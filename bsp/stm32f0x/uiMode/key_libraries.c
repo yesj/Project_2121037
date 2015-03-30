@@ -1,7 +1,7 @@
 #include "chandler.h"
 #include "24lcxx_user.h"
 
-void	F_AllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
+void	F_SeatPositionControlAllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 {
 					switch(Key)
 					{
@@ -40,4 +40,15 @@ void	F_AllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 						F_eeprom_home2_data(1,&sport_data.saveSeatPositionHome_2);
 						break;	
 					}
+}
+
+void	F_SetUserKey(rt_uint8_t keyCode) 
+{
+		switch(keyCode)
+		{
+			case	user_KeyVal:
+			bz_short();
+			F_setUsersInit();
+				break;
+		}	
 }

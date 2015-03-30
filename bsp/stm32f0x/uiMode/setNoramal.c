@@ -20,7 +20,8 @@ void F_setNoramal(void)
 					{
 						rt_kprintf("setNoramalVal:%d\r\n>",keyCode);
 					}
-					F_AllKey(keyCode,LongKeyStartFlg);
+					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
+					F_SetUserKey(keyCode);
 					switch(keyCode)
 					{
 						case	quick_start_KeyVal:
@@ -41,10 +42,6 @@ void F_setNoramal(void)
 						break;
 						case	programs_KeyVal:
 						F_setProfileInit();
-						bz_short();
-						break;
-						case	user_KeyVal:
-						F_setUsersInit();
 						bz_short();
 						break;
 					}

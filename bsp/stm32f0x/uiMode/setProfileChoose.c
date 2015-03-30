@@ -38,6 +38,7 @@ void F_setProfileChoose(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_SetUserKey(keyCode);
 					switch(keyCode)
 					{
 						case	quick_start_KeyVal:

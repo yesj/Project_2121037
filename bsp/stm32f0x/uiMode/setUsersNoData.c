@@ -129,13 +129,15 @@ static void F_SetUsersAgeUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 {
 	switch(Key) {
 		case	resistance_up_KeyVal:
-		if(LongKeyStartFlg == 0)
+		if(LongKeyStartFlg == 0){
 			bz_short();
+		}
 		F_NumberUp_8(&set_user_data.age,1,cycleNumberVal);
 			break;
 		case	resistance_down_KeyVal:
-		if(LongKeyStartFlg == 0)
+		if(LongKeyStartFlg == 0){
 			bz_short();
+		}
 		F_NumberDown_8(&set_user_data.age,1,cycleNumberVal);
 			break;
 	}
@@ -145,13 +147,15 @@ static void F_SetUsersWeightUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 {
 	switch(Key) {
 		case	resistance_up_KeyVal:
-		if(LongKeyStartFlg == 0)
+		if(LongKeyStartFlg == 0){
 			bz_short();
+		}
 		F_NumberUp_8(&set_user_data.Weight,1,cycleNumberVal);
 			break;
 		case	resistance_down_KeyVal:
-		if(LongKeyStartFlg == 0)
+		if(LongKeyStartFlg == 0){
 			bz_short();
+		}
 		F_NumberDown_8(&set_user_data.Weight,1,cycleNumberVal);
 			break;
 	}

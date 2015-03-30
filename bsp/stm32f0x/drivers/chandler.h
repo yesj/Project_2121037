@@ -544,6 +544,7 @@ extern void	F_showSetAge(rt_uint8_t Age);
 
 extern void	F_showSetWeight(rt_uint8_t Weight);
 //=======================================
-extern void	F_AllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg);
+extern void	F_SeatPositionControlAllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg);
 
+extern void	F_SetUserKey(rt_uint8_t keyCode);
 #endif

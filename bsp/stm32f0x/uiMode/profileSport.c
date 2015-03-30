@@ -86,7 +86,7 @@ void F_ProfileSport(void)
 				{
 					keyCode = 0;
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
-					F_AllKey(keyCode,LongKeyStartFlg);
+					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					switch(keyCode)
 					{
 						case	resistance_up_KeyVal:

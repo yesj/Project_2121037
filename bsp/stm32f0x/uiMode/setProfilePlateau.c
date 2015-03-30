@@ -1,6 +1,6 @@
 #include "chandler.h"
 
-static void	F_setProfileLevelKey(rt_uint8_t keyCode)
+static void	F_setProfileLevelKey(rt_uint8_t keyCode,rt_bool_t LongKeyStartFlg)
 {
 		switch(keyCode)
 		{
@@ -19,19 +19,23 @@ static void	F_setProfileLevelKey(rt_uint8_t keyCode)
 			case	resistance_up_KeyVal:
 			if(F_NumberUp_8(&set_profile_data.plateauLevel,1,noCycleNumberVal).complyFlg == YesComplyVal) {
 				F_PlateauLevelCount(set_profile_data.plateauLevel.number,sport_data.progfileArry,ProgfileDataSizeVal);
-				bz_short();
+				if(LongKeyStartFlg == 0){
+					bz_short();
+				}
 			}
 				break;
 			case	resistance_down_KeyVal:
 			if(F_NumberDown_8(&set_profile_data.plateauLevel,1,noCycleNumberVal).complyFlg == YesComplyVal) {
 				F_PlateauLevelCount(set_profile_data.plateauLevel.number,sport_data.progfileArry,ProgfileDataSizeVal);
-				bz_short();
+				if(LongKeyStartFlg == 0){
+					bz_short();
+				}
 			}
 				break;
 		}
 }
 
-static void	F_setProfileWorkOutTImeKey(rt_uint8_t keyCode)
+static void	F_setProfileWorkOutTImeKey(rt_uint8_t keyCode,rt_bool_t LongKeyStartFlg)
 {
 		switch(keyCode)
 		{
@@ -45,11 +49,15 @@ static void	F_setProfileWorkOutTImeKey(rt_uint8_t keyCode)
 			ui_action.Event = setProfileLevelEventVal;
 				break;
 			case	resistance_up_KeyVal:
-			bz_short();
+			if(LongKeyStartFlg == 0){
+				bz_short();
+			}
 			F_NumberUp_8(&set_profile_data.plateauWorkoutMinTime,1,cycleNumberVal);
 				break;
 			case	resistance_down_KeyVal:
-			bz_short();
+			if(LongKeyStartFlg == 0){
+				bz_short();
+			}
 			F_NumberDown_8(&set_profile_data.plateauWorkoutMinTime,1,cycleNumberVal);
 				break;
 		}
@@ -69,13 +77,14 @@ void F_setProfilePlateau(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_SetUserKey(keyCode);
 					switch(ui_action.Event) 
 					{
 						case	setProfileLevelEventVal:
-						F_setProfileLevelKey(keyCode);
+						F_setProfileLevelKey(keyCode,LongKeyStartFlg);
 							break;
 						case	setProfileWorkOutTImeEventVal:
-						F_setProfileWorkOutTImeKey(keyCode);
+						F_setProfileWorkOutTImeKey(keyCode,LongKeyStartFlg);
 							break;
 					}
 				}

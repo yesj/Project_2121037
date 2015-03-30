@@ -35,6 +35,8 @@ void F_setProfiles(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
+					F_SetUserKey(keyCode);
 					switch(keyCode)
 					{
 						case	stop_rest_KeyVal:
