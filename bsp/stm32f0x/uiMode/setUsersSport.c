@@ -1,45 +1,19 @@
 #include "chandler.h"
+#include "24lcxx_user.h"
 
-void F_ShowBasicView(void)
+void F_setUsersSport(void)
 {
-		F_showMatrixTime(TimeData);
-		F_showResistance(sport_data.resistance.number);
-		F_show8HearRate(F_readHandHeartRate(),F_readwHeartRate());
-		F_showCal(calor_count.calorie);
-}
-
-
-void F_ShowHeartRateView(void)
-{
-	F_show8Time(TimeData);
-	F_showResistance(sport_data.resistance.number);
-	F_showDistance(distance_data.distance_count);
-	F_showHearRateGraph(F_readHandHeartRate(),F_readwHeartRate());
-}
-
-void F_ShowCalorieView(void)
-{
-	F_show8Time(TimeData);
-	F_showResistance(sport_data.resistance.number);
-	F_show8HearRate(F_readHandHeartRate(),F_readwHeartRate());
-	F_showMatrixCal(calor_count.calorie);
-	//F_showMatrixCalHr(calor_count.calorie);
-}
-
-void F_SportManual(void)
-{
-		rt_uint8_t	keyCode;
+		rt_uint8_t	keyCode = 0;
 		rt_bool_t	LongKeyStartFlg = 0;
 		rt_uint32_t e;
+	
 			if (rt_event_recv(&sport_timer_event, 0xFFFF,
 					RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR,
 					RT_WAITING_FOREVER, &e) == RT_EOK)
 			{
 				if((e & time_20ms_val) == time_20ms_val)
 				{
-					keyCode = 0;
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
-					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					switch(keyCode)
 					{
 						case	resistance_up_KeyVal:
@@ -56,17 +30,9 @@ void F_SportManual(void)
 							}
 						}
 						break;
-						case	view_KeyVal:
-							bz_short();
-							ui_action.Event++;
-							if(ui_action.Event > CalorieVewVal) 
-							{
-								ui_action.Event = BasicViewVal;
-							}
-						break;
 						case	stop_rest_KeyVal:
-							bz_short();
-							F_setNoramalInit();
+						bz_short();
+						F_setUsersInit(ui_action.UsersEventSave);
 						break;	
 					}
 				}
@@ -74,18 +40,10 @@ void F_SportManual(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					switch(ui_action.Event)
-					{
-						case	BasicViewVal:
-							F_ShowBasicView();
-							break;
-						case	HeartRateViewVal:
-							F_ShowHeartRateView();
-							break;
-						case	CalorieVewVal:
-							F_ShowCalorieView();
-							break;
-					}
+					F_showMatrixTime(TimeData);
+					F_showResistance(sport_data.resistance.number);
+					F_show8HearRate(F_readHandHeartRate(),F_readwHeartRate());
+					F_showCal(calor_count.calorie);
 					F_Display();
 				}
 				//=====================
@@ -104,14 +62,12 @@ void F_SportManual(void)
 			}
 }
 
-void	F_SportManualInit(void)
+void F_setUsersSportInit(void)
 {
-	ui_action.Status = sportManualVal;
-	ui_action.Event	= BasicViewVal;
+		ui_action.Status = setUsersSportVal;
+		//ui_action.Event = showUserResetNoEventVal;
 	memset(&TimeData,0,sizeof(TimeData));
 	memset(&calor_count,0,sizeof(calor_count));
 	sport_data.resistance.number = 1;
 	F_setVmsDetectionVal(30);
-	//fristSportFlg = 1;
 }
-

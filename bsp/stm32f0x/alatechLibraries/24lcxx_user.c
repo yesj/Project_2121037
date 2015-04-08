@@ -6,8 +6,6 @@
 #define EepromVer_2				0x10
 #define EepromVer_3				0x34
 #define EepromVer_4				0x00
-
-
 //============
 #define EE_IncMax					0x06
 #define EE_IncUpDown			0x07
@@ -19,6 +17,91 @@
 //============
 #define EE_DetectionData_1	0x0C
 #define EE_DetectionData_2	0x0D
+//============
+#define EE_UserNameDataAdr						0x0E
+#define EE_User1_Name			EE_UserNameDataAdr
+#define EE_User2_Name			(EE_UserNameDataAdr + 10)
+#define EE_User3_Name			(EE_UserNameDataAdr + 20)
+#define EE_User4_Name			(EE_UserNameDataAdr + 30)
+#define EE_User5_Name			(EE_UserNameDataAdr + 40)
+#define EE_User6_Name			(EE_UserNameDataAdr + 50)
+#define EE_User7_Name			(EE_UserNameDataAdr + 60)
+#define EE_User8_Name			(EE_UserNameDataAdr + 70)
+#define EE_User9_Name			(EE_UserNameDataAdr + 80)
+#define EE_User10_Name		(EE_UserNameDataAdr + 90)
+
+#define EE_UserDataAdr		(EE_UserNameDataAdr + 100)
+#define EE_User1_age			EE_UserDataAdr
+#define EE_User2_age			(EE_UserDataAdr + 1)
+#define EE_User3_age			(EE_UserDataAdr + 2)
+#define EE_User4_age			(EE_UserDataAdr + 3)
+#define EE_User5_age			(EE_UserDataAdr + 4)
+#define EE_User6_age			(EE_UserDataAdr + 5)
+#define EE_User7_age			(EE_UserDataAdr + 6)
+#define EE_User8_age			(EE_UserDataAdr + 7)
+#define EE_User9_age			(EE_UserDataAdr + 8)
+#define EE_User10_age			(EE_UserDataAdr + 9)
+
+#define EE_User1_wigeht		(EE_UserDataAdr + 10)
+#define EE_User2_wigeht		(EE_UserDataAdr + 11)
+#define EE_User3_wigeht		(EE_UserDataAdr + 12)
+#define EE_User4_wigeht		(EE_UserDataAdr + 13)
+#define EE_User5_wigeht		(EE_UserDataAdr + 14)
+#define EE_User6_wigeht		(EE_UserDataAdr + 15)
+#define EE_User7_wigeht		(EE_UserDataAdr + 16)
+#define EE_User8_wigeht		(EE_UserDataAdr + 17)
+#define EE_User9_wigeht		(EE_UserDataAdr + 18)
+#define EE_User10_wigeht	(EE_UserDataAdr + 19)
+
+#define EE_User1_seat_position		(EE_UserDataAdr + 20)
+#define EE_User2_seat_position		(EE_UserDataAdr + 21)
+#define EE_User3_seat_position		(EE_UserDataAdr + 22)
+#define EE_User4_seat_position		(EE_UserDataAdr + 23)
+#define EE_User5_seat_position		(EE_UserDataAdr + 24)
+#define EE_User6_seat_position		(EE_UserDataAdr + 25)
+#define EE_User7_seat_position		(EE_UserDataAdr + 26)
+#define EE_User8_seat_position		(EE_UserDataAdr + 27)
+#define EE_User9_seat_position		(EE_UserDataAdr + 28)
+#define EE_User10_seat_position		(EE_UserDataAdr + 29)
+
+#define EE_User_gender_1		(EE_UserDataAdr + 30)
+#define EE_User_gender_2		(EE_UserDataAdr + 31)
+
+#define EE_User_sport_data_adr		(EE_User_gender_2 + 1)
+
+#define EE_User1_time				(EE_User_sport_data_adr)
+#define EE_User2_time				(EE_User_sport_data_adr + (3 * 1))
+#define EE_User3_time				(EE_User_sport_data_adr + (3 * 2))
+#define EE_User4_time				(EE_User_sport_data_adr + (3 * 3))
+#define EE_User5_time				(EE_User_sport_data_adr + (3 * 4))
+#define EE_User6_time				(EE_User_sport_data_adr + (3 * 5))
+#define EE_User7_time				(EE_User_sport_data_adr + (3 * 6))
+#define EE_User8_time				(EE_User_sport_data_adr + (3 * 7))
+#define EE_User9_time				(EE_User_sport_data_adr + (3 * 8))
+#define EE_User10_time				(EE_User_sport_data_adr + (3 * 9))
+
+#define EE_User1_cal				(EE_User_sport_data_adr + (3 * 10))
+#define EE_User2_cal				(EE_User_sport_data_adr + (3 * 11))
+#define EE_User3_cal				(EE_User_sport_data_adr + (3 * 12))
+#define EE_User4_cal				(EE_User_sport_data_adr + (3 * 13))
+#define EE_User5_cal				(EE_User_sport_data_adr + (3 * 14))
+#define EE_User6_cal				(EE_User_sport_data_adr + (3 * 15))
+#define EE_User7_cal				(EE_User_sport_data_adr + (3 * 16))
+#define EE_User8_cal				(EE_User_sport_data_adr + (3 * 17))
+#define EE_User9_cal				(EE_User_sport_data_adr + (3 * 18))
+#define EE_User10_cal				(EE_User_sport_data_adr + (3 * 19))
+
+#define EE_User_miles_adr		(EE_User_sport_data_adr + (3 * 20))
+#define EE_User1_miles			EE_User_miles_adr
+#define EE_User2_miles			(EE_User_miles_adr + (2 * 1))
+#define EE_User3_miles			(EE_User_miles_adr + (2 * 2))
+#define EE_User4_miles			(EE_User_miles_adr + (2 * 3))
+#define EE_User5_miles			(EE_User_miles_adr + (2 * 4))
+#define EE_User6_miles			(EE_User_miles_adr + (2 * 5))
+#define EE_User7_miles			(EE_User_miles_adr + (2 * 6))
+#define EE_User8_miles			(EE_User_miles_adr + (2 * 7))
+#define EE_User9_miles			(EE_User_miles_adr + (2 * 8))
+#define EE_User10_miles			(EE_User_miles_adr + (2 * 9))
 
 //============
 #define EE_Ver_1					0xFA
@@ -154,73 +237,379 @@ void	F_eeprom_home2_data(rt_uint8_t status,rt_uint8_t *data)
 
 void	F_eeprom_user_DetectionData(rt_uint8_t status,rt_uint8_t Num,rt_uint8_t *data)
 {
+	rt_uint8_t	DetectionDataTemp;
+	rt_uint8_t	DataAdr;
+
 	dev = rt_device_find("eeprom");
 	rt_device_open(dev , RT_DEVICE_OFLAG_RDWR);
-	if(status) 
-	{
-		rt_device_read(dev, EE_DetectionData_1 , data, 1);
+	
 		switch(Num) {
 			case	setUser_1_EventVal:
-				*data |= 0x01;
+				DetectionDataTemp = EE_DetectionData_1;
+				DataAdr = 0x01;
 				break;
 			case	setUser_2_EventVal:
-				*data |= 0x02;
+				DetectionDataTemp = EE_DetectionData_1;
+				DataAdr = 0x02;
 				break;
 			case	setUser_3_EventVal:
-				*data |= 0x04;
+				DetectionDataTemp = EE_DetectionData_1;
+				DataAdr = 0x04;
 				break;
 			case	setUser_4_EventVal:
-				*data |= 0x08;
+				DetectionDataTemp = EE_DetectionData_1;
+				DataAdr = 0x08;
 				break;
 			case	setUser_5_EventVal:
-				*data |= 0x10;
+				DetectionDataTemp = EE_DetectionData_1;
+				DataAdr = 0x10;
 				break;
 			case	setUser_6_EventVal:
-				*data |= 0x20;
+				DetectionDataTemp = EE_DetectionData_1;
+				DataAdr = 0x20;
 				break;
 			case	setUser_7_EventVal:
-				*data |= 0x40;
+				DetectionDataTemp = EE_DetectionData_1;
+				DataAdr = 0x40;
 				break;
 			case	setUser_8_EventVal:
-				*data |= 0x80;
+				DetectionDataTemp = EE_DetectionData_1;
+				DataAdr = 0x80;
+				break;
+			case	setUser_9_EventVal:
+				DetectionDataTemp = EE_DetectionData_2;
+				DataAdr = 0x01;
+				break;
+			case	setUser_10_EventVal:
+				DetectionDataTemp = EE_DetectionData_2;
+				DataAdr = 0x02;
 				break;
 		}
-		rt_device_write(dev, EE_DetectionData_1, data, 1);
-	}
-	else
-	{
-		rt_device_read(dev, EE_DetectionData_1 , data, 1);
-		switch(Num) {
-			case	setUser_1_EventVal:
-				*data &= ~0x01;	
-				break;
-			case	setUser_2_EventVal:
-				*data &= ~0x02;	
-				break;
-			case	setUser_3_EventVal:
-				*data &= ~0x04;	
-				break;
-			case	setUser_4_EventVal:
-				*data &= ~0x08;	
-				break;
-			case	setUser_5_EventVal:
-				*data &= ~0x10;	
-				break;
-			case	setUser_6_EventVal:
-				*data &= ~0x20;	
-				break;
-			case	setUser_7_EventVal:
-				*data &= ~0x40;	
-				break;
-			case	setUser_8_EventVal:
-				*data &= ~0x80;	
-				break;
-		}
+		
+	switch(status) {
+		case	ReadDataVal:
+			rt_device_read(dev, DetectionDataTemp , data, 1);
+			*data &= DataAdr;	
 			if(*data) {
 				*data = 1;
 			} else {
 				*data = 0;
 			}
+			break;
+		//===========
+		case	WriteDataVal:
+		rt_device_read(dev, DetectionDataTemp , &buf, 1);
+		if(*data) {
+			buf |= DataAdr;
+		} else {
+			buf &= ~DataAdr;
+		}
+		rt_device_write(dev, DetectionDataTemp, &buf, 1);
+			break;
+		//===========
+		case	InitDataVal:
+		rt_device_write(dev, EE_DetectionData_1, data, 1);	
+		rt_device_write(dev, EE_DetectionData_2, data, 1);	
+			break;		
+	}
+	rt_device_close(dev);
+}
+
+void	F_eeprom_user_name(rt_uint8_t status,rt_uint8_t Num,rt_uint8_t *data,rt_uint8_t Adr)
+{
+	rt_uint8_t	DetectionDataTemp;
+	rt_uint8_t	i,buf;
+	
+	dev = rt_device_find("eeprom");
+	rt_device_open(dev , RT_DEVICE_OFLAG_RDWR);
+	
+		switch(Num) {
+			case	setUser_1_EventVal:
+				DetectionDataTemp = EE_User1_Name;
+				break;
+			case	setUser_2_EventVal:
+				DetectionDataTemp = EE_User2_Name;
+				break;
+			case	setUser_3_EventVal:
+				DetectionDataTemp = EE_User3_Name;
+				break;
+			case	setUser_4_EventVal:
+				DetectionDataTemp = EE_User4_Name;
+				break;
+			case	setUser_5_EventVal:
+				DetectionDataTemp = EE_User5_Name;
+				break;
+			case	setUser_6_EventVal:
+				DetectionDataTemp = EE_User6_Name;
+				break;
+			case	setUser_7_EventVal:
+				DetectionDataTemp = EE_User7_Name;
+				break;
+			case	setUser_8_EventVal:
+				DetectionDataTemp = EE_User8_Name;
+				break;
+			case	setUser_9_EventVal:
+				DetectionDataTemp = EE_User9_Name;
+				break;
+			case	setUser_10_EventVal:
+				DetectionDataTemp = EE_User10_Name;
+				break;
+		}
+		
+	switch(status) {
+		case	ReadDataVal:
+			for(i=0;i<10;i++) {
+				rt_device_read(dev, DetectionDataTemp+i , &buf, 1);
+				*(data + i) = buf;
+			}
+			break;
+		//===========
+		case	WriteDataVal:
+			for(i=0;i<10;i++) {
+				buf = *(data+i);
+				rt_device_write(dev, DetectionDataTemp+i, &buf, 1);
+			}
+			break;
+		//===========
+		case	ReadSpecificDataAdrVal:
+		rt_device_read(dev, DetectionDataTemp+Adr , &buf, 1);
+		*(data + Adr) = buf;
+			break;		
+		//===========
+		case	WriteSpecificDataAdrVal:
+		buf = *(data+Adr);
+		rt_device_write(dev, DetectionDataTemp+Adr, &buf, 1);
+			break;	
+	}
+	rt_device_close(dev);
+}
+
+void	F_eeprom_user_age(rt_uint8_t status,rt_uint8_t Num,rt_uint8_t *data)
+{
+	rt_uint8_t	DetectionDataTemp;
+	dev = rt_device_find("eeprom");
+	rt_device_open(dev , RT_DEVICE_OFLAG_RDWR);
+	
+		switch(Num) {
+			case	setUser_1_EventVal:
+				DetectionDataTemp = EE_User1_age;
+				break;
+			case	setUser_2_EventVal:
+				DetectionDataTemp = EE_User2_age;
+				break;
+			case	setUser_3_EventVal:
+				DetectionDataTemp = EE_User3_age;
+				break;
+			case	setUser_4_EventVal:
+				DetectionDataTemp = EE_User4_age;
+				break;
+			case	setUser_5_EventVal:
+				DetectionDataTemp = EE_User5_age;
+				break;
+			case	setUser_6_EventVal:
+				DetectionDataTemp = EE_User6_age;
+				break;
+			case	setUser_7_EventVal:
+				DetectionDataTemp = EE_User7_age;
+				break;
+			case	setUser_8_EventVal:
+				DetectionDataTemp = EE_User8_age;
+				break;
+			case	setUser_9_EventVal:
+				DetectionDataTemp = EE_User9_age;
+				break;
+			case	setUser_10_EventVal:
+				DetectionDataTemp = EE_User10_age;
+				break;
+		}
+		
+	switch(status) {
+		case	ReadDataVal:
+			rt_device_read(dev, DetectionDataTemp , data, 1);
+			break;
+		//===========
+		case	WriteDataVal:
+			rt_device_write(dev, DetectionDataTemp, data, 1);
+			break;
+	}
+	rt_device_close(dev);
+}
+
+void	F_eeprom_user_wigeht(rt_uint8_t status,rt_uint8_t Num,rt_uint8_t *data)
+{
+	rt_uint8_t	DetectionDataTemp;
+	dev = rt_device_find("eeprom");
+	rt_device_open(dev , RT_DEVICE_OFLAG_RDWR);
+	
+		switch(Num) {
+			case	setUser_1_EventVal:
+				DetectionDataTemp = EE_User1_wigeht;
+				break;
+			case	setUser_2_EventVal:
+				DetectionDataTemp = EE_User2_wigeht;
+				break;
+			case	setUser_3_EventVal:
+				DetectionDataTemp = EE_User3_wigeht;
+				break;
+			case	setUser_4_EventVal:
+				DetectionDataTemp = EE_User4_wigeht;
+				break;
+			case	setUser_5_EventVal:
+				DetectionDataTemp = EE_User5_wigeht;
+				break;
+			case	setUser_6_EventVal:
+				DetectionDataTemp = EE_User6_wigeht;
+				break;
+			case	setUser_7_EventVal:
+				DetectionDataTemp = EE_User7_wigeht;
+				break;
+			case	setUser_8_EventVal:
+				DetectionDataTemp = EE_User8_wigeht;
+				break;
+			case	setUser_9_EventVal:
+				DetectionDataTemp = EE_User9_wigeht;
+				break;
+			case	setUser_10_EventVal:
+				DetectionDataTemp = EE_User10_wigeht;
+				break;
+		}
+	switch(status) {
+		case	ReadDataVal:
+			rt_device_read(dev, DetectionDataTemp , data, 1);
+			break;
+		//===========
+		case	WriteDataVal:
+			rt_device_write(dev, DetectionDataTemp, data, 1);
+			break;
+	}
+	rt_device_close(dev);
+}
+
+void	F_eeprom_user_seat_position(rt_uint8_t status,rt_uint8_t Num,rt_uint8_t *data)
+{
+	rt_uint8_t	DetectionDataTemp;
+	dev = rt_device_find("eeprom");
+	rt_device_open(dev , RT_DEVICE_OFLAG_RDWR);
+	
+		switch(Num) {
+			case	setUser_1_EventVal:
+				DetectionDataTemp = EE_User1_seat_position;
+				break;
+			case	setUser_2_EventVal:
+				DetectionDataTemp = EE_User2_seat_position;
+				break;
+			case	setUser_3_EventVal:
+				DetectionDataTemp = EE_User3_seat_position;
+				break;
+			case	setUser_4_EventVal:
+				DetectionDataTemp = EE_User4_seat_position;
+				break;
+			case	setUser_5_EventVal:
+				DetectionDataTemp = EE_User5_seat_position;
+				break;
+			case	setUser_6_EventVal:
+				DetectionDataTemp = EE_User6_seat_position;
+				break;
+			case	setUser_7_EventVal:
+				DetectionDataTemp = EE_User7_seat_position;
+				break;
+			case	setUser_8_EventVal:
+				DetectionDataTemp = EE_User8_seat_position;
+				break;
+			case	setUser_9_EventVal:
+				DetectionDataTemp = EE_User9_seat_position;
+				break;
+			case	setUser_10_EventVal:
+				DetectionDataTemp = EE_User10_seat_position;
+				break;
+		}
+	switch(status) {
+		case	ReadDataVal:
+			rt_device_read(dev, DetectionDataTemp , data, 1);
+			break;
+		//===========
+		case	WriteDataVal:
+			rt_device_write(dev, DetectionDataTemp, data, 1);
+			break;
+	}
+	rt_device_close(dev);
+}
+
+void	F_eeprom_user_gender(rt_uint8_t status,rt_uint8_t Num,rt_uint8_t *data)
+{
+	rt_uint8_t	DetectionDataTemp,DataAdr;
+
+	dev = rt_device_find("eeprom");
+	rt_device_open(dev , RT_DEVICE_OFLAG_RDWR);
+
+		switch(Num) {
+			case	setUser_1_EventVal:
+				DetectionDataTemp = EE_User_gender_1;
+				DataAdr = 0x01;
+				break;
+			case	setUser_2_EventVal:
+				DetectionDataTemp = EE_User_gender_1;
+				DataAdr = 0x02;
+				break;
+			case	setUser_3_EventVal:
+				DetectionDataTemp = EE_User_gender_1;
+				DataAdr = 0x04;
+				break;
+			case	setUser_4_EventVal:
+				DetectionDataTemp = EE_User_gender_1;
+				DataAdr = 0x08;
+				break;
+			case	setUser_5_EventVal:
+				DetectionDataTemp = EE_User_gender_1;
+				DataAdr = 0x10;
+				break;
+			case	setUser_6_EventVal:
+				DetectionDataTemp = EE_User_gender_1;
+				DataAdr = 0x20;
+				break;
+			case	setUser_7_EventVal:
+				DetectionDataTemp = EE_User_gender_1;
+				DataAdr = 0x40;
+				break;
+			case	setUser_8_EventVal:
+				DetectionDataTemp = EE_User_gender_1;
+				DataAdr = 0x80;
+				break;
+			case	setUser_9_EventVal:
+				DetectionDataTemp = EE_User_gender_2;
+				DataAdr = 0x01;
+				break;
+			case	setUser_10_EventVal:
+				DetectionDataTemp = EE_User_gender_2;
+				DataAdr = 0x02;
+				break;
+		}
+		
+	switch(status) {
+		case	ReadDataVal:
+			rt_device_read(dev, DetectionDataTemp , data, 1);
+			*data &= DataAdr;	
+			if(*data) {
+				*data = 1;
+			} else {
+				*data = 0;
+			}
+			break;
+		//===========
+		case	WriteDataVal:
+			rt_device_read(dev, DetectionDataTemp , &buf, 1);
+			if(*data) {
+				buf |= DataAdr;
+			} else {
+				buf &= ~DataAdr;
+			}
+			rt_device_write(dev, DetectionDataTemp, &buf, 1);
+			break;
+		//===========
+		case	InitDataVal:
+		rt_device_write(dev, EE_User_gender_1, data, 1);	
+		rt_device_write(dev, EE_User_gender_2, data, 1);	
+			break;		
 	}
 	rt_device_close(dev);
 }

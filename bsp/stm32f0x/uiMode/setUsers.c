@@ -1,49 +1,32 @@
 #include "chandler.h"
 #include "24lcxx_user.h"
 
-static void F_UeserChooseMode(void)
+static void F_UeserEnterKeyChooseMode(void)
 {
-	rt_uint8_t	buf;
-	
-		switch(ui_action.Event) {
-			case setUser_1_EventVal:
-			F_eeprom_user_DetectionData(0,setUser_1_EventVal,&buf);	
-				break;
-			case setUser_2_EventVal:
-			F_eeprom_user_DetectionData(0,setUser_2_EventVal,&buf);	
-				break;
-			case setUser_3_EventVal:
-			F_eeprom_user_DetectionData(0,setUser_3_EventVal,&buf);	
-				break;
-			case setUser_4_EventVal:
-			F_eeprom_user_DetectionData(0,setUser_4_EventVal,&buf);	
-				break;
-			case setUser_5_EventVal:
-			F_eeprom_user_DetectionData(0,setUser_5_EventVal,&buf);	
-				break;
-			case setUser_6_EventVal:
-			F_eeprom_user_DetectionData(0,setUser_6_EventVal,&buf);	
-				break;
-			case setUser_7_EventVal:
-			F_eeprom_user_DetectionData(0,setUser_7_EventVal,&buf);	
-				break;
-			case setUser_8_EventVal:
-			F_eeprom_user_DetectionData(0,setUser_8_EventVal,&buf);	
-				break;
-			case setUser_9_EventVal:
-
-				break;
-			case setUser_10_EventVal:
-
-				break;
-		}
+		rt_uint8_t	buf;
+		F_eeprom_user_DetectionData(ReadDataVal,ui_action.Event,&buf);	
 		ui_action.UsersEventSave = ui_action.Event;
-		F_setUsersNoDataInit();
-		/*
 		if(buf) {
-			
-		} 
-		*/
+			F_setUsersDataInit();
+		} else {
+			buf = 1;
+			F_eeprom_user_DetectionData(WriteDataVal,ui_action.Event,&buf);	
+			F_setUsersNoDataInit();
+		}
+}
+
+static void F_UeserStartKeyChooseMode(void)
+{
+		rt_uint8_t	buf;
+		F_eeprom_user_DetectionData(ReadDataVal,ui_action.Event,&buf);	
+		ui_action.UsersEventSave = ui_action.Event;
+		if(buf) {
+			F_setUsersSportInit();
+		} else {
+			buf = 1;
+			F_eeprom_user_DetectionData(WriteDataVal,ui_action.Event,&buf);	
+			F_setUsersNoDataInit();
+		}					
 }
 
 void F_setUsers(void)
@@ -59,15 +42,25 @@ void F_setUsers(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					switch(keyCode)
 					{
+						case	quick_start_KeyVal:
+							bz_short();
+							F_UeserStartKeyChooseMode();
+						break;
 						case	stop_rest_KeyVal:
 							bz_short();
 							F_setNoramalInit();
 						break;
-						case	enter_KeyVal:
+						case	long_enter_KeyVal:
 							bz_short();
-							F_UeserChooseMode();
+							ui_action.UsersEventSave = ui_action.Event;
+							F_setUsersResetDataInit();
+						break;
+						case	short_enter_KeyVal:
+							bz_short();
+							F_UeserEnterKeyChooseMode();
 						break;
 						case	resistance_down_KeyVal:
 							bz_short();
@@ -126,8 +119,8 @@ void F_setUsers(void)
 			}
 }
 
-void F_setUsersInit(void)
+void F_setUsersInit(rt_uint8_t UserEvent)
 {
 		ui_action.Status = setUsersVal;
-		ui_action.Event = setUser_1_EventVal;
+		ui_action.Event = UserEvent;
 }

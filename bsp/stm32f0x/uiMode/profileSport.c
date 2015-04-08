@@ -1,8 +1,6 @@
 #include "chandler.h"
 
-static 	rt_uint8_t	VmsDetectionTime;
 static 	rt_uint8_t	R_Segments,R_SegmentsTime;
-static 	rt_uint8_t	VmsDetectionTime;
 static 	rt_bool_t		FlickerFlg;
 //static 	rt_bool_t fristSportFlg;
 void	F_ProfileTimeSegments(rt_uint8_t *Segments,rt_time_data_t Time,rt_uint8_t SegmentsData,rt_uint8_t MaxSegments)
@@ -48,22 +46,6 @@ static void	F_MaxLevelCount(rt_uint8_t MaxLevel,rt_uint8_t Segments)
 		}
 }
 
-static void	F_VmsDetection(rt_uint8_t rpm)
-{
-		if(rpm) {
-			VmsDetectionTime = 0;
-			F_vms_control(sport_data.progfileArry[R_Segments]);
-		} else {
-			VmsDetectionTime++;
-			if(VmsDetectionTime>=30) {
-				VmsDetectionTime = 30;
-				F_vms_control(0);
-			} else {
-				F_vms_control(sport_data.progfileArry[R_Segments]);
-			}
-		}
-}
-
 static void F_ShowBasicView(void)
 {
 		F_showMatrixProfileWrokOutTime(TimeData);
@@ -91,13 +73,17 @@ void F_ProfileSport(void)
 					{
 						case	resistance_up_KeyVal:
 						if(F_NumberUp_8(&sport_data.resistance,1,noCycleNumberVal).complyFlg == YesComplyVal) {
-							bz_short();
+							if(LongKeyStartFlg == 0){
+								bz_short();
+							}
 							F_MaxLevelCount(sport_data.resistance.number,R_Segments);
 						}
 						break;
 						case	resistance_down_KeyVal:
 						if(F_NumberDown_8(&sport_data.resistance,1,noCycleNumberVal).complyFlg == YesComplyVal) {
-							bz_short();
+							if(LongKeyStartFlg == 0){
+								bz_short();
+							}
 							F_MaxLevelCount(sport_data.resistance.number,R_Segments);
 						}
 						break;
@@ -148,7 +134,7 @@ void	F_ProfileSportInit(rt_uint8_t Evnet)
 	ui_action.Event	= BasicViewVal;
 	ui_action.ProfileEventSave = Evnet;
 	memset(&calor_count,0,sizeof(calor_count));
-	VmsDetectionTime = 30;
+	F_setVmsDetectionVal(30);
 		switch(ui_action.ProfileEventSave) 
 		{
 			case	setRollingHillEventVal:

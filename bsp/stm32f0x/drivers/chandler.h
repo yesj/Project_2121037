@@ -30,6 +30,9 @@ enum _uiStatus {
 		profileSportVal,
 		setUsersVal,
 		setUsersNoDataVal,
+		setUsersDataVal,
+		setUsersResetDataVal,
+		setUsersSportVal,
     eepromErrVal,
     sportErrVal,
 };
@@ -99,6 +102,17 @@ enum _setUsersNoDataEvent{
 	setAgeEventVal,
 	setWeightEventVal
 };
+
+enum _setUsersResetDataEvent{
+	showUserResetNoEventVal,
+	showUserResetYesEventVal
+};
+
+enum _setUsersDataEvent{
+	showUserNameEventVal,
+	showUserDataEventVal
+};
+
 //================================
 struct	rt_ui_action
 {
@@ -405,11 +419,24 @@ extern void	F_ProfileSportInit(rt_uint8_t Evnet);
 
 extern void F_setUsers(void);
 
-extern void F_setUsersInit(void);
+extern void F_setUsersInit(rt_uint8_t UserEvent);
 
 extern void F_setUsersNoData(void);
 
 extern void F_setUsersNoDataInit(void);
+
+extern void F_setUsersData(void);
+
+extern void F_setUsersDataInit(void);
+
+extern void F_setUsersResetData(void);
+
+extern void F_setUsersResetDataInit(void);
+
+extern void F_setUsersSport(void);
+
+extern void F_setUsersSportInit(void);
+
 //===========================================================================
 
 extern void  F_ShowMatrixLcd(rt_uint8_t	lcdRamAdr,rt_uint32_t data,rt_uint8_t dataLongSize,rt_uint32_t *displayAdr);
@@ -536,6 +563,8 @@ extern void	F_showNoData(void);
 
 extern void	F_showSetUserName(rt_uint8_t adr,rt_uint8_t *data,rt_uint8_t size);
 
+extern void	F_showUserName(rt_uint8_t *data,rt_uint8_t size);
+
 extern void	F_showSetSeatPosition(void);
 
 extern void	F_showGender(rt_uint8_t Gender);
@@ -543,8 +572,19 @@ extern void	F_showGender(rt_uint8_t Gender);
 extern void	F_showSetAge(rt_uint8_t Age);
 
 extern void	F_showSetWeight(rt_uint8_t Weight);
+
+extern void	F_showTimeMilesCal(rt_time_data_t TimeData,rt_uint16_t	Miles,rt_uint32_t	Cal);
+
+extern void	F_showResetDataNo(void);
+
+extern void	F_showResetDataYes(void);
 //=======================================
 extern void	F_SeatPositionControlAllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg);
 
 extern void	F_SetUserKey(rt_uint8_t keyCode);
+
+extern void	F_VmsDetection(rt_uint8_t rpm);
+
+extern void	F_setVmsDetectionVal(rt_uint8_t val);
+
 #endif

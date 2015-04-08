@@ -903,6 +903,21 @@
               <FileType>1</FileType>
               <FilePath>.\uiMode\setUsersNoData.c</FilePath>
             </File>
+            <File>
+              <FileName>setUsersResetData.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setUsersResetData.c</FilePath>
+            </File>
+            <File>
+              <FileName>setUsersData.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setUsersData.c</FilePath>
+            </File>
+            <File>
+              <FileName>setUsersSport.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setUsersSport.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

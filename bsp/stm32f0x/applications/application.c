@@ -189,6 +189,7 @@ static void rt_control_thread_entry(void* parameter)
 {
     volatile rt_uint32_t count=0;
     rt_uint8_t major, minor;
+		rt_uint8_t	buf;
 	//char buf[20];
 	//static rt_uint8_t uart_rx_data_buf[segLengthVal];
 	
@@ -207,19 +208,23 @@ static void rt_control_thread_entry(void* parameter)
 			if(F_eeprom_test() == RT_EOK) {
 				rt_kprintf("eeprom_OK");
 				if(F_eeprom_whether_init() == RT_EOK) {
-					F_eeprom_incline_data(0,&incline_eeprom_data);	//	read
-					F_eeprom_home1_data(0,&sport_data.saveSeatPositionHome_1);
-					F_eeprom_home2_data(0,&sport_data.saveSeatPositionHome_2);
+					// eeprom 資料讀取
+					F_eeprom_incline_data(ReadDataVal,&incline_eeprom_data);	//	read
+					F_eeprom_home1_data(ReadDataVal,&sport_data.saveSeatPositionHome_1);
+					F_eeprom_home2_data(ReadDataVal,&sport_data.saveSeatPositionHome_2);
 				} else {
+					// eeprom 資料初始化
 					//incline_eeprom_data.incMaxNum = 15;
 					incline_eeprom_data.incMaxAd = 0xE1;
 					incline_eeprom_data.incMinAd = 0x1E;
 					incline_eeprom_data.incUpDownFlg = 0;
-					F_eeprom_incline_data(1,&incline_eeprom_data);	//	write
+					F_eeprom_incline_data(WriteDataVal,&incline_eeprom_data);	//	write
 					sport_data.saveSeatPositionHome_1 = incline_eeprom_data.incMaxAd;
-					F_eeprom_home1_data(1,&sport_data.saveSeatPositionHome_1);
+					F_eeprom_home1_data(WriteDataVal,&sport_data.saveSeatPositionHome_1);
 					sport_data.saveSeatPositionHome_2 = incline_eeprom_data.incMinAd;
-					F_eeprom_home2_data(1,&sport_data.saveSeatPositionHome_2);
+					F_eeprom_home2_data(WriteDataVal,&sport_data.saveSeatPositionHome_2);
+					buf = 0;
+					F_eeprom_user_DetectionData(InitDataVal,EepromNothingVal,&buf);		
 					F_eeprom_write_init();
 				}
 				incline_control_init(incline_eeprom_data);
@@ -290,6 +295,18 @@ static void rt_control_thread_entry(void* parameter)
 			//==================
 			case	setUsersNoDataVal:
 			F_setUsersNoData();
+				break;
+			//==================
+			case	setUsersDataVal:
+			F_setUsersData();
+				break;
+			//==================
+			case	setUsersResetDataVal:
+			F_setUsersResetData();
+				break;
+			//==================
+			case	setUsersSportVal:
+			F_setUsersSport();
 				break;
 			//==================
 			case	eng1Val:

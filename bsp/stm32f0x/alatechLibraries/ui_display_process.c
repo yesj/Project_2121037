@@ -50,6 +50,18 @@ const rt_uint8_t M41[] ={"FEMALE"};
 const rt_uint8_t M42[] ={"MALE"};
 const rt_uint8_t M43[] ={"AGE"};
 const rt_uint8_t M44[] ={"WEIGHT"};
+const rt_uint8_t M45[] ={"MILES"};
+const rt_uint8_t M46[] ={"CAL"};
+const rt_uint8_t M47[] ={"RESETDATA?"};
+const rt_uint8_t M48[] ={"YES"};
+const rt_uint8_t M49[] ={"NO"};
+
+static void	F_HundredChange(rt_uint8_t	*byte2,rt_uint8_t	*byte1,rt_uint32_t data)
+{
+	*byte2 = data / 100;
+	*byte1 = data % 100;
+}
+
 
 void	F_showHeartRateDot(void)
 {
@@ -216,12 +228,6 @@ void	F_show8Time(rt_time_data_t TimeData)
 	F_Show_8_Lcd(blankVal,0,1,ShowHiByeVal,TimeData.timeH,LCDBuffer);
 	F_Show_8_Lcd(blankVal,2,3,ShowHiByeVal,TimeData.timeL,LCDBuffer);
 	F_showTimeClick();
-}
-
-void	F_HundredChange(rt_uint8_t	*byte2,rt_uint8_t	*byte1,rt_uint32_t data)
-{
-	*byte2 = data / 100;
-	*byte1 = data % 100;
 }
 
 void	F_CalChange(rt_uint32_t *Cal)
@@ -909,6 +915,7 @@ void	F_showNoData(void)
 	coordinateTemp1.y = 13;
 	F_ShowMatrixStringLcd(coordinateTemp1,M36,sizeof(M36),LCDBuffer);
 }
+
 #define UserNameAdr			6
 void	F_showSetUserName(rt_uint8_t adr,rt_uint8_t *data,rt_uint8_t size)
 {
@@ -942,6 +949,21 @@ void	F_showSetUserName(rt_uint8_t adr,rt_uint8_t *data,rt_uint8_t size)
 			F_ShowMatrixFontLcd(coordinateTemp1,*(data + i),LCDBuffer);
 		}
 	}
+}
+
+void	F_showUserName(rt_uint8_t *data,rt_uint8_t size)
+{
+	rt_coordinate_t coordinateTemp1;
+	rt_uint8_t i;
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 22;
+	F_ShowMatrixStringLcd(coordinateTemp1,M37,sizeof(M37),LCDBuffer);
+
+	for(i=0 ; i < 10 ; i++) {
+		coordinateTemp1.x = (UserNameAdr * i);
+		coordinateTemp1.y = 9;
+		F_ShowMatrixFontLcd(coordinateTemp1,*(data + i),LCDBuffer);
+	}	
 }
 
 void	F_showSetSeatPosition(void)
@@ -1016,3 +1038,93 @@ void	F_showSetWeight(rt_uint8_t Weight)
 	
 		F_ShowMatrixNumProcessReverse(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,Weight,LCDBuffer);
 }
+
+void	F_showTimeMilesCal(rt_time_data_t TimeData,rt_uint16_t	Miles,rt_uint32_t	Cal)
+{
+		rt_coordinate_t coordinateTemp1,coordinateTemp2,coordinateTemp3;
+		coordinateTemp1.x = 0;
+		coordinateTemp1.y = 23;
+		F_ShowMatrixStringLcd(coordinateTemp1,M02,sizeof(M02),LCDBuffer);
+	
+		coordinateTemp3.x = blankVal;
+		coordinateTemp3.y = blankVal;
+		coordinateTemp2.x = 24;
+		coordinateTemp2.y = 23;
+		coordinateTemp1.x = 24+6;
+		coordinateTemp1.y = 23;
+		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,TimeData.timeH,LCDBuffer);
+		coordinateTemp2.x = 42;
+		coordinateTemp2.y = 23;
+		coordinateTemp1.x = 42+6;
+		coordinateTemp1.y = 23;
+		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,TimeData.timeL,LCDBuffer);
+		
+		coordinateTemp1.x = 20;
+		coordinateTemp1.y = 13;
+		F_ShowMatrixStringLcd(coordinateTemp1,M45,sizeof(M45),LCDBuffer);
+	
+		coordinateTemp3.x = 0;
+		coordinateTemp3.y = 13;
+		coordinateTemp2.x = 0+6;
+		coordinateTemp2.y = 13;
+		coordinateTemp1.x = 0+6+6;
+		coordinateTemp1.y = 13;
+		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,Miles,LCDBuffer);	
+	
+		coordinateTemp1.x = 32;
+		coordinateTemp1.y = 3;
+		F_ShowMatrixStringLcd(coordinateTemp1,M46,sizeof(M46),LCDBuffer);
+		
+		coordinateTemp3.x = blankVal;
+		coordinateTemp3.y = blankVal;
+		coordinateTemp2.x = 18;
+		coordinateTemp2.y = 3;
+		coordinateTemp1.x = 18+6;
+		coordinateTemp1.y = 3;
+		
+		if(Cal > 99) {
+			F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,(Cal % 100),LCDBuffer);
+			coordinateTemp3.x = 0;
+			coordinateTemp3.y = 3;
+			coordinateTemp2.x = 0+6;
+			coordinateTemp2.y = 3;
+			coordinateTemp1.x = 0+6+6;
+			coordinateTemp1.y = 3;
+			F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,(Cal / 100),LCDBuffer);
+		} else {
+			F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,Cal,LCDBuffer);	
+		}
+}
+
+void	F_showResetDataNo(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 0;
+		coordinateTemp1.y = 22;
+		F_ShowMatrixStringLcd(coordinateTemp1,M47,sizeof(M47),LCDBuffer);
+	
+		coordinateTemp1.x = 6;
+		coordinateTemp1.y = 12;
+		F_ShowMatrixStringLcd(coordinateTemp1,M48,sizeof(M48),LCDBuffer);		//	YES
+	
+		coordinateTemp1.x = 9;
+		coordinateTemp1.y = 2;
+		F_ShowMatrixStringLcdReverse(coordinateTemp1,M49,sizeof(M49),LCDBuffer);		//	NO
+}
+
+void	F_showResetDataYes(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 0;
+		coordinateTemp1.y = 22;
+		F_ShowMatrixStringLcd(coordinateTemp1,M47,sizeof(M47),LCDBuffer);
+	
+		coordinateTemp1.x = 6;
+		coordinateTemp1.y = 12;
+		F_ShowMatrixStringLcdReverse(coordinateTemp1,M48,sizeof(M48),LCDBuffer);		//	YES
+
+		coordinateTemp1.x = 9;
+		coordinateTemp1.y = 2;
+		F_ShowMatrixStringLcd(coordinateTemp1,M49,sizeof(M49),LCDBuffer);		//	NO
+}
+

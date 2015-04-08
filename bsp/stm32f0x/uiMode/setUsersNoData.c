@@ -1,4 +1,5 @@
 #include "chandler.h"
+#include "24lcxx_user.h"
 
 static	rt_uint8_t	TimeCount;
 		
@@ -86,8 +87,8 @@ static void F_SetUsersEnterStopKey(rt_uint8_t Key)
 		case	enter_KeyVal:
 		bz_short();
 		ui_action.Event++;
-		if(ui_action.Event == setWeightEventVal) {
-			
+		if(ui_action.Event > setWeightEventVal) {
+			F_setUsersInit(ui_action.UsersEventSave);
 		}
 			break;
 		case	stop_rest_KeyVal:
@@ -95,11 +96,20 @@ static void F_SetUsersEnterStopKey(rt_uint8_t Key)
 		if(ui_action.Event > setUsersName_1_EventVal) {
 			ui_action.Event--;
 		} else {
-			F_setUsersInit();
+			F_setUsersInit(ui_action.UsersEventSave);
 		}	
 			break;
 	}
 }	
+
+static void F_SetUsersEnterNameKey(rt_uint8_t Key,rt_uint8_t DataAdr)
+{
+	switch(Key) {
+		case	enter_KeyVal:
+		F_eeprom_user_name(WriteSpecificDataAdrVal,ui_action.UsersEventSave,set_user_data.UserNaume,DataAdr);
+			break;
+	}
+}
 
 static void F_SetUsersGenderUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 {
@@ -174,6 +184,7 @@ void F_setUsersNoData(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					switch(ui_action.Event) {
 						case setUsersNoDataEventVal:
 
@@ -181,42 +192,52 @@ void F_setUsersNoData(void)
 						case setUsersName_1_EventVal:
 						F_SetUsersEnterStopKey(keyCode);
 						F_SetUsersNameUpDownKey(keyCode,LongKeyStartFlg,0);
+						F_SetUsersEnterNameKey(keyCode,0);
 							break;
 						case setUsersName_2_EventVal:
 						F_SetUsersEnterStopKey(keyCode);
 						F_SetUsersNameUpDownKey(keyCode,LongKeyStartFlg,1);
+						F_SetUsersEnterNameKey(keyCode,1);
 							break;
 						case setUsersName_3_EventVal:
 						F_SetUsersEnterStopKey(keyCode);
 						F_SetUsersNameUpDownKey(keyCode,LongKeyStartFlg,2);
+						F_SetUsersEnterNameKey(keyCode,2);
 							break;
 						case setUsersName_4_EventVal:
 						F_SetUsersEnterStopKey(keyCode);
 						F_SetUsersNameUpDownKey(keyCode,LongKeyStartFlg,3);
+						F_SetUsersEnterNameKey(keyCode,3);
 							break;
 						case setUsersName_5_EventVal:
 						F_SetUsersEnterStopKey(keyCode);
 						F_SetUsersNameUpDownKey(keyCode,LongKeyStartFlg,4);
+						F_SetUsersEnterNameKey(keyCode,4);
 							break;
 						case setUsersName_6_EventVal:
 						F_SetUsersEnterStopKey(keyCode);
 						F_SetUsersNameUpDownKey(keyCode,LongKeyStartFlg,5);
+						F_SetUsersEnterNameKey(keyCode,5);
 							break;
 						case setUsersName_7_EventVal:
 						F_SetUsersEnterStopKey(keyCode);
 						F_SetUsersNameUpDownKey(keyCode,LongKeyStartFlg,6);
+						F_SetUsersEnterNameKey(keyCode,6);
 							break;
 						case setUsersName_8_EventVal:
 						F_SetUsersEnterStopKey(keyCode);
 						F_SetUsersNameUpDownKey(keyCode,LongKeyStartFlg,7);
+						F_SetUsersEnterNameKey(keyCode,7);
 							break;
 						case setUsersName_9_EventVal:
 						F_SetUsersEnterStopKey(keyCode);
 						F_SetUsersNameUpDownKey(keyCode,LongKeyStartFlg,8);
+						F_SetUsersEnterNameKey(keyCode,8);
 							break;
 						case setUsersName_10_EventVal:
 						F_SetUsersEnterStopKey(keyCode);
 						F_SetUsersNameUpDownKey(keyCode,LongKeyStartFlg,9);
+						F_SetUsersEnterNameKey(keyCode,9);
 							break;
 						case setSeatPositionEventVal:
 						F_SetUsersEnterStopKey(keyCode);
@@ -300,20 +321,30 @@ void F_setUsersNoData(void)
 
 void F_setUsersNoDataInit(void)
 {
-		rt_uint8_t i;
+		rt_uint8_t	i;
+		rt_uint8_t	AdTemp;
+	
 		ui_action.Status = setUsersNoDataVal;
 		ui_action.Event = setUsersNoDataEventVal;
 		TimeCount = 0;
 		for(i=0;i<10;i++) {
 			set_user_data.UserNaume[i] = ' ';
 		}
+		
+		F_eeprom_user_name(WriteDataVal,ui_action.UsersEventSave,set_user_data.UserNaume,0);
+		AdTemp = rt_inc_read_ad();
+		F_eeprom_user_seat_position(WriteDataVal,ui_action.UsersEventSave,&AdTemp);
+		
 		set_user_data.age.maxNumber = 99;
 		set_user_data.age.minNumber = 10;
 		set_user_data.age.number = 40;
+		F_eeprom_user_age(WriteDataVal,ui_action.UsersEventSave,&set_user_data.age.number);
 		
 		set_user_data.Weight.maxNumber = 250;
 		set_user_data.Weight.minNumber = 100;
 		set_user_data.Weight.number = 150;
+		F_eeprom_user_wigeht(WriteDataVal,ui_action.UsersEventSave,&set_user_data.Weight.number);
 		set_user_data.Gender = 1;
+		F_eeprom_user_gender(WriteDataVal,ui_action.UsersEventSave,&set_user_data.Gender);
 }
 

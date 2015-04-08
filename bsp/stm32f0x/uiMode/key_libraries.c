@@ -48,7 +48,31 @@ void	F_SetUserKey(rt_uint8_t keyCode)
 		{
 			case	user_KeyVal:
 			bz_short();
-			F_setUsersInit();
+			F_setUsersInit(setUser_1_EventVal);
 				break;
 		}	
+}
+
+static 	rt_uint8_t	VmsDetectionTime;
+
+void	F_VmsDetection(rt_uint8_t rpm)
+{
+		if(rpm) {
+			VmsDetectionTime = 0;
+			F_vms_control(sport_data.resistance.number);
+		} else {
+			VmsDetectionTime++;
+			if(VmsDetectionTime>=30) {
+				VmsDetectionTime = 30;
+				F_vms_control(0);
+			} else {
+				F_vms_control(sport_data.resistance.number);
+			}
+		}
+}
+
+void	F_setVmsDetectionVal(rt_uint8_t val)
+{
+	VmsDetectionTime = val;
+	
 }
