@@ -50,7 +50,7 @@
           <OutputName>template</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\build\</ListingPath>
@@ -829,11 +829,6 @@
               <FilePath>.\uiMode\sysUiStart.c</FilePath>
             </File>
             <File>
-              <FileName>sportManual.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\uiMode\sportManual.c</FilePath>
-            </File>
-            <File>
               <FileName>eng_1.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\uiMode\eng_1.c</FilePath>
@@ -917,6 +912,36 @@
               <FileName>setUsersSport.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\uiMode\setUsersSport.c</FilePath>
+            </File>
+            <File>
+              <FileName>setProfilesManual.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setProfilesManual.c</FilePath>
+            </File>
+            <File>
+              <FileName>setManualFatBurn.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setManualFatBurn.c</FilePath>
+            </File>
+            <File>
+              <FileName>sportNoramal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\sportNoramal.c</FilePath>
+            </File>
+            <File>
+              <FileName>setManualCardio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setManualCardio.c</FilePath>
+            </File>
+            <File>
+              <FileName>setManualTarget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setManualTarget.c</FilePath>
+            </File>
+            <File>
+              <FileName>setProfilesManualSport.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setProfilesManualSport.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,6 +1,21 @@
 #include "chandler.h"
 #include "24lcxx_user.h"
 
+static void F_UserSportTimeSecCount(void)
+{
+	set_user_data.SportTimeSec++;
+}
+
+static void F_SaveSportData(void)
+{
+		set_user_data.SportCal = set_user_data.SportCal + (calor_count.calorie / 100000);				// 卡路里計算 小數點第5位
+		set_user_data.SportKm = set_user_data.SportKm + (distance_data.distance_count / 1000);	// 單位公分 轉換 公里
+	
+		F_eeprom_user_time(WriteDataVal,ui_action.UsersEventSave,&set_user_data.SportTimeSec);
+		F_eeprom_user_cal(WriteDataVal,ui_action.UsersEventSave,&set_user_data.SportCal);
+		F_eeprom_user_km(WriteDataVal,ui_action.UsersEventSave,&set_user_data.SportKm);
+}
+
 void F_setUsersSport(void)
 {
 		rt_uint8_t	keyCode = 0;
@@ -32,6 +47,7 @@ void F_setUsersSport(void)
 						break;
 						case	stop_rest_KeyVal:
 						bz_short();
+						F_SaveSportData();
 						F_setUsersInit(ui_action.UsersEventSave);
 						break;	
 					}
@@ -58,16 +74,20 @@ void F_setUsersSport(void)
 					F_VmsDetection(distance_data.rpm);
 					distance_data.WheelSize = 300;
 					F_distance_process(&distance_data);
+					F_UserSportTimeSecCount();
 				}
 			}
 }
 
 void F_setUsersSportInit(void)
 {
-		ui_action.Status = setUsersSportVal;
-		//ui_action.Event = showUserResetNoEventVal;
+	ui_action.Status = setUsersSportVal;
+	//ui_action.Event = showUserResetNoEventVal;
 	memset(&TimeData,0,sizeof(TimeData));
 	memset(&calor_count,0,sizeof(calor_count));
 	sport_data.resistance.number = 1;
 	F_setVmsDetectionVal(30);
+	F_eeprom_user_time(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportTimeSec);
+	F_eeprom_user_cal(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportCal);
+	F_eeprom_user_km(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportKm);
 }

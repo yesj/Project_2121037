@@ -259,7 +259,7 @@ void  F_ShowMatrixLcd(rt_uint8_t	lcdRamAdr,rt_uint32_t data,rt_uint8_t dataLongS
 		*(displayAdr+lcdRamAdrTemp) = dataTemp;
 }
 //===============================================================
-// 矩陣點黑
+// 在x、y的範圍內將矩陣點黑
 void F_ShowMatrixLcdChossDot(rt_coordinate_t	adr,rt_uint8_t x_long,rt_uint8_t y_long,rt_uint32_t *displayAdr)
 {
 		rt_uint8_t	lcdBitAdr,lcdRamAdrTemp;
@@ -279,7 +279,8 @@ void F_ShowMatrixLcdChossDot(rt_coordinate_t	adr,rt_uint8_t x_long,rt_uint8_t y_
 			*(displayAdr+lcdRamAdrTemp) = dataTemp;
 		}
 }
-
+//======================================================
+// 設定x、y的範圍，帶入要點黑的資料
 void F_ShowMatrixLcdChossReverse(rt_coordinate_t	adr,rt_uint8_t x_long,rt_uint8_t y_long,rt_uint32_t data,rt_uint32_t *displayAdr)
 {
 		rt_uint8_t	lcdBitAdr,lcdRamAdrTemp;

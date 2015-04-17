@@ -25,7 +25,7 @@ void F_setNoramal(void)
 					switch(keyCode)
 					{
 						case	quick_start_KeyVal:
-						F_SportManualInit();
+						F_SportNoramalInit();
 						bz_short();
 						break;
 						case	resistance_up_KeyVal:
@@ -41,7 +41,7 @@ void F_setNoramal(void)
 						bz_short();
 						break;
 						case	programs_KeyVal:
-						F_setProfileInit();
+						F_setProfileInit(setProfileEventVal);
 						bz_short();
 						break;
 					}

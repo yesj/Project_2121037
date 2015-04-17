@@ -2,13 +2,13 @@
 
 static void	F_SetProfilesChooseMode(void)
 {
-	
+		bz_short();	
 		switch(ui_action.Event) {
 			case	setProfileEventVal:
 			F_setProfileChooseInit(ui_action.ProfileEventSave);
 				break;
 			case	setManualEventVal:
-
+			F_setProfilesManualInit(showManualFatBurnEventVal);
 				break;
 			case	setHeartRateEventVal:
 
@@ -44,21 +44,20 @@ void F_setProfiles(void)
 							F_setNoramalInit();
 						break;
 						case	enter_KeyVal:
-							bz_short();
 							F_SetProfilesChooseMode();
 						break;
 						case	resistance_up_KeyVal:
-							bz_short();
-							ui_action.Event++;
-							if(ui_action.Event>setMetsEventVal)
-								ui_action.Event = setProfileEventVal;
-							break;
-						case	resistance_down_KeyVal:
 							bz_short();
 							if(ui_action.Event > setProfileEventVal)
 								ui_action.Event--;
 								else
 									ui_action.Event = setMetsEventVal;
+							break;
+						case	resistance_down_KeyVal:
+							bz_short();
+							ui_action.Event++;
+							if(ui_action.Event>setMetsEventVal)
+								ui_action.Event = setProfileEventVal;
 							break;
 					}
 				}
@@ -89,9 +88,9 @@ void F_setProfiles(void)
 			}
 }
 
-void F_setProfileInit(void)
+void F_setProfileInit(rt_uint8_t Event)
 {
 	ui_action.Status = setProfilesVal;
-	ui_action.Event = setProfileEventVal;
+	ui_action.Event = Event;
 }
 

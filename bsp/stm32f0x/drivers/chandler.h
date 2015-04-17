@@ -12,7 +12,16 @@
 #include "pwm_vms.h"
 #include "Incline.h"
 #include "heart.h"
+//=================================
+// 參數設定 
+#define ageNumMaxVal					99
+#define ageNumMinVal					10
+#define ageNumVal							40
 
+#define workOutTimeMinuteNumMaxVal		99
+#define workOutTimeMinuteNumMinVal		5
+#define workOutTimeMinuteNumVal				15
+//=================================
 enum _uiStatus {
 		sysPowerStartVal,
     sysUiStartVal,
@@ -33,6 +42,11 @@ enum _uiStatus {
 		setUsersDataVal,
 		setUsersResetDataVal,
 		setUsersSportVal,
+		setProfilesManualVal,
+		setManualFatBurnVal,
+		setManualCardioVal,
+		setManualTargetVal,
+		setManualSportVal,
     eepromErrVal,
     sportErrVal,
 };
@@ -113,11 +127,24 @@ enum _setUsersDataEvent{
 	showUserDataEventVal
 };
 
+enum _setManualEvent{
+	showManualFatBurnEventVal,
+	showManualCardicEventVal,
+	showManualTargetEventVal
+};
+
+enum _setManualDataEvent{
+	showManualAgeEventVal,
+	showManualSetTargetEventVal,
+	showManualWorkoutEventVal
+};
+
 //================================
 struct	rt_ui_action
 {
   rt_uint8_t	Status;
   rt_uint8_t	Event;
+	//rt_uint8_t	ProfileSEventSave;
 	rt_uint8_t	ProfileEventSave;
 	rt_uint8_t	UsersEventSave;
 };
@@ -162,6 +189,20 @@ struct	rt_set_profile_data
 };
 
 typedef struct	rt_set_profile_data		rt_set_profile_data_t;
+//================================
+struct	rt_set_manual_data
+{
+  uint8_Number_t FatBurnAge;
+	rt_uint8_t	FatBurnTarget;
+	uint8_Number_t FatBurnWorkoutMinTime;
+  uint8_Number_t CardioAge;
+	rt_uint8_t	CardioTarget;
+	uint8_Number_t CardioWorkoutMinTime;
+  uint8_Number_t TargetTarget;
+	uint8_Number_t TargetWorkoutMinTime;
+};
+
+typedef struct	rt_set_manual_data		rt_set_manual_data_t;
 //================================
 struct rt_incline_eeprom_data
 {
@@ -215,24 +256,12 @@ struct rt_user_data
 	rt_uint8_t	TimeH;
 	rt_uint8_t	TimeM;
 	rt_uint16_t	calorie;
+	rt_uint32_t	SportTimeSec;
+	rt_uint32_t	SportCal;
+	rt_uint16_t	SportKm;	
 };
 typedef struct rt_user_data rt_user_data_t;
-/*
-struct rt_set_user_data
-{
-	rt_user_data_t	set_user_data_1;
-	rt_user_data_t	set_user_data_2;
-	rt_user_data_t	set_user_data_3;
-	rt_user_data_t	set_user_data_4;
-	rt_user_data_t	set_user_data_5;
-	rt_user_data_t	set_user_data_6;
-	rt_user_data_t	set_user_data_7;
-	rt_user_data_t	set_user_data_8;
-	rt_user_data_t	set_user_data_9;
-	rt_user_data_t	set_user_data_10;
-};
-typedef struct rt_set_user_data rt_set_user_data_t;
-*/
+
 //========================================================================
 extern rt_ui_action_t	ui_action;
 
@@ -247,6 +276,8 @@ extern rt_distance_data_t	distance_data;
 extern rt_set_profile_data_t set_profile_data;
 
 extern rt_user_data_t	set_user_data;
+
+extern rt_set_manual_data_t	set_manual_data;
 //================================
 
 typedef void (*app_err_treadmill_handler_t)(rt_uint8_t message);
@@ -369,9 +400,9 @@ extern void F_setNoramal(void);
 
 extern void F_setNoramalInit(void);
 
-extern void F_SportManual(void);
+extern void F_SportNoramal(void);
 
-extern void F_SportManualInit(void);
+extern void F_SportNoramalInit(void);
 
 extern void F_EngMode1(void);
 
@@ -383,7 +414,7 @@ extern void F_EngMode1_AutoErr(void);
 
 extern void F_setProfiles(void);
 
-extern void F_setProfileInit(void);
+extern void F_setProfileInit(rt_uint8_t Event);
 
 extern void F_setProfileChoose(void);
 
@@ -436,6 +467,26 @@ extern void F_setUsersResetDataInit(void);
 extern void F_setUsersSport(void);
 
 extern void F_setUsersSportInit(void);
+
+extern void F_setProfilesManual(void);
+
+extern void F_setProfilesManualInit(rt_uint8_t Event);
+
+extern void F_setManualFatBurn(void);
+	
+extern void F_setManualFatBurnInit(void);
+
+extern void F_setManualCardio(void);
+
+extern void F_setManualCardioInit(void);
+
+extern void F_setManualTarget(void);
+
+extern void F_setManualTargetInit(void);
+
+extern void F_ProfilesManualSport(void);
+
+extern void F_ProfilesManualSportInit(rt_uint8_t WorkOutTimeMin,rt_uint8_t Target);
 
 //===========================================================================
 
@@ -578,6 +629,14 @@ extern void	F_showTimeMilesCal(rt_time_data_t TimeData,rt_uint16_t	Miles,rt_uint
 extern void	F_showResetDataNo(void);
 
 extern void	F_showResetDataYes(void);
+
+extern void	F_showFatburn(void);
+
+extern void	F_showCardio(void);
+
+extern void	F_showTarget(void);
+
+extern void	F_showSetTargetNum(rt_uint8_t target,rt_uint8_t Dot);
 //=======================================
 extern void	F_SeatPositionControlAllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg);
 

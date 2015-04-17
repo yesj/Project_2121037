@@ -52,7 +52,7 @@ void F_setProfileChoose(void)
 						case	stop_rest_KeyVal:
 							bz_short();
 							ui_action.ProfileEventSave = ui_action.Event;
-							F_setProfileInit();
+							F_setProfileInit(setProfileEventVal);
 							break;
 						case	resistance_up_KeyVal:
 							bz_short();

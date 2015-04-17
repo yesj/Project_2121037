@@ -26,7 +26,7 @@ void F_ShowCalorieView(void)
 	//F_showMatrixCalHr(calor_count.calorie);
 }
 
-void F_SportManual(void)
+void F_SportNoramal(void)
 {
 		rt_uint8_t	keyCode;
 		rt_bool_t	LongKeyStartFlg = 0;
@@ -104,7 +104,7 @@ void F_SportManual(void)
 			}
 }
 
-void	F_SportManualInit(void)
+void	F_SportNoramalInit(void)
 {
 	ui_action.Status = sportManualVal;
 	ui_action.Event	= BasicViewVal;

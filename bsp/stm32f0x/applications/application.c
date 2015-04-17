@@ -53,6 +53,8 @@ rt_distance_data_t	distance_data;
 rt_set_profile_data_t set_profile_data;
 
 rt_user_data_t	set_user_data;
+
+rt_set_manual_data_t	set_manual_data;
 //==============================================================================
 void IWDG_Config(unsigned char timeout)
 {
@@ -133,51 +135,77 @@ static	void	F_InitSetProfileData(void)
 	set_profile_data.roolingHillLevel.maxNumber = 20;
 	set_profile_data.roolingHillLevel.minNumber = 1;
 	
-	set_profile_data.roolingHillWorkoutMinTime.number = 15;
-	set_profile_data.roolingHillWorkoutMinTime.maxNumber = 99;
-	set_profile_data.roolingHillWorkoutMinTime.minNumber = 5;
+	set_profile_data.roolingHillWorkoutMinTime.number = workOutTimeMinuteNumVal;
+	set_profile_data.roolingHillWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+	set_profile_data.roolingHillWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
 	
 	set_profile_data.peakLevel.number = 7;
 	set_profile_data.peakLevel.maxNumber = 20;
 	set_profile_data.peakLevel.minNumber = 1;
 	
-	set_profile_data.peakWorkoutMinTime.number = 15;
-	set_profile_data.peakWorkoutMinTime.maxNumber = 99;
-	set_profile_data.peakWorkoutMinTime.minNumber = 5;
+	set_profile_data.peakWorkoutMinTime.number = workOutTimeMinuteNumVal;
+	set_profile_data.peakWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+	set_profile_data.peakWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
 	
 	set_profile_data.plateauLevel.number = 7;
 	set_profile_data.plateauLevel.maxNumber = 20;
 	set_profile_data.plateauLevel.minNumber = 1;
 	
-	set_profile_data.plateauWorkoutMinTime.number = 15;
-	set_profile_data.plateauWorkoutMinTime.maxNumber = 99;
-	set_profile_data.plateauWorkoutMinTime.minNumber = 5;
+	set_profile_data.plateauWorkoutMinTime.number = workOutTimeMinuteNumVal;
+	set_profile_data.plateauWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+	set_profile_data.plateauWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
 	
 	set_profile_data.climbLevel.number = 7;
 	set_profile_data.climbLevel.maxNumber = 20;
 	set_profile_data.climbLevel.minNumber = 1;
 	
-	set_profile_data.climbWorkoutMinTime.number = 15;
-	set_profile_data.climbWorkoutMinTime.maxNumber = 99;
-	set_profile_data.climbWorkoutMinTime.minNumber = 5;
+	set_profile_data.climbWorkoutMinTime.number = workOutTimeMinuteNumVal;
+	set_profile_data.climbWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+	set_profile_data.climbWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
 	
 	set_profile_data.interval_1_Level.number = 7;
 	set_profile_data.interval_1_Level.maxNumber = 20;
 	set_profile_data.interval_1_Level.minNumber = 1;
 	
-	set_profile_data.interval_1_WorkoutMinTime.number = 15;
-	set_profile_data.interval_1_WorkoutMinTime.maxNumber = 99;
-	set_profile_data.interval_1_WorkoutMinTime.minNumber = 5;
+	set_profile_data.interval_1_WorkoutMinTime.number = workOutTimeMinuteNumVal;
+	set_profile_data.interval_1_WorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+	set_profile_data.interval_1_WorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
 	
 	set_profile_data.interval_2_Level.number = 7;
 	set_profile_data.interval_2_Level.maxNumber = 20;
 	set_profile_data.interval_2_Level.minNumber = 1;
 	
-	set_profile_data.interval_2_WorkoutMinTime.number = 15;
-	set_profile_data.interval_2_WorkoutMinTime.maxNumber = 99;
-	set_profile_data.interval_2_WorkoutMinTime.minNumber = 5;
+	set_profile_data.interval_2_WorkoutMinTime.number = workOutTimeMinuteNumVal;
+	set_profile_data.interval_2_WorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+	set_profile_data.interval_2_WorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
 }
 
+static	void	F_InitManualData(void)
+{
+		set_manual_data.FatBurnAge.maxNumber = ageNumMaxVal;
+		set_manual_data.FatBurnAge.minNumber = ageNumMinVal;
+		set_manual_data.FatBurnAge.number = ageNumVal;
+	
+		set_manual_data.CardioAge.maxNumber = ageNumMaxVal;
+		set_manual_data.CardioAge.minNumber = ageNumMinVal;
+		set_manual_data.CardioAge.number = ageNumVal;
+
+		set_manual_data.TargetTarget.maxNumber = 220;
+		set_manual_data.TargetTarget.minNumber = 40;
+		set_manual_data.TargetTarget.number = 120;
+	
+		set_manual_data.FatBurnWorkoutMinTime.number = workOutTimeMinuteNumVal;
+		set_manual_data.FatBurnWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+		set_manual_data.FatBurnWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
+	
+		set_manual_data.CardioWorkoutMinTime.number = workOutTimeMinuteNumVal;
+		set_manual_data.CardioWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+		set_manual_data.CardioWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
+
+		set_manual_data.TargetWorkoutMinTime.number = workOutTimeMinuteNumVal;
+		set_manual_data.TargetWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+		set_manual_data.TargetWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
+}
 static	void	F_InitSetProfileEvent(void)
 {
 	
@@ -234,6 +262,7 @@ static void rt_control_thread_entry(void* parameter)
 				F_InitSportParameters();
 				F_InitSetProfileData();
 				F_InitSetProfileEvent();
+				F_InitManualData();
 				ui_action.Status = sysUiStartVal;
 			} else {
 				rt_kprintf("eeprom_ERR");
@@ -250,7 +279,7 @@ static void rt_control_thread_entry(void* parameter)
 				break;
 			//==================
 			case	sportManualVal:
-			F_SportManual();
+			F_SportNoramal();
 				break;
 			//==================
 			case	setProfilesVal:
@@ -307,6 +336,26 @@ static void rt_control_thread_entry(void* parameter)
 			//==================
 			case	setUsersSportVal:
 			F_setUsersSport();
+				break;
+			//==================
+			case	setProfilesManualVal:
+			F_setProfilesManual();
+				break;
+			//==================
+			case	setManualFatBurnVal:
+			F_setManualFatBurn();
+				break;
+			//==================
+			case	setManualCardioVal:
+			F_setManualCardio();
+				break;
+			//==================
+			case	setManualTargetVal:
+			F_setManualTarget();
+				break;
+			//==================
+			case	setManualSportVal:
+			F_ProfilesManualSport();
 				break;
 			//==================
 			case	eng1Val:

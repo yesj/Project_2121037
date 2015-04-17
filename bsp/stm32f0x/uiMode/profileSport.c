@@ -2,7 +2,7 @@
 
 static 	rt_uint8_t	R_Segments,R_SegmentsTime;
 static 	rt_bool_t		FlickerFlg;
-//static 	rt_bool_t fristSportFlg;
+
 void	F_ProfileTimeSegments(rt_uint8_t *Segments,rt_time_data_t Time,rt_uint8_t SegmentsData,rt_uint8_t MaxSegments)
 {
 	rt_uint16_t timeSec;
@@ -89,7 +89,7 @@ void F_ProfileSport(void)
 						break;
 						case	stop_rest_KeyVal:
 							bz_short();
-							F_setProfileInit();
+							F_setProfileInit(setProfileEventVal);
 						break;
 					}
 				}
@@ -122,7 +122,7 @@ void F_ProfileSport(void)
 						distance_data.WheelSize = 300;
 						F_distance_process(&distance_data);
 					} else {
-						F_setProfileInit();
+						F_setProfileInit(setProfileEventVal);
 					}
 				}
 			}

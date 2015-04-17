@@ -6,6 +6,11 @@ const rt_uint32_t P01[] ={
 0x0E0000
 };
 
+const rt_uint16_t P02[] ={
+0x0380,0x07C0,0x0FE0,0x0FF0,0x0FF8,0x0FFC,0x07FE,0x03FF,0x07FE,0x0FFC,
+0x0FF8,0x0FF0,0x0FE0,0x07C0,0x0380
+};
+
 const rt_uint8_t M01[] ={"QUICKSTART"};
 const rt_uint8_t M02[] ={"TIME"};
 const rt_uint8_t M03[] ={"CAL"}; 
@@ -55,6 +60,10 @@ const rt_uint8_t M46[] ={"CAL"};
 const rt_uint8_t M47[] ={"RESETDATA?"};
 const rt_uint8_t M48[] ={"YES"};
 const rt_uint8_t M49[] ={"NO"};
+const rt_uint8_t M50[] ={"FAT"};
+const rt_uint8_t M51[] ={"BURN"};
+const rt_uint8_t M52[] ={"CARDIO"};
+const rt_uint8_t M53[] ={"TARGET"};
 
 static void	F_HundredChange(rt_uint8_t	*byte2,rt_uint8_t	*byte1,rt_uint32_t data)
 {
@@ -1128,3 +1137,104 @@ void	F_showResetDataYes(void)
 		F_ShowMatrixStringLcd(coordinateTemp1,M49,sizeof(M49),LCDBuffer);		//	NO
 }
 
+static void		F_showManualFartburnChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) {
+		F_ShowMatrixStringLcd(coordinate,M50,sizeof(M50),LCDBuffer);
+		coordinate.x = 21;
+		F_ShowMatrixStringLcd(coordinate,M51,sizeof(M51),LCDBuffer);
+	}
+		else {
+			F_ShowMatrixStringLcdReverse(coordinate,M50,sizeof(M50),LCDBuffer);	
+			coordinate.x = 21;
+			F_ShowMatrixStringLcdReverse(coordinate,M51,sizeof(M51),LCDBuffer);	
+		}
+}
+
+static void		F_showManualCardioChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M52,sizeof(M52),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M52,sizeof(M52),LCDBuffer);	
+}
+
+static void		F_showManualTargetChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M53,sizeof(M53),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M53,sizeof(M53),LCDBuffer);	
+}
+
+void	F_showFatburn(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showManualFartburnChoose(coordinateTemp1,0);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showManualCardioChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
+		F_showManualTargetChoose(coordinateTemp1,1);
+}
+
+void	F_showCardio(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showManualFartburnChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showManualCardioChoose(coordinateTemp1,0);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
+		F_showManualTargetChoose(coordinateTemp1,1);
+}
+
+void	F_showTarget(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showManualFartburnChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showManualCardioChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
+		F_showManualTargetChoose(coordinateTemp1,0);
+}
+
+void	F_showSetTargetNum(rt_uint8_t target,rt_uint8_t Dot)
+{
+	rt_coordinate_t coordinateTemp1,coordinateTemp2,coordinateTemp3;
+	rt_uint8_t Temp;
+	rt_uint8_t	adr;
+	
+	coordinateTemp1.x = 7;
+	coordinateTemp1.y = 22;
+	F_ShowMatrixStringLcd(coordinateTemp1,M53,sizeof(M53),LCDBuffer);
+	
+	coordinateTemp1.x = 4;
+	coordinateTemp1.y = 5;
+	Temp = sizeof(P02) / 2;
+	for(adr = 0; adr < Temp ; adr++) {
+		F_ShowMatrixLcdChossReverse(coordinateTemp1,1,12,P02[adr],LCDBuffer);
+		coordinateTemp1.x++;
+	}
+	coordinateTemp3.x = 22;
+	coordinateTemp3.y = 5;
+	coordinateTemp2.x = 22 + 9;
+	coordinateTemp2.y = 5;
+	coordinateTemp1.x = 22 + 9 + 9;
+	coordinateTemp1.y = 5;
+	if(Dot) {
+		F_ShowMatrixBigNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,target,LCDBuffer);
+	} else {
+		F_ShowMatrixBigNumProcessReverse(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,target,LCDBuffer);
+	}
+}

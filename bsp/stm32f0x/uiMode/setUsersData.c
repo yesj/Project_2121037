@@ -1,12 +1,13 @@
 #include "chandler.h"
 #include "24lcxx_user.h"
 
+static	rt_time_data_t	TimeTest;
+
 void F_setUsersData(void)
 {
 		rt_uint8_t	keyCode = 0;
 		rt_bool_t	LongKeyStartFlg = 0;
 		rt_uint32_t e;
-		rt_time_data_t	TimeTest;
 			if (rt_event_recv(&sport_timer_event, 0xFFFF,
 					RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR,
 					RT_WAITING_FOREVER, &e) == RT_EOK)
@@ -50,9 +51,7 @@ void F_setUsersData(void)
 							F_showUserName(set_user_data.UserNaume,10);
 							break;
 						case showUserDataEventVal:
-							TimeTest.timeH = 89;
-							TimeTest.timeL = 59;
-							F_showTimeMilesCal(TimeTest,456,89999);
+							F_showTimeMilesCal(TimeTest,set_user_data.SportCal,set_user_data.SportKm);
 							break;
 					}
 					F_Display();
@@ -63,7 +62,14 @@ void F_setUsersData(void)
 
 void F_setUsersDataInit(void)
 {
+	rt_uint16_t	TempMin;
 		ui_action.Status = setUsersDataVal;
 		ui_action.Event = showUserNameEventVal;
 		F_eeprom_user_name(ReadDataVal,ui_action.UsersEventSave,set_user_data.UserNaume,0);
+		F_eeprom_user_time(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportTimeSec);
+		F_eeprom_user_cal(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportCal);
+		F_eeprom_user_km(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportKm);
+		TempMin =  set_user_data.SportTimeSec / 60;
+		TimeTest.timeH = (TempMin / 60);
+		TimeTest.timeL = (TempMin % 60);
 }
