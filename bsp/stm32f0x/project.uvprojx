@@ -943,6 +943,11 @@
               <FileType>1</FileType>
               <FilePath>.\uiMode\setProfilesManualSport.c</FilePath>
             </File>
+            <File>
+              <FileName>EngineeringMode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\EngineeringMode.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

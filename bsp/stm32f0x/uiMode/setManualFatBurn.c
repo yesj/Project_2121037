@@ -6,6 +6,7 @@ static void F_SetManualAgeKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 		case	enter_KeyVal:
 		bz_short();
 		ui_action.Event = showManualSetTargetEventVal;
+		set_manual_data.FatBurnTarget = (220-set_manual_data.FatBurnAge.number) * 0.65;
 			break;
 		case	stop_rest_KeyVal:
 		bz_short();
@@ -47,7 +48,7 @@ static void	F_setFatBurnWorkOutTImeKey(rt_uint8_t keyCode,rt_bool_t LongKeyStart
 		{
 			case	enter_KeyVal:
 			bz_short();
-
+			F_ProfilesManualSportInit(set_manual_data.FatBurnWorkoutMinTime.number,set_manual_data.FatBurnTarget,showManualFatBurnEventVal);
 				break;
 			case	stop_rest_KeyVal:
 			bz_short();
@@ -74,7 +75,7 @@ static	void	F_SportKey(rt_uint8_t keyCode)
 		{
 			case	quick_start_KeyVal:
 			bz_short();
-			F_ProfilesManualSportInit(set_manual_data.FatBurnWorkoutMinTime.number,set_manual_data.FatBurnTarget);
+			F_ProfilesManualSportInit(set_manual_data.FatBurnWorkoutMinTime.number,set_manual_data.FatBurnTarget,showManualFatBurnEventVal);
 				break;
 		}
 }
@@ -133,5 +134,4 @@ void F_setManualFatBurnInit(void)
 {
 		ui_action.Status = setManualFatBurnVal;
 		ui_action.Event = showManualAgeEventVal;
-		set_manual_data.FatBurnTarget = 120;
 }

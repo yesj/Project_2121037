@@ -10,9 +10,6 @@ static void	F_SetProfilesChooseMode(void)
 			case	setManualEventVal:
 			F_setProfilesManualInit(showManualFatBurnEventVal);
 				break;
-			case	setHeartRateEventVal:
-
-				break;
 			case	setFocusEventVal:
 
 				break;
@@ -47,17 +44,21 @@ void F_setProfiles(void)
 							F_SetProfilesChooseMode();
 						break;
 						case	resistance_up_KeyVal:
+						if(LongKeyStartFlg == 0)	{
 							bz_short();
 							if(ui_action.Event > setProfileEventVal)
 								ui_action.Event--;
 								else
 									ui_action.Event = setMetsEventVal;
+							}
 							break;
 						case	resistance_down_KeyVal:
+						if(LongKeyStartFlg == 0)	{
 							bz_short();
 							ui_action.Event++;
 							if(ui_action.Event>setMetsEventVal)
 								ui_action.Event = setProfileEventVal;
+						}
 							break;
 					}
 				}
@@ -71,9 +72,6 @@ void F_setProfiles(void)
 							break;
 						case	setManualEventVal:
 							F_showManualReverse();
-							break;
-						case	setHeartRateEventVal:
-							F_showHeartReverse();
 							break;
 						case	setFocusEventVal:
 							F_showFocusReverse();

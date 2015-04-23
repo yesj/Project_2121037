@@ -32,6 +32,8 @@
 #define short_enter_KeyVal			103
 #define long_enter_KeyVal				104
 
+#define engineering_KeyVal			105		//	seat_position_down_KeyVal + enter_KeyVal
+
 //typedef void (*app_button_handler_t)(rt_uint8_t button_action);
 
 extern void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart);

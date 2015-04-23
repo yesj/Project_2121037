@@ -358,6 +358,10 @@ static void rt_control_thread_entry(void* parameter)
 			F_ProfilesManualSport();
 				break;
 			//==================
+			case	engineeringModeVal:
+			F_EngineeringMode();
+				break;
+			//==================
 			case	eng1Val:
 			F_EngMode1();
 				break;

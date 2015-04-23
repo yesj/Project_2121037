@@ -164,50 +164,51 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>1220</LineNumber>
+          <LineNumber>260</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134245500</Address>
+          <Address>134226616</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\alatechLibraries\ui_display_process.c</Filename>
+          <Filename>.\drivers\scan_key_led.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\template\alatechLibraries/ui_display_process.c\1220</Expression>
+          <Expression>\\template\drivers/scan_key_led.c\260</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>260</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134226620</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>.\drivers\scan_key_led.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\template\drivers/scan_key_led.c\260</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>incline_eeprom_data</ItemText>
+          <ItemText>set_user_data.UserNaume</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>eeprom_data</ItemText>
+          <ItemText>R_ScanKey</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>*data</ItemText>
-        </Ww>
-        <Ww>
-          <count>3</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>set_user_data.UserNaume</ItemText>
-        </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>Num</ItemText>
-        </Ww>
-        <Ww>
-          <count>5</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>Temp,0x0A</ItemText>
+          <ItemText>ReadkeyData</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>
@@ -306,7 +307,7 @@
 
   <Group>
     <GroupName>Drivers</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1593,6 +1594,19 @@
       <bDave2>0</bDave2>
       <PathWithFileName>.\uiMode\setProfilesManualSport.c</PathWithFileName>
       <FilenameWithoutPath>setProfilesManualSport.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>10</GroupNumber>
+      <FileNumber>99</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\uiMode\EngineeringMode.c</PathWithFileName>
+      <FilenameWithoutPath>EngineeringMode.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

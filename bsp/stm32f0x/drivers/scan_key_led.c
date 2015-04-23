@@ -84,6 +84,7 @@
 
 #define RT_KEY_NUM_103		103
 #define RT_KEY_NUM_104		104
+#define RT_KEY_NUM_105		105
 
 /* 定時器的控制塊 */
 //static rt_timer_t	key_led_scan_timer;
@@ -221,7 +222,7 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
 		ScanLine3Out(1);
 		ScanLine4Out(1);
 		ScanLine5Out(1);
-		F_EEDelay(20);
+		F_EEDelay(50);
 		R_ScanKey[0] = F_ReadScanKey();
 	
 		ScanLine1Out(1);
@@ -229,7 +230,7 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
 		ScanLine3Out(1);
 		ScanLine4Out(1);
 		ScanLine5Out(1);
-		F_EEDelay(20);
+		F_EEDelay(50);
 		R_ScanKey[1] = F_ReadScanKey();
 	
 		ScanLine1Out(1);
@@ -237,7 +238,7 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
 		ScanLine3Out(0);
 		ScanLine4Out(1);
 		ScanLine5Out(1);
-		F_EEDelay(20);
+		F_EEDelay(50);
 		R_ScanKey[2] = F_ReadScanKey();
 	
 		ScanLine1Out(1);
@@ -245,7 +246,7 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
 		ScanLine3Out(1);
 		ScanLine4Out(0);
 		ScanLine5Out(1);
-		F_EEDelay(20);
+		F_EEDelay(50);
 		R_ScanKey[3] = F_ReadScanKey();
 		
 		ScanLine1Out(1);
@@ -253,9 +254,9 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
 		ScanLine3Out(1);
 		ScanLine4Out(1);
 		ScanLine5Out(0);
-		F_EEDelay(20);
+		F_EEDelay(50);
 		R_ScanKey[4] = F_ReadScanKey();
-		
+
     switch(R_ScanKey[0])
     {
       case 0x00:									break;	
@@ -313,6 +314,10 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
     default :			KeyRam=0;       break;
     }
 
+		if(R_ScanKey[0] == 0x18) {
+			KeyRam=RT_KEY_NUM_105;
+		}
+		
 			for(i=0;i<5;i++)
 				R_ScanKey[i]=0;
 		
@@ -359,6 +364,7 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
               case	RT_KEY_NUM_28:      *KeyCode=RT_KEY_NUM_28;      break;
               case	RT_KEY_NUM_29:      *KeyCode=RT_KEY_NUM_29;      break;
               case	RT_KEY_NUM_31:      *KeyCode=RT_KEY_NUM_31;      break;
+							case	RT_KEY_NUM_105:			*KeyCode=RT_KEY_NUM_105;			break;
             }
           }
           //=====================

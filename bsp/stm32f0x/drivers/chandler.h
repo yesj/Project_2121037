@@ -26,6 +26,7 @@ enum _uiStatus {
 		sysPowerStartVal,
     sysUiStartVal,
     eng1Val,
+		engineeringModeVal,
     setNoramalVal,
     sportManualVal,
     setProfilesVal,
@@ -67,7 +68,7 @@ enum _eng1Event{
 enum _setProfilesEvent{
 	setProfileEventVal,
 	setManualEventVal,
-	setHeartRateEventVal,
+//	setHeartRateEventVal,
 	setFocusEventVal,
 	setMetsEventVal
 };
@@ -139,6 +140,14 @@ enum _setManualDataEvent{
 	showManualWorkoutEventVal
 };
 
+enum _setEngineeringModeEvent{
+	UnitEventVal,
+	VersionEventVal,
+	BeeperTestEventVal,
+	DisplayTestEventVal,
+	KeypadTestEventVal
+};
+
 //================================
 struct	rt_ui_action
 {
@@ -147,6 +156,7 @@ struct	rt_ui_action
 	//rt_uint8_t	ProfileSEventSave;
 	rt_uint8_t	ProfileEventSave;
 	rt_uint8_t	UsersEventSave;
+	rt_uint8_t	ManualEventSave;
 };
 typedef struct	rt_ui_action	rt_ui_action_t;
 #define ProgfileDataSizeVal					60
@@ -486,8 +496,11 @@ extern void F_setManualTargetInit(void);
 
 extern void F_ProfilesManualSport(void);
 
-extern void F_ProfilesManualSportInit(rt_uint8_t WorkOutTimeMin,rt_uint8_t Target);
+extern void F_ProfilesManualSportInit(rt_uint8_t WorkOutTimeMin,rt_uint8_t Target,rt_uint8_t ManualEvent);
 
+extern void F_EngineeringMode(void);
+
+extern void F_EngineeringModeInit(void);
 //===========================================================================
 
 extern void  F_ShowMatrixLcd(rt_uint8_t	lcdRamAdr,rt_uint32_t data,rt_uint8_t dataLongSize,rt_uint32_t *displayAdr);
@@ -637,6 +650,17 @@ extern void	F_showCardio(void);
 extern void	F_showTarget(void);
 
 extern void	F_showSetTargetNum(rt_uint8_t target,rt_uint8_t Dot);
+
+extern void	F_ShowUnit(void);
+
+extern void	F_ShowSoftwareVersion(void);
+
+extern void	F_ShowBeeperTest(void);
+
+extern void	F_ShowDisplayTest(void);
+
+extern void	F_ShowKeypedTest(void);
+
 //=======================================
 extern void	F_SeatPositionControlAllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg);
 

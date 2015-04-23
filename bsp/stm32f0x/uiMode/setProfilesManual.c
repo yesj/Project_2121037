@@ -29,11 +29,12 @@ static	void	F_ManualSportMode(void)
 		Target = set_manual_data.CardioTarget;
 			break;
 		case	showManualTargetEventVal:
-		WorkOutTimeMin = set_manual_data.TargetTarget.number;
+		WorkOutTimeMin = set_manual_data.TargetWorkoutMinTime.number;
 		Target = set_manual_data.TargetTarget.number;
 			break;
 		}
-		F_ProfilesManualSportInit(WorkOutTimeMin,Target);
+		
+		F_ProfilesManualSportInit(WorkOutTimeMin,Target,ui_action.Event);
 }
 
 void F_setProfilesManual(void)

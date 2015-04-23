@@ -55,17 +55,21 @@ void F_setProfileChoose(void)
 							F_setProfileInit(setProfileEventVal);
 							break;
 						case	resistance_up_KeyVal:
+						if(LongKeyStartFlg == 0)	{
 							bz_short();
 							ui_action.Event++;
 							if(ui_action.Event>setInterval_2_EventVal)
 								ui_action.Event = setRollingHillEventVal;
+						}
 							break;
 						case	resistance_down_KeyVal:
+						if(LongKeyStartFlg == 0)	{
 							bz_short();
 							if(ui_action.Event > setRollingHillEventVal)
 								ui_action.Event--;
 								else
 									ui_action.Event = setInterval_2_EventVal;
+						}
 							break;
 					}
 				}

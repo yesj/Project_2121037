@@ -16,9 +16,15 @@ void F_SysUiStart(void)
 				{
 					//rt_kprintf("timer 40ms");
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					
 					if(keyCode != 0 ) 
 					{
 						rt_kprintf(" sysUiStartVal:%d \r\n",keyCode);
+					}
+					switch(keyCode) {
+						case engineering_KeyVal:
+							F_EngineeringModeInit();
+							break;		
 					}
 				}
 				if((e & time_1s_val) == time_1s_val)

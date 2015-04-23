@@ -1,5 +1,33 @@
 #include "chandler.h"
 
+static rt_uint8_t	SportTargetTime;
+static rt_uint8_t	TargetTemp;
+
+void	F_SportTargetTimeDetection(void)
+{
+	rt_uint8_t HeartRateTemp,HandHeartRate,wHeartRate;
+
+	wHeartRate = F_readwHeartRate();
+	HandHeartRate = F_readHandHeartRate();
+	if(wHeartRate) {
+		HeartRateTemp = wHeartRate;
+	} else {
+		HeartRateTemp = HandHeartRate;
+	}
+	
+	if(HeartRateTemp) {
+		if(SportTargetTime >= 15) {
+			if(HeartRateTemp >= TargetTemp) {
+				F_NumberDown_8(&sport_data.resistance,1,noCycleNumberVal);
+			} else {
+				F_NumberUp_8(&sport_data.resistance,1,noCycleNumberVal);
+			}
+		}
+	} else {
+		SportTargetTime = 0;
+	}
+}
+
 void F_ProfilesManualSport(void)
 {
 		rt_uint8_t	keyCode = 0;
@@ -14,8 +42,27 @@ void F_ProfilesManualSport(void)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
 					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
-					
-					
+					switch(keyCode)
+					{
+						case	resistance_up_KeyVal:
+						if(F_NumberUp_8(&sport_data.resistance,1,noCycleNumberVal).complyFlg == YesComplyVal) {
+							if(LongKeyStartFlg == 0){
+								bz_short();
+							}
+						}
+						break;
+						case	resistance_down_KeyVal:
+						if(F_NumberDown_8(&sport_data.resistance,1,noCycleNumberVal).complyFlg == YesComplyVal) {
+							if(LongKeyStartFlg == 0){
+								bz_short();
+							}
+						}
+						break;
+						case	stop_rest_KeyVal:
+						bz_short();
+						F_setProfilesManualInit(ui_action.ManualEventSave);
+						break;	
+					}
 				}
 				//=====================
 				if((e & time_100ms_val) == time_100ms_val)
@@ -40,17 +87,21 @@ void F_ProfilesManualSport(void)
 					distance_data.WheelSize = 300;
 					F_distance_process(&distance_data);
 					} else {
-						F_setProfileInit(setManualEventVal);
+						F_setProfilesManualInit(ui_action.ManualEventSave);
 					}
 				}
 			}
 }
 
-void F_ProfilesManualSportInit(rt_uint8_t WorkOutTimeMin,rt_uint8_t Target)
+void F_ProfilesManualSportInit(rt_uint8_t WorkOutTimeMin,rt_uint8_t Target,rt_uint8_t ManualEvent)
 {
 		ui_action.Status = setManualSportVal;
 		//ui_action.Event = Event;
 		TimeData.timeH = WorkOutTimeMin;
 		TimeData.timeL = 0;
+		memset(&calor_count,0,sizeof(calor_count));
 		sport_data.resistance.number = 1;
+		ui_action.ManualEventSave = ManualEvent;
+		TargetTemp = Target;
+		SportTargetTime = 0;
 }

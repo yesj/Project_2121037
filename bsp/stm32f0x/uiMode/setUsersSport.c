@@ -29,6 +29,7 @@ void F_setUsersSport(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					switch(keyCode)
 					{
 						case	resistance_up_KeyVal:
