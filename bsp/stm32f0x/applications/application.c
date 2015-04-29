@@ -240,6 +240,7 @@ static void rt_control_thread_entry(void* parameter)
 					F_eeprom_incline_data(ReadDataVal,&incline_eeprom_data);	//	read
 					F_eeprom_home1_data(ReadDataVal,&sport_data.saveSeatPositionHome_1);
 					F_eeprom_home2_data(ReadDataVal,&sport_data.saveSeatPositionHome_2);
+					F_eeprom_uint(ReadDataVal,&sport_data.UnitFlg);
 				} else {
 					// eeprom 資料初始化
 					//incline_eeprom_data.incMaxNum = 15;
@@ -254,6 +255,8 @@ static void rt_control_thread_entry(void* parameter)
 					buf = 0;
 					F_eeprom_user_DetectionData(InitDataVal,EepromNothingVal,&buf);		
 					F_eeprom_write_init();
+					sport_data.UnitFlg = UintEnglishVal;
+					F_eeprom_uint(WriteDataVal,&sport_data.UnitFlg);
 				}
 				incline_control_init(incline_eeprom_data);
 				rt_hw_pwm_vms_init();
@@ -360,6 +363,22 @@ static void rt_control_thread_entry(void* parameter)
 			//==================
 			case	engineeringModeVal:
 			F_EngineeringMode();
+				break;
+			//==================
+			case	setUintVal:
+			F_setUint();
+				break;
+			//==================
+			case	setBzTestVal:
+			F_setBzTest();
+				break;
+			//==================
+			case	setLcdTestVal:
+			F_setLcdTest();
+				break;
+			//==================
+			case	setKeyTestVal:
+			F_setKeyTest();
 				break;
 			//==================
 			case	eng1Val:

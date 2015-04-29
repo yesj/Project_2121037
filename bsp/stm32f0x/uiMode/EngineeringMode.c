@@ -1,5 +1,33 @@
 #include "chandler.h"
 
+static void	F_ChooseMode(void)
+{
+	rt_bool_t	BzOnFlg = 0;
+		switch(ui_action.Event) {
+			case	UnitEventVal:
+				BzOnFlg = 1;
+				F_setUintInit();
+				break;
+			case	VersionEventVal:
+				
+				break;
+			case	BeeperTestEventVal:
+				BzOnFlg = 1;
+				F_setBzTestInit();
+				break;
+			case	DisplayTestEventVal:
+				BzOnFlg = 1;
+				F_setLcdTestInit();
+				break;
+			case	KeypadTestEventVal:
+				BzOnFlg = 1;
+				F_setKeyTestInit();
+				break;
+		}
+		if(BzOnFlg) {
+			bz_short();
+		}
+}
 
 void F_EngineeringMode(void)
 {
@@ -18,11 +46,10 @@ void F_EngineeringMode(void)
 					{
 						case	stop_rest_KeyVal:
 							IWDG_Config(0);	
-							while(1);
+							while(1)
 							break;
 						case	enter_KeyVal:
-							bz_short();
-
+							F_ChooseMode();
 							break;
 						case	resistance_up_KeyVal:
 						if(LongKeyStartFlg == 0)	{
@@ -69,8 +96,8 @@ void F_EngineeringMode(void)
 			}
 }
 
-void F_EngineeringModeInit(void)
+void F_EngineeringModeInit(rt_uint8_t Event)
 {
 	ui_action.Status = engineeringModeVal;
-	ui_action.Event = UnitEventVal;
+	ui_action.Event = Event;
 }

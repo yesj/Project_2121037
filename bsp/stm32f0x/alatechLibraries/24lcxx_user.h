@@ -44,4 +44,6 @@ extern void	F_eeprom_user_cal(rt_uint8_t status,rt_uint8_t Num,rt_uint32_t *cal)
 
 extern void	F_eeprom_user_km(rt_uint8_t status,rt_uint8_t Num,rt_uint16_t *km);
 
+extern void	F_eeprom_uint(rt_uint8_t status,rt_bool_t *data);
+
 #endif

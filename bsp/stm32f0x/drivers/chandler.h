@@ -27,6 +27,10 @@ enum _uiStatus {
     sysUiStartVal,
     eng1Val,
 		engineeringModeVal,
+		setUintVal,
+		setBzTestVal,
+		setLcdTestVal,
+		setKeyTestVal,
     setNoramalVal,
     sportManualVal,
     setProfilesVal,
@@ -148,18 +152,34 @@ enum _setEngineeringModeEvent{
 	KeypadTestEventVal
 };
 
+enum _setUintEvent{
+	MetricEventVal,
+	EnglishEventVal
+};
+
+enum _setBzTestEvent{
+	BzTest1EventVal,
+	BzTest2EventVal,
+	BzTest3EventVal
+};
+
+enum _uint{
+	UintMetricVal,
+	UintEnglishVal
+};
+
 //================================
 struct	rt_ui_action
 {
   rt_uint8_t	Status;
   rt_uint8_t	Event;
-	//rt_uint8_t	ProfileSEventSave;
 	rt_uint8_t	ProfileEventSave;
 	rt_uint8_t	UsersEventSave;
 	rt_uint8_t	ManualEventSave;
 };
 typedef struct	rt_ui_action	rt_ui_action_t;
 #define ProgfileDataSizeVal					60
+
 //================================
 struct	rt_sport_data
 {
@@ -178,7 +198,7 @@ struct	rt_sport_data
 	rt_uint8_t	progfileArryBuf[ProgfileDataSizeVal];
 	rt_uint8_t	saveSeatPositionHome_1;
 	rt_uint8_t	saveSeatPositionHome_2;
-  //unitMag_t UnitMag;
+  rt_bool_t		UnitFlg;
 };
 typedef struct	rt_sport_data		rt_sport_data_t;
 
@@ -500,7 +520,24 @@ extern void F_ProfilesManualSportInit(rt_uint8_t WorkOutTimeMin,rt_uint8_t Targe
 
 extern void F_EngineeringMode(void);
 
-extern void F_EngineeringModeInit(void);
+extern void F_EngineeringModeInit(rt_uint8_t Event);
+
+extern void F_setUint(void);
+
+extern void F_setUintInit(void);
+
+extern void F_setBzTest(void);
+
+extern void F_setBzTestInit(void);
+
+extern void F_setLcdTest(void);
+
+extern void F_setLcdTestInit(void);
+
+extern void F_setKeyTest(void);
+
+extern void F_setKeyTestInit(void);
+
 //===========================================================================
 
 extern void  F_ShowMatrixLcd(rt_uint8_t	lcdRamAdr,rt_uint32_t data,rt_uint8_t dataLongSize,rt_uint32_t *displayAdr);
@@ -541,6 +578,7 @@ extern void IWDG_Config(unsigned char timeout);
 //=======================================
 extern rt_uint16_t	F_readRpm(void);
 //=======================================
+
 extern void	F_showNoramal(void);
 
 extern void	F_showMatrixTime(rt_time_data_t TimeData);
@@ -661,6 +699,21 @@ extern void	F_ShowDisplayTest(void);
 
 extern void	F_ShowKeypedTest(void);
 
+extern void	F_ShowChooseMetric(void);
+
+extern void	F_ShowChooseEnglish(void);
+
+extern void	F_ShowChooseBz1(void);
+
+extern void	F_ShowChooseBz2(void);
+
+extern void	F_ShowChooseBz3(void);
+
+extern void	F_ShowKeyNum(rt_uint8_t	Num);
+
+extern void	F_Show_8_DotDisplay(rt_uint8_t	Num);
+
+extern void	F_ShowMatrixDotDisplayTest(rt_uint32_t	Num);
 //=======================================
 extern void	F_SeatPositionControlAllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg);
 

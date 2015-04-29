@@ -948,6 +948,26 @@
               <FileType>1</FileType>
               <FilePath>.\uiMode\EngineeringMode.c</FilePath>
             </File>
+            <File>
+              <FileName>setUint.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setUint.c</FilePath>
+            </File>
+            <File>
+              <FileName>setBzTest.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setBzTest.c</FilePath>
+            </File>
+            <File>
+              <FileName>setLcdTest.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setLcdTest.c</FilePath>
+            </File>
+            <File>
+              <FileName>setKeyTest.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setKeyTest.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

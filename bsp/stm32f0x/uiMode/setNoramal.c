@@ -51,7 +51,6 @@ void F_setNoramal(void)
 				{
 					F_SetDisplayRam(0);
 					F_showNoramal();
-					//LCDBuffer[63] = Temp; 
 					F_Display();
 				}
 				//=====================

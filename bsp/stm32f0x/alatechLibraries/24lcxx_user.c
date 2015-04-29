@@ -5,8 +5,9 @@
 #define EepromVer_1				0xA0
 #define EepromVer_2				0x10
 #define EepromVer_3				0x34
-#define EepromVer_4				0x00
+#define EepromVer_4				0x01
 //============
+#define EE_Unit						0x05
 #define EE_IncMax					0x06
 #define EE_IncUpDown			0x07
 #define EE_IncMaxAd				0x08
@@ -834,6 +835,18 @@ void	F_eeprom_user_km(rt_uint8_t status,rt_uint8_t Num,rt_uint16_t *km)
 			rt_device_write(dev, DetectionDataTemp2, &TimeSecByte_2, 1);
 			rt_device_write(dev, DetectionDataTemp1, &TimeSecByte_1, 1);
 			break;
+	}
+	rt_device_close(dev);
+}
+
+void	F_eeprom_uint(rt_uint8_t status,rt_bool_t *data)
+{
+	dev = rt_device_find("eeprom");
+	rt_device_open(dev , RT_DEVICE_OFLAG_RDWR);
+	if(status) {
+		rt_device_write(dev, EE_Unit, data, 1);
+	} else {
+		rt_device_read(dev, EE_Unit , data, 1);
 	}
 	rt_device_close(dev);
 }

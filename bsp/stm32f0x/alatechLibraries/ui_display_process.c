@@ -1,15 +1,70 @@
 #include "chandler.h"
 
-const rt_uint32_t P01[] ={
+const rt_uint32_t P01[] = {		// ·R¤ß
 0x0E0000,0x1F0000,0x318000,0x60C000,0x606000,0x603000,0x601800,0x300C00,
 0x180600,0x300C00,0x601800,0x603000,0x606000,0x60C000,0x318000,0x1F0000,
 0x0E0000
 };
 
-const rt_uint16_t P02[] ={
+const rt_uint16_t P02[] = {
 0x0380,0x07C0,0x0FE0,0x0FF0,0x0FF8,0x0FFC,0x07FE,0x03FF,0x07FE,0x0FFC,
 0x0FF8,0x0FF0,0x0FE0,0x07C0,0x0380
 };
+
+const rt_uint16_t P03[] = {
+0x01FF,0x01FF,0x00FF,0x00FF,0x007F,0x007F,0x003F,0x003F,0x007F,0x007F,
+0x00FF,0x00FF,0x01FF,0x01FF,0x03FF,0x03FF,0x07FF,0x07FF,0x0FFF,0x0FFF,
+0x1FFF,0x1FFF,0x3FFF,0x3FFF,0x7FFF,0x7FFF,0x7FFF,0x7FFF,0x3FFF,0x3FFF,
+0x1FFF,0x1FFF,0x0FFF,0x0FFF,0x07FF,0x07FF,0x03FF,0x03FF,0x01FF,0x01FF,
+0x00FF,0x00FF,0x007F,0x007F,0x003F,0x003F,0x001F,0x001F,0x003F,0x003F,
+0x007F,0x007F,0x00FF,0x00FF,0x01FF,0x01FF,0x03FF,0x03FF,0x01FF,0x01FF
+};
+
+const rt_uint32_t P04[] = {
+0x0000001F,0x0000003F,0x0000003F,0x0000007F,0x0000007F,0x000000FF,0x000000FF,0x000001FF,0x000001FF,0x000003FF,
+0x000003FF,0x000007FF,0x000007FF,0x00000FFF,0x00000FFF,0x00001FFF,0x00001FFF,0x00003FFF,0x00003FFF,0x00007FFF,
+0x00007FFF,0x0000FFFF,0x0000FFFF,0x0001FFFF,0x0001FFFF,0x0003FFFF,0x0003FFFF,0x0007FFFF,0x0007FFFF,0x000FFFFF,
+0x000FFFFF,0x0007FFFF,0x0007FFFF,0x0003FFFF,0x0003FFFF,0x0001FFFF,0x0001FFFF,0x0000FFFF,0x0000FFFF,0x00007FFF,
+0x00007FFF,0x00003FFF,0x00003FFF,0x00001FFF,0x00001FFF,0x00000FFF,0x00000FFF,0x000007FF,0x000007FF,0x000003FF,
+0x000003FF,0x000001FF,0x000001FF,0x000000FF,0x000000FF,0x0000007F,0x0000007F,0x0000003F,0x0000003F,0x0000001F
+};
+
+const rt_uint32_t P05[] = {
+0x0000000F,0x0000000F,0x0000001F,0x0000003F,0x0000003F,0x0000007F,0x0000007F,0x000000FF,0x000001FF,0x000007FF,
+0x00000FFF,0x00001FFF,0x00001FFF,0x00003FFF,0x00007FFF,0x0000FFFF,0x0003FFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,
+0x000FFFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,
+0x000FFFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,0x000FFFFF,0x0003FFFF,0x0000FFFF,
+0x00007FFF,0x00007FFF,0x00003FFF,0x00003FFF,0x00001FFF,0x00000FFF,0x00000FFF,0x000007FF,0x000003FF,0x000000FF,
+0x0000007F,0x0000007F,0x0000003F,0x0000001F,0x0000000F,0x0000000F,0x0000000F,0x0000000F,0x0000000F,0x0000000F
+};
+
+const rt_uint32_t P06[] = {
+0x00000003,0x00000003,0x00000003,0x00000003,0x0000000F,0x0000000F,0x0000001F,0x0000001F,0x0000001F,0x0000003F,
+0x0000003F,0x0000003F,0x0000007F,0x0000007F,0x0000007F,0x000000FF,0x000000FF,0x000000FF,0x000001FF,0x000003FF,
+0x000003FF,0x000003FF,0x000007FF,0x000007FF,0x000007FF,0x00000FFF,0x00000FFF,0x00000FFF,0x00001FFF,0x00001FFF,
+0x00001FFF,0x00003FFF,0x00003FFF,0x00003FFF,0x00007FFF,0x00007FFF,0x00007FFF,0x0000FFFF,0x0000FFFF,0x0000FFFF,
+0x0000FFFF,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x0003FFFF,0x0003FFFF,0x0003FFFF,0x0007FFFF,
+0x0007FFFF,0x0007FFFF,0x0007FFFF,0x0007FFFF,0x0007FFFF,0x00000007,0x00000007,0x00000007,0x00000007,0x00000007
+};
+
+const rt_uint16_t P07[] = {
+0x0007,0x0007,0x0007,0x01FF,0x07FF,0x3FFF,0xFFFF,0x0007,0x0007,0x0007,
+0x01FF,0x07FF,0x3FFF,0xFFFF,0x0007,0x0007,0x0007,0x01FF,0x07FF,0x3FFF,
+0xFFFF,0x0007,0x0007,0x0007,0x01FF,0x07FF,0x3FFF,0xFFFF,0x0007,0x0007,
+0x0007,0x01FF,0x07FF,0x3FFF,0xFFFF,0x0007,0x0007,0x0007,0x01FF,0x07FF,
+0x3FFF,0xFFFF,0x0007,0x0007,0x0007,0x01FF,0x07FF,0x3FFF,0xFFFF,0x0007,
+0x0007,0x0007,0x01FF,0x07FF,0x3FFF,0xFFFF,0x0007,0x0007,0x0007,0x0007
+};
+
+const rt_uint32_t P08[] = {
+0x00000007,0x00000007,0x00000007,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x00000007,0x00000007,0x00000007,
+0x0001FFFF,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x00000007,0x00000007,0x00000007,0x0001FFFF,0x0001FFFF,0x0001FFFF,
+0x0001FFFF,0x00000007,0x00000007,0x00000007,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x00000007,0x00000007,
+0x00000007,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x00000007,0x00000007,0x00000007,0x0001FFFF,0x0001FFFF,
+0x0001FFFF,0x0001FFFF,0x00000007,0x00000007,0x00000007,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x00000007,
+0x00000007,0x00000007,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x00000007,0x00000007,0x00000007,0x00000007
+};
+
 
 const rt_uint8_t M01[] ={"QUICKSTART"};
 const rt_uint8_t M02[] ={"TIME"};
@@ -64,7 +119,7 @@ const rt_uint8_t M50[] ={"FAT"};
 const rt_uint8_t M51[] ={"BURN"};
 const rt_uint8_t M52[] ={"CARDIO"};
 const rt_uint8_t M53[] ={"TARGET"};
-const rt_uint8_t M54[] ={"METERC/"};
+const rt_uint8_t M54[] ={"METERC"};
 const rt_uint8_t M55[] ={"ENGLISH"};
 const rt_uint8_t M56[] ={"SOFTWARE"};
 const rt_uint8_t M57[] ={"VERSION"};
@@ -74,6 +129,11 @@ const rt_uint8_t M60[] ={"TEST/PRESS"};
 const rt_uint8_t M61[] ={"ENTER"};
 const rt_uint8_t M62[] ={"DISPLAY"};
 const rt_uint8_t M63[] ={"KEYPAD"};
+const rt_uint8_t M64[] ={"BZ1"};
+const rt_uint8_t M65[] ={"BZ2"};
+const rt_uint8_t M66[] ={"BZ3"};
+const rt_uint8_t M67[] ={"KEY NUM"};
+
 
 static void	F_HundredChange(rt_uint8_t	*byte2,rt_uint8_t	*byte1,rt_uint32_t data)
 {
@@ -81,20 +141,19 @@ static void	F_HundredChange(rt_uint8_t	*byte2,rt_uint8_t	*byte1,rt_uint32_t data
 	*byte1 = data % 100;
 }
 
-
-void	F_showHeartRateDot(void)
-{
-	LCDBuffer[0] |= 0x40000; 
-}
-
-void	F_showCalHrDot(void)
-{
-	LCDBuffer[1] |= 0x40000; 
-}
-
 void	F_showTimeDot(void)
 {
 	LCDBuffer[0] |= 0x1000; 
+}
+
+void	F_showRpmDot(void)
+{
+	LCDBuffer[1] |= 0x1000; 
+}
+
+void	F_showCalDot(void)
+{
+	LCDBuffer[62] |= 0x1000; 
 }
 
 void	F_showResistanceDot(void)
@@ -102,9 +161,14 @@ void	F_showResistanceDot(void)
 	LCDBuffer[0] |= 0x08; 
 }
 
-void	F_showCalDot(void)
+void	F_showCalHrDot(void)
 {
-	LCDBuffer[62] |= 0x1000; 
+	LCDBuffer[1] |= 0x08; 
+}
+
+void	F_showHeartRateDot(void)
+{
+	LCDBuffer[0] |= 0x40000; 
 }
 
 void	F_showDistanceDot(void)
@@ -115,6 +179,22 @@ void	F_showDistanceDot(void)
 void	F_showTimeClick(void)
 {
 	LCDBuffer[63] |= 0x1000; 
+}
+
+void	F_show_8_Dot(void)
+{
+	LCDBuffer[0] |= 0x10; 
+	LCDBuffer[0] |= 0x20000; 
+	LCDBuffer[0] |= 0x4000000; 
+	LCDBuffer[1] |= 0x10; 
+	LCDBuffer[1] |= 0x20000; 
+	LCDBuffer[1] |= 0x4000000; 
+	LCDBuffer[62] |= 0x10; 
+	LCDBuffer[62] |= 0x20000; 
+	LCDBuffer[62] |= 0x4000000;
+	LCDBuffer[63] |= 0x10; 
+	LCDBuffer[63] |= 0x20000; 
+	LCDBuffer[63] |= 0x4000000; 
 }
 
 void	F_showNoramal(void)
@@ -737,6 +817,7 @@ void	F_showUsers_10(void)
 void	F_showRollingHillGraph(void)
 {
 	rt_coordinate_t coordinateTemp1;
+	rt_uint8_t	adr;
 	
 	coordinateTemp1.x = 11;
 	coordinateTemp1.y = 24;
@@ -745,51 +826,71 @@ void	F_showRollingHillGraph(void)
 	coordinateTemp1.x = 19;
 	coordinateTemp1.y = 16;
 	F_ShowMatrixStringLcd(coordinateTemp1,M16,sizeof(M16),LCDBuffer);
+	
+	for(adr = 0; adr < 60 ; adr++) {
+		F_ShowMatrixLcd(adr,P03[adr],15,LCDBuffer);
+	}
 }
 
 void	F_showPeakGraph(void)
 {
 	rt_coordinate_t coordinateTemp1;
-	
+	rt_uint8_t	adr;
 	coordinateTemp1.x = 18;
 	coordinateTemp1.y = 24;
 	F_ShowMatrixStringLcd(coordinateTemp1,M17,sizeof(M17),LCDBuffer);
+	
+	for(adr = 0; adr < 60 ; adr++) {
+		F_ShowMatrixLcd(adr,P04[adr],20,LCDBuffer);
+	}
 }
 
 void	F_showPlateauGraph(void)
 {
 	rt_coordinate_t coordinateTemp1;
-	
+	rt_uint8_t	adr;
 	coordinateTemp1.x = 10;
 	coordinateTemp1.y = 24;
 	F_ShowMatrixStringLcd(coordinateTemp1,M18,sizeof(M18),LCDBuffer);
+	for(adr = 0; adr < 60 ; adr++) {
+		F_ShowMatrixLcd(adr,P05[adr],20,LCDBuffer);
+	}
 }
 
 void	F_showClimbGraph(void)
 {
 	rt_coordinate_t coordinateTemp1;
-	
+	rt_uint8_t	adr;	
 	coordinateTemp1.x = 16;
 	coordinateTemp1.y = 23;
 	F_ShowMatrixStringLcd(coordinateTemp1,M19,sizeof(M19),LCDBuffer);
+	for(adr = 0; adr < 60 ; adr++) {
+		F_ShowMatrixLcd(adr,P06[adr],19,LCDBuffer);
+	}
 }
 
 void	F_showInterval_1_Graph(void)
 {
 	rt_coordinate_t coordinateTemp1;
-	
+	rt_uint8_t	adr;	
 	coordinateTemp1.x = 3;
 	coordinateTemp1.y = 24;
 	F_ShowMatrixStringLcd(coordinateTemp1,M20,sizeof(M20),LCDBuffer);
+	for(adr = 0; adr < 60 ; adr++) {
+		F_ShowMatrixLcd(adr,P07[adr],16,LCDBuffer);
+	}
 }
 
 void	F_showInterval_2_Graph(void)
 {
 	rt_coordinate_t coordinateTemp1;
-	
+	rt_uint8_t	adr;	
 	coordinateTemp1.x = 3;
 	coordinateTemp1.y = 24;
 	F_ShowMatrixStringLcd(coordinateTemp1,M21,sizeof(M21),LCDBuffer);
+	for(adr = 0; adr < 60 ; adr++) {
+		F_ShowMatrixLcd(adr,P08[adr],17,LCDBuffer);
+	}
 }
 
 void	F_showProfileSetLeve(rt_uint8_t Level)
@@ -1257,11 +1358,12 @@ void	F_ShowUnit(void)
 	coordinateTemp.x = 10;
 	coordinateTemp.y = 20;
 	F_ShowMatrixStringLcd(coordinateTemp,M54,sizeof(M54),LCDBuffer);
-	
+	coordinateTemp.x = 46;
+	coordinateTemp.y = 20;
+	F_ShowMatrixFontLcd(coordinateTemp,'/',LCDBuffer);
 	coordinateTemp.x = 10;
 	coordinateTemp.y = 10;
 	F_ShowMatrixStringLcd(coordinateTemp,M55,sizeof(M55),LCDBuffer);
-	
 }
 
 void	F_ShowSoftwareVersion(void)
@@ -1343,3 +1445,152 @@ void	F_ShowKeypedTest(void)
 	coordinateTemp.y = 0;
 	F_ShowMatrixStringLcd(coordinateTemp,M61,sizeof(M61),LCDBuffer);
 }
+
+static void		F_showMetricChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M54,sizeof(M54),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M54,sizeof(M54),LCDBuffer);	
+}
+
+static void		F_showEnglishChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M55,sizeof(M55),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M55,sizeof(M55),LCDBuffer);	
+}
+
+void	F_ShowChooseMetric(void)
+{
+	rt_coordinate_t coordinateTemp;
+	coordinateTemp.x = 10;
+	coordinateTemp.y = 20;
+	F_showMetricChoose(coordinateTemp,0);
+	coordinateTemp.x = 10;
+	coordinateTemp.y = 10;
+	F_showEnglishChoose(coordinateTemp,1);
+}
+
+void	F_ShowChooseEnglish(void)
+{
+	rt_coordinate_t coordinateTemp;
+	coordinateTemp.x = 10;
+	coordinateTemp.y = 20;
+	F_showMetricChoose(coordinateTemp,1);
+	coordinateTemp.x = 10;
+	coordinateTemp.y = 10;
+	F_showEnglishChoose(coordinateTemp,0);
+}
+
+static void		F_showBz1Choose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M64,sizeof(M64),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M64,sizeof(M64),LCDBuffer);	
+}
+
+static void		F_showBz2Choose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M65,sizeof(M65),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M65,sizeof(M65),LCDBuffer);	
+}
+
+static void		F_showBz3Choose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M66,sizeof(M66),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M66,sizeof(M66),LCDBuffer);	
+}
+
+void	F_ShowChooseBz1(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showBz1Choose(coordinateTemp1,0);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showBz2Choose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
+		F_showBz3Choose(coordinateTemp1,1);
+}
+
+void	F_ShowChooseBz2(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showBz1Choose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showBz2Choose(coordinateTemp1,0);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
+		F_showBz3Choose(coordinateTemp1,1);
+}
+
+void	F_ShowChooseBz3(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showBz1Choose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showBz2Choose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
+		F_showBz3Choose(coordinateTemp1,0);
+}
+
+void	F_ShowKeyNum(rt_uint8_t	Num)
+{
+		rt_coordinate_t coordinateTemp1,coordinateTemp2,coordinateTemp3;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_ShowMatrixStringLcd(coordinateTemp1,M67,sizeof(M67),LCDBuffer);
+	
+		coordinateTemp3.x = blankVal;
+		coordinateTemp3.y = blankVal;
+	
+		coordinateTemp2.x = 44;
+		coordinateTemp2.y = 23;
+	
+		coordinateTemp1.x = 44+6;
+		coordinateTemp1.y = 23;
+	
+		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,Num,LCDBuffer);
+}
+
+void	F_Show_8_DotDisplay(rt_uint8_t	Num)
+{
+	rt_uint8_t	adr;
+		F_showTimeDot();
+		F_showRpmDot();
+		F_showCalDot();
+		F_showResistanceDot();
+		F_showCalHrDot();
+		F_showHeartRateDot();
+		F_showDistanceDot();
+		F_showTimeClick();
+		F_show_8_Dot();
+		for(adr=0 ; adr < 12 ; adr++) {
+			F_Show_8_FontLcd(adr,Num,LCDBuffer);
+		}
+}
+
+void	F_ShowMatrixDotDisplayTest(rt_uint32_t	Num)
+{
+	rt_uint8_t	adr;
+	for(adr=0 ; adr < 60 ; adr++) {
+		F_ShowMatrixLcd(adr,Num,32,LCDBuffer);
+	}
+}
+
