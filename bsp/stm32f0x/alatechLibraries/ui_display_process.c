@@ -133,7 +133,13 @@ const rt_uint8_t M64[] ={"BZ1"};
 const rt_uint8_t M65[] ={"BZ2"};
 const rt_uint8_t M66[] ={"BZ3"};
 const rt_uint8_t M67[] ={"KEY NUM"};
-
+const rt_uint8_t M68[] ={"EEPROM ERR"};
+const rt_uint8_t M69[] ={"TOTAL"};
+const rt_uint8_t M70[] ={"BODY"};
+const rt_uint8_t M71[] ={"ARMS"};
+const rt_uint8_t M72[] ={"LEGS"};
+const rt_uint8_t M73[] ={"MAXIMUM"};
+const rt_uint8_t M74[] ={"RESISTANCE"};
 
 static void	F_HundredChange(rt_uint8_t	*byte2,rt_uint8_t	*byte1,rt_uint32_t data)
 {
@@ -535,7 +541,7 @@ void	F_showProfileReverse(void)
 		F_showMatrixManual(coordinateTemp1,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
-		F_showMatrixFocus(coordinateTemp1,1);
+		F_showMatrixHeart(coordinateTemp1,1);
 }
 
 void	F_showManualReverse(void)
@@ -549,24 +555,10 @@ void	F_showManualReverse(void)
 		F_showMatrixManual(coordinateTemp1,0);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
-		F_showMatrixFocus(coordinateTemp1,1);
+		F_showMatrixHeart(coordinateTemp1,1);
 }
-/*
+
 void	F_showHeartReverse(void)
-{
-		rt_coordinate_t coordinateTemp1;
-		coordinateTemp1.x = 2;
-		coordinateTemp1.y = 23;
-		F_showMatrixProfile(coordinateTemp1,0);
-		coordinateTemp1.x = 2;
-		coordinateTemp1.y = 13;
-		F_showMatrixManual(coordinateTemp1,1);
-		coordinateTemp1.x = 2;
-		coordinateTemp1.y = 3;
-		F_showMatrixFocus(coordinateTemp1,1);
-}
-*/
-void	F_showFocusReverse(void)
 {
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 2;
@@ -577,6 +569,20 @@ void	F_showFocusReverse(void)
 		F_showMatrixManual(coordinateTemp1,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
+		F_showMatrixHeart(coordinateTemp1,0);
+}
+
+void	F_showFocusReverse(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showMatrixManual(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showMatrixHeart(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
 		F_showMatrixFocus(coordinateTemp1,0);
 }
 
@@ -585,7 +591,7 @@ void	F_showMetsReverse(void)
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 23;
-		F_showMatrixManual(coordinateTemp1,1);
+		F_showMatrixHeart(coordinateTemp1,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 13;
 		F_showMatrixFocus(coordinateTemp1,1);
@@ -1591,6 +1597,147 @@ void	F_ShowMatrixDotDisplayTest(rt_uint32_t	Num)
 	rt_uint8_t	adr;
 	for(adr=0 ; adr < 60 ; adr++) {
 		F_ShowMatrixLcd(adr,Num,32,LCDBuffer);
+	}
+}
+
+void	F_ShowEepromErr(void)
+{
+	rt_coordinate_t coordinateTemp1;
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 20;
+	F_ShowMatrixStringLcd(coordinateTemp1,M68,sizeof(M68),LCDBuffer);
+}
+
+static void		F_showTotalBodyChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	rt_coordinate_t coordinateTemp1;
+	if(Dot)
+		F_ShowMatrixStringLcd(coordinate,M69,sizeof(M69),LCDBuffer);
+		else {
+			F_ShowMatrixStringLcdReverse(coordinate,M69,sizeof(M69),LCDBuffer);
+			//ÂI¶Â
+			coordinateTemp1.x = 32;
+			coordinateTemp1.y = (coordinate.y - 1);
+			F_ShowMatrixLcdChossDot(coordinateTemp1,2,9,LCDBuffer);
+			//ÂI¶Â
+		}
+	coordinateTemp1.x = 35;
+	coordinateTemp1.y = coordinate.y;
+	if(Dot)
+		F_ShowMatrixStringLcd(coordinateTemp1,M70,sizeof(M70),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinateTemp1,M70,sizeof(M70),LCDBuffer);
+		
+}
+
+static void		F_showArmsChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M71,sizeof(M71),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M71,sizeof(M71),LCDBuffer);	
+}
+
+static void		F_showLegsChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M72,sizeof(M72),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M72,sizeof(M72),LCDBuffer);	
+}
+
+void	F_ShowChooseTotalBody(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showTotalBodyChoose(coordinateTemp1,0);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showArmsChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
+		F_showLegsChoose(coordinateTemp1,1);
+}
+
+void	F_ShowChooseArms(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showTotalBodyChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showArmsChoose(coordinateTemp1,0);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
+		F_showLegsChoose(coordinateTemp1,1);
+}
+
+void	F_ShowChooseLegs(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showTotalBodyChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showArmsChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
+		F_showLegsChoose(coordinateTemp1,0);
+}
+
+void	F_ShowMaximumResistanceLevel(rt_uint8_t Level)
+{
+		rt_coordinate_t coordinateTemp1,coordinateTemp2,coordinateTemp3;;
+		coordinateTemp1.x = 8;
+		coordinateTemp1.y = 22;
+		F_ShowMatrixStringLcd(coordinateTemp1,M73,sizeof(M73),LCDBuffer);
+		coordinateTemp1.x = 0;
+		coordinateTemp1.y = 13;
+		F_ShowMatrixStringLcd(coordinateTemp1,M74,sizeof(M74),LCDBuffer);
+		coordinateTemp1.x = 10;
+		coordinateTemp1.y = 4;
+		F_ShowMatrixStringLcd(coordinateTemp1,M22,sizeof(M22),LCDBuffer);
+		coordinateTemp3.x = blankVal;
+		coordinateTemp3.y = blankVal;	
+		coordinateTemp2.x = 41;
+		coordinateTemp2.y = 4;
+		coordinateTemp1.x = 41+6;
+		coordinateTemp1.y = 4;
+		F_ShowMatrixNumProcessReverse(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,Level,LCDBuffer);
+}
+
+void	F_ShowHandlesUp(void)
+{
+	rt_uint8_t	adr;
+	for(adr = 0; adr < 11; adr++) {
+		F_ShowMatrixLcd(adr,0x03,2,LCDBuffer);
+	}
+}
+
+void	F_ShowHandlesDown(void)
+{
+	rt_uint8_t	adr;
+	for(adr = 13; adr < 28; adr++) {
+		F_ShowMatrixLcd(adr,0x03,2,LCDBuffer);
+	}
+}
+
+void	F_ShowFeetOnPedals(void)
+{
+	rt_uint8_t	adr;
+	for(adr = 30; adr < 45; adr++) {
+		F_ShowMatrixLcd(adr,0x03,2,LCDBuffer);
+	}
+}
+
+void	F_ShowFeetOnPegs(void)
+{
+	rt_uint8_t	adr;
+	for(adr = 47; adr < 60; adr++) {
+		F_ShowMatrixLcd(adr,0x03,2,LCDBuffer);
 	}
 }
 

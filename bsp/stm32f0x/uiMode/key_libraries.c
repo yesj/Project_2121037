@@ -55,7 +55,7 @@ void	F_SetUserKey(rt_uint8_t keyCode)
 
 static 	rt_uint8_t	VmsDetectionTime;
 
-void	F_VmsDetection(rt_uint8_t rpm)
+void	F_VmsDetection(rt_uint8_t rpm,rt_uint8_t resistance)
 {
 		if(rpm) {
 			VmsDetectionTime = 0;

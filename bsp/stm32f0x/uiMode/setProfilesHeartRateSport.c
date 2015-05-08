@@ -28,7 +28,7 @@ void	F_SportTargetTimeDetection(void)
 	}
 }
 
-void F_ProfilesManualSport(void)
+void F_ProfilesHeartRateSport(void)
 {
 		rt_uint8_t	keyCode = 0;
 		rt_bool_t	LongKeyStartFlg = 0;
@@ -60,7 +60,7 @@ void F_ProfilesManualSport(void)
 						break;
 						case	stop_rest_KeyVal:
 						bz_short();
-						F_setProfilesManualInit(ui_action.ManualEventSave);
+						F_setProfilesHeartRateInit(ui_action.HeartRateEventSave);
 						break;	
 					}
 				}
@@ -83,25 +83,25 @@ void F_ProfilesManualSport(void)
 					F_readWatte(calor_count.level,&calor_count.watt);					
 					F_calorie_process(&calor_count);
 					distance_data.rpm = F_readRpm();
-					F_VmsDetection(distance_data.rpm);
+					F_VmsDetection(distance_data.rpm,sport_data.resistance.number);
 					distance_data.WheelSize = 300;
 					F_distance_process(&distance_data);
 					} else {
-						F_setProfilesManualInit(ui_action.ManualEventSave);
+						F_setProfilesHeartRateInit(ui_action.HeartRateEventSave);
 					}
 				}
 			}
 }
 
-void F_ProfilesManualSportInit(rt_uint8_t WorkOutTimeMin,rt_uint8_t Target,rt_uint8_t ManualEvent)
+void F_ProfilesHeartRateSportInit(rt_uint8_t WorkOutTimeMin,rt_uint8_t Target,rt_uint8_t HeartRateEvent)
 {
-		ui_action.Status = setManualSportVal;
+		ui_action.Status = setHeartRateSportVal;
 		//ui_action.Event = Event;
 		TimeData.timeH = WorkOutTimeMin;
 		TimeData.timeL = 0;
 		memset(&calor_count,0,sizeof(calor_count));
 		sport_data.resistance.number = 1;
-		ui_action.ManualEventSave = ManualEvent;
+		ui_action.HeartRateEventSave = HeartRateEvent;
 		TargetTemp = Target;
 		SportTargetTime = 0;
 }

@@ -72,7 +72,7 @@ void F_setUsersSport(void)
 					F_calorie_process(&calor_count);
 					//rt_kprintf("RPM:%d \r\n",F_readRpm());
 					distance_data.rpm = F_readRpm();
-					F_VmsDetection(distance_data.rpm);
+					F_VmsDetection(distance_data.rpm,sport_data.resistance.number);
 					distance_data.WheelSize = 300;
 					F_distance_process(&distance_data);
 					F_UserSportTimeSecCount();

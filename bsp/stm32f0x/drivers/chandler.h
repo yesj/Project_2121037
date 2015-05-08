@@ -47,11 +47,14 @@ enum _uiStatus {
 		setUsersDataVal,
 		setUsersResetDataVal,
 		setUsersSportVal,
-		setProfilesManualVal,
-		setManualFatBurnVal,
-		setManualCardioVal,
-		setManualTargetVal,
-		setManualSportVal,
+		setProfilesHeartRateVal,
+		setHeartRateFatBurnVal,
+		setHeartRateCardioVal,
+		setHeartRateTargetVal,
+		setHeartRateSportVal,
+		setProfilesFocusVal,
+		setProfilesFocusDataVal,
+		FocusSportVal,
     eepromErrVal,
     sportErrVal,
 };
@@ -72,7 +75,7 @@ enum _eng1Event{
 enum _setProfilesEvent{
 	setProfileEventVal,
 	setManualEventVal,
-//	setHeartRateEventVal,
+	setHeartRateEventVal,
 	setFocusEventVal,
 	setMetsEventVal
 };
@@ -132,16 +135,16 @@ enum _setUsersDataEvent{
 	showUserDataEventVal
 };
 
-enum _setManualEvent{
-	showManualFatBurnEventVal,
-	showManualCardicEventVal,
-	showManualTargetEventVal
+enum _setHeartRateEvent{
+	showHeartRateFatBurnEventVal,
+	showHeartRateCardicEventVal,
+	showHeartRateTargetEventVal
 };
 
-enum _setManualDataEvent{
-	showManualAgeEventVal,
-	showManualSetTargetEventVal,
-	showManualWorkoutEventVal
+enum _setHeartRateDataEvent{
+	showHeartRateAgeEventVal,
+	showHeartRateSetTargetEventVal,
+	showHeartRateWorkoutEventVal
 };
 
 enum _setEngineeringModeEvent{
@@ -163,6 +166,17 @@ enum _setBzTestEvent{
 	BzTest3EventVal
 };
 
+enum _setProfilesFocusEvent{
+	FocusTotalBodyEventVal,
+	FocusArmsEventVal,
+	FocusLegsEventVal
+};
+
+enum _setProfilesFocusDataEvent{
+	FocusMaximumLevelEventVal,
+	FocusWorkoutTimeEventVal
+};
+
 enum _uint{
 	UintMetricVal,
 	UintEnglishVal
@@ -175,7 +189,8 @@ struct	rt_ui_action
   rt_uint8_t	Event;
 	rt_uint8_t	ProfileEventSave;
 	rt_uint8_t	UsersEventSave;
-	rt_uint8_t	ManualEventSave;
+	rt_uint8_t	HeartRateEventSave;
+	rt_uint8_t	FocusEventSave;
 };
 typedef struct	rt_ui_action	rt_ui_action_t;
 #define ProgfileDataSizeVal					60
@@ -220,7 +235,7 @@ struct	rt_set_profile_data
 
 typedef struct	rt_set_profile_data		rt_set_profile_data_t;
 //================================
-struct	rt_set_manual_data
+struct	rt_profile_heartrate_data
 {
   uint8_Number_t FatBurnAge;
 	rt_uint8_t	FatBurnTarget;
@@ -232,7 +247,15 @@ struct	rt_set_manual_data
 	uint8_Number_t TargetWorkoutMinTime;
 };
 
-typedef struct	rt_set_manual_data		rt_set_manual_data_t;
+typedef struct	rt_profile_heartrate_data		rt_profile_heartrate_data_t;
+//================================
+struct	rt_set_focus_data
+{
+  uint8_Number_t	FocusLevel;
+	uint8_Number_t	FocusWorkoutMinTime;
+};
+
+typedef struct	rt_set_focus_data		rt_set_focus_data_t;
 //================================
 struct rt_incline_eeprom_data
 {
@@ -292,6 +315,15 @@ struct rt_user_data
 };
 typedef struct rt_user_data rt_user_data_t;
 
+struct rt_fouse_count_data
+{
+	rt_uint8_t	segment;
+	rt_uint8_t	resistanceSetting;
+	rt_uint8_t	handlePosistion;
+	rt_uint8_t	instruction;
+};
+
+typedef struct rt_fouse_count_data	rt_fouse_count_data_t;
 //========================================================================
 extern rt_ui_action_t	ui_action;
 
@@ -307,7 +339,9 @@ extern rt_set_profile_data_t set_profile_data;
 
 extern rt_user_data_t	set_user_data;
 
-extern rt_set_manual_data_t	set_manual_data;
+extern rt_profile_heartrate_data_t	profile_heartrate_data;
+
+extern rt_set_focus_data_t	set_focus_data;
 //================================
 
 typedef void (*app_err_treadmill_handler_t)(rt_uint8_t message);
@@ -498,25 +532,25 @@ extern void F_setUsersSport(void);
 
 extern void F_setUsersSportInit(void);
 
-extern void F_setProfilesManual(void);
+extern void F_setProfilesHeartRate(void);
 
-extern void F_setProfilesManualInit(rt_uint8_t Event);
+extern void F_setProfilesHeartRateInit(rt_uint8_t Event);
 
-extern void F_setManualFatBurn(void);
+extern void F_setHeartRateFatBurn(void);
 	
-extern void F_setManualFatBurnInit(void);
+extern void F_setHeartRateFatBurnInit(void);
 
-extern void F_setManualCardio(void);
+extern void F_setHeartRateCardio(void);
 
-extern void F_setManualCardioInit(void);
+extern void F_setHeartRateCardioInit(void);
 
-extern void F_setManualTarget(void);
+extern void F_setHeartRateTarget(void);
 
-extern void F_setManualTargetInit(void);
+extern void F_setHeartRateTargetInit(void);
 
-extern void F_ProfilesManualSport(void);
+extern void F_ProfilesHeartRateSport(void);
 
-extern void F_ProfilesManualSportInit(rt_uint8_t WorkOutTimeMin,rt_uint8_t Target,rt_uint8_t ManualEvent);
+extern void F_ProfilesHeartRateSportInit(rt_uint8_t WorkOutTimeMin,rt_uint8_t Target,rt_uint8_t HeartRateEvent);
 
 extern void F_EngineeringMode(void);
 
@@ -538,6 +572,21 @@ extern void F_setKeyTest(void);
 
 extern void F_setKeyTestInit(void);
 
+extern void F_eepromErrMode(void);
+
+extern void F_eepromErrModeInit(void);
+
+extern void F_setProfilesFocus(void);
+
+extern void F_setProfilesFocusInit(rt_uint8_t Event);
+
+extern void F_setProfilesFocusData(void);
+
+extern void F_setProfilesFocusDataInit(void);
+
+extern void F_FocusSport(void);
+
+extern void F_FocusSportInit(void);
 //===========================================================================
 
 extern void  F_ShowMatrixLcd(rt_uint8_t	lcdRamAdr,rt_uint32_t data,rt_uint8_t dataLongSize,rt_uint32_t *displayAdr);
@@ -714,12 +763,30 @@ extern void	F_ShowKeyNum(rt_uint8_t	Num);
 extern void	F_Show_8_DotDisplay(rt_uint8_t	Num);
 
 extern void	F_ShowMatrixDotDisplayTest(rt_uint32_t	Num);
+
+extern void	F_ShowEepromErr(void);
+
+extern void	F_ShowChooseTotalBody(void);
+
+extern void	F_ShowChooseArms(void);
+
+extern void	F_ShowChooseLegs(void);
+
+extern void	F_ShowMaximumResistanceLevel(rt_uint8_t Level);
+
+extern void	F_ShowHandlesUp(void);
+
+extern void	F_ShowHandlesDown(void);
+
+extern void	F_ShowFeetOnPedals(void);
+
+extern void	F_ShowFeetOnPegs(void);
 //=======================================
 extern void	F_SeatPositionControlAllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg);
 
 extern void	F_SetUserKey(rt_uint8_t keyCode);
 
-extern void	F_VmsDetection(rt_uint8_t rpm);
+extern void	F_VmsDetection(rt_uint8_t rpm,rt_uint8_t resistance);
 
 extern void	F_setVmsDetectionVal(rt_uint8_t val);
 

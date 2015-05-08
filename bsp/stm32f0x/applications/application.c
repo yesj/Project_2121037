@@ -54,7 +54,9 @@ rt_set_profile_data_t set_profile_data;
 
 rt_user_data_t	set_user_data;
 
-rt_set_manual_data_t	set_manual_data;
+rt_profile_heartrate_data_t		profile_heartrate_data;
+
+rt_set_focus_data_t	set_focus_data;
 //==============================================================================
 void IWDG_Config(unsigned char timeout)
 {
@@ -182,35 +184,45 @@ static	void	F_InitSetProfileData(void)
 
 static	void	F_InitManualData(void)
 {
-		set_manual_data.FatBurnAge.maxNumber = ageNumMaxVal;
-		set_manual_data.FatBurnAge.minNumber = ageNumMinVal;
-		set_manual_data.FatBurnAge.number = ageNumVal;
+		profile_heartrate_data.FatBurnAge.maxNumber = ageNumMaxVal;
+		profile_heartrate_data.FatBurnAge.minNumber = ageNumMinVal;
+		profile_heartrate_data.FatBurnAge.number = ageNumVal;
 	
-		set_manual_data.CardioAge.maxNumber = ageNumMaxVal;
-		set_manual_data.CardioAge.minNumber = ageNumMinVal;
-		set_manual_data.CardioAge.number = ageNumVal;
+		profile_heartrate_data.CardioAge.maxNumber = ageNumMaxVal;
+		profile_heartrate_data.CardioAge.minNumber = ageNumMinVal;
+		profile_heartrate_data.CardioAge.number = ageNumVal;
 
-		set_manual_data.TargetTarget.maxNumber = 220;
-		set_manual_data.TargetTarget.minNumber = 40;
-		set_manual_data.TargetTarget.number = 120;
+		profile_heartrate_data.TargetTarget.maxNumber = 220;
+		profile_heartrate_data.TargetTarget.minNumber = 40;
+		profile_heartrate_data.TargetTarget.number = 120;
 	
-		set_manual_data.FatBurnWorkoutMinTime.number = workOutTimeMinuteNumVal;
-		set_manual_data.FatBurnWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
-		set_manual_data.FatBurnWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
+		profile_heartrate_data.FatBurnWorkoutMinTime.number = workOutTimeMinuteNumVal;
+		profile_heartrate_data.FatBurnWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+		profile_heartrate_data.FatBurnWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
 	
-		set_manual_data.CardioWorkoutMinTime.number = workOutTimeMinuteNumVal;
-		set_manual_data.CardioWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
-		set_manual_data.CardioWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
+		profile_heartrate_data.CardioWorkoutMinTime.number = workOutTimeMinuteNumVal;
+		profile_heartrate_data.CardioWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+		profile_heartrate_data.CardioWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
 
-		set_manual_data.TargetWorkoutMinTime.number = workOutTimeMinuteNumVal;
-		set_manual_data.TargetWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
-		set_manual_data.TargetWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
+		profile_heartrate_data.TargetWorkoutMinTime.number = workOutTimeMinuteNumVal;
+		profile_heartrate_data.TargetWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+		profile_heartrate_data.TargetWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
 }
+
+static	void	F_InitFocusData(void)
+{
+	set_focus_data.FocusLevel.number = 7;
+	set_focus_data.FocusLevel.maxNumber = 20;
+	set_focus_data.FocusLevel.minNumber = 1;
+	
+	set_focus_data.FocusWorkoutMinTime.number = workOutTimeMinuteNumVal;
+	set_focus_data.FocusWorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
+	set_focus_data.FocusWorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
+}
+
 static	void	F_InitSetProfileEvent(void)
 {
-	
 	ui_action.ProfileEventSave = setRollingHillEventVal;
-	
 }
 
 static void rt_control_thread_entry(void* parameter)
@@ -266,10 +278,11 @@ static void rt_control_thread_entry(void* parameter)
 				F_InitSetProfileData();
 				F_InitSetProfileEvent();
 				F_InitManualData();
+				F_InitFocusData();
 				ui_action.Status = sysUiStartVal;
 			} else {
 				rt_kprintf("eeprom_ERR");
-				ui_action.Status = eepromErrVal;
+				F_eepromErrModeInit();
 			}
 				break;
 			//==================
@@ -341,24 +354,36 @@ static void rt_control_thread_entry(void* parameter)
 			F_setUsersSport();
 				break;
 			//==================
-			case	setProfilesManualVal:
-			F_setProfilesManual();
+			case	setProfilesHeartRateVal:
+			F_setProfilesHeartRate();
 				break;
 			//==================
-			case	setManualFatBurnVal:
-			F_setManualFatBurn();
+			case	setHeartRateFatBurnVal:
+			F_setHeartRateFatBurn();
 				break;
 			//==================
-			case	setManualCardioVal:
-			F_setManualCardio();
+			case	setHeartRateCardioVal:
+			F_setHeartRateCardio();
 				break;
 			//==================
-			case	setManualTargetVal:
-			F_setManualTarget();
+			case	setHeartRateTargetVal:
+			F_setHeartRateTarget();
 				break;
 			//==================
-			case	setManualSportVal:
-			F_ProfilesManualSport();
+			case	setHeartRateSportVal:
+			F_ProfilesHeartRateSport();
+				break;
+			//==================
+			case	setProfilesFocusVal:
+			F_setProfilesFocus();	
+				break;
+			//==================
+			case	setProfilesFocusDataVal:
+			F_setProfilesFocusData();
+				break;
+			//==================
+			case	FocusSportVal:
+			F_FocusSport();	
 				break;
 			//==================
 			case	engineeringModeVal:
@@ -385,7 +410,7 @@ static void rt_control_thread_entry(void* parameter)
 			F_EngMode1();
 				break;
 			case	eepromErrVal:
-			
+			F_eepromErrMode();
 				break;
 		}
 		//memset(uart_rx_data_buf,0xFF,sizeof(uart_rx_data_buf));

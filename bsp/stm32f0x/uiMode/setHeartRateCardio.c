@@ -5,24 +5,24 @@ static void F_SetManualAgeKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 	switch(Key) {
 		case	enter_KeyVal:
 		bz_short();
-		ui_action.Event = showManualSetTargetEventVal;
-		set_manual_data.FatBurnTarget = (220-set_manual_data.FatBurnAge.number) * 0.65;
+		ui_action.Event = showHeartRateSetTargetEventVal;
+		profile_heartrate_data.CardioTarget = (220-profile_heartrate_data.CardioAge.number) * 0.80;
 			break;
 		case	stop_rest_KeyVal:
 		bz_short();
-		F_setProfilesManualInit(showManualFatBurnEventVal);
+		F_setProfilesHeartRateInit(showHeartRateCardicEventVal);
 			break;
 		case	resistance_up_KeyVal:
 		if(LongKeyStartFlg == 0){
 			bz_short();
 		}
-		F_NumberUp_8(&set_manual_data.FatBurnAge,1,cycleNumberVal);
+		F_NumberUp_8(&profile_heartrate_data.CardioAge,1,cycleNumberVal);
 			break;
 		case	resistance_down_KeyVal:
 		if(LongKeyStartFlg == 0){
 			bz_short();
 		}
-		F_NumberDown_8(&set_manual_data.FatBurnAge,1,cycleNumberVal);
+		F_NumberDown_8(&profile_heartrate_data.CardioAge,1,cycleNumberVal);
 			break;
 	}
 }
@@ -33,11 +33,11 @@ static void	F_setTargetKey(rt_uint8_t keyCode,rt_bool_t LongKeyStartFlg)
 		{
 			case	enter_KeyVal:
 			bz_short();
-			ui_action.Event = showManualWorkoutEventVal;
+			ui_action.Event = showHeartRateWorkoutEventVal;
 				break;
 			case	stop_rest_KeyVal:
 			bz_short();
-			ui_action.Event = showManualAgeEventVal;
+			ui_action.Event = showHeartRateAgeEventVal;
 				break;
 		}
 }
@@ -48,23 +48,23 @@ static void	F_setFatBurnWorkOutTImeKey(rt_uint8_t keyCode,rt_bool_t LongKeyStart
 		{
 			case	enter_KeyVal:
 			bz_short();
-			F_ProfilesManualSportInit(set_manual_data.FatBurnWorkoutMinTime.number,set_manual_data.FatBurnTarget,showManualFatBurnEventVal);
+			F_ProfilesHeartRateSportInit(profile_heartrate_data.CardioWorkoutMinTime.number,profile_heartrate_data.CardioTarget,showHeartRateCardicEventVal);
 				break;
 			case	stop_rest_KeyVal:
 			bz_short();
-			ui_action.Event = showManualSetTargetEventVal;
+			ui_action.Event = showHeartRateSetTargetEventVal;
 				break;
 			case	resistance_up_KeyVal:
 			if(LongKeyStartFlg == 0){
 				bz_short();
 			}
-			F_NumberUp_8(&set_manual_data.FatBurnWorkoutMinTime,1,cycleNumberVal);
+			F_NumberUp_8(&profile_heartrate_data.CardioWorkoutMinTime,1,cycleNumberVal);
 				break;
 			case	resistance_down_KeyVal:
 			if(LongKeyStartFlg == 0){
 				bz_short();
 			}
-			F_NumberDown_8(&set_manual_data.FatBurnWorkoutMinTime,1,cycleNumberVal);
+			F_NumberDown_8(&profile_heartrate_data.CardioWorkoutMinTime,1,cycleNumberVal);
 				break;
 		}
 }
@@ -75,12 +75,12 @@ static	void	F_SportKey(rt_uint8_t keyCode)
 		{
 			case	quick_start_KeyVal:
 			bz_short();
-			F_ProfilesManualSportInit(set_manual_data.FatBurnWorkoutMinTime.number,set_manual_data.FatBurnTarget,showManualFatBurnEventVal);
+			F_ProfilesHeartRateSportInit(profile_heartrate_data.CardioWorkoutMinTime.number,profile_heartrate_data.CardioTarget,showHeartRateCardicEventVal);
 				break;
 		}
 }
 
-void F_setManualFatBurn(void)
+void F_setHeartRateCardio(void)
 {
 		rt_uint8_t	keyCode = 0;
 		rt_bool_t	LongKeyStartFlg = 0;
@@ -96,13 +96,13 @@ void F_setManualFatBurn(void)
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
 					F_SportKey(keyCode);
 					switch(ui_action.Event) {
-						case	showManualAgeEventVal:
+						case	showHeartRateAgeEventVal:
 						F_SetManualAgeKey(keyCode,LongKeyStartFlg);
 							break;
-						case	showManualSetTargetEventVal:
+						case	showHeartRateSetTargetEventVal:
 						F_setTargetKey(keyCode,LongKeyStartFlg);
 							break;
-						case	showManualWorkoutEventVal:
+						case	showHeartRateWorkoutEventVal:
 						F_setFatBurnWorkOutTImeKey(keyCode,LongKeyStartFlg);
 							break;
 					}
@@ -112,14 +112,14 @@ void F_setManualFatBurn(void)
 				{
 					F_SetDisplayRam(0);
 					switch(ui_action.Event) {
-						case	showManualAgeEventVal:
-						F_showSetAge(set_manual_data.FatBurnAge.number);
+						case	showHeartRateAgeEventVal:
+						F_showSetAge(profile_heartrate_data.CardioAge.number);
 							break;
-						case	showManualSetTargetEventVal:
-						F_showSetTargetNum(set_manual_data.FatBurnTarget,1);
+						case	showHeartRateSetTargetEventVal:
+						F_showSetTargetNum(profile_heartrate_data.CardioTarget,1);
 							break;
-						case	showManualWorkoutEventVal:
-						SetWorkoutTime.timeH = set_manual_data.FatBurnWorkoutMinTime.number;
+						case	showHeartRateWorkoutEventVal:
+						SetWorkoutTime.timeH = profile_heartrate_data.CardioWorkoutMinTime.number;
 						SetWorkoutTime.timeL = 0;
 						F_showProfileSetWorkoutTime(SetWorkoutTime);
 							break;
@@ -130,8 +130,9 @@ void F_setManualFatBurn(void)
 			}
 }
 
-void F_setManualFatBurnInit(void)
+void F_setHeartRateCardioInit(void)
 {
-		ui_action.Status = setManualFatBurnVal;
-		ui_action.Event = showManualAgeEventVal;
+		ui_action.Status = setHeartRateCardioVal;
+		ui_action.Event = showHeartRateAgeEventVal;
+		
 }

@@ -8,10 +8,13 @@ static void	F_SetProfilesChooseMode(void)
 			F_setProfileChooseInit(ui_action.ProfileEventSave);
 				break;
 			case	setManualEventVal:
-			F_setProfilesManualInit(showManualFatBurnEventVal);
+
+				break;
+			case	setHeartRateEventVal:
+			F_setProfilesHeartRateInit(showHeartRateFatBurnEventVal);			
 				break;
 			case	setFocusEventVal:
-
+			F_setProfilesFocusInit(FocusTotalBodyEventVal);
 				break;
 			case	setMetsEventVal:
 
@@ -72,6 +75,9 @@ void F_setProfiles(void)
 							break;
 						case	setManualEventVal:
 							F_showManualReverse();
+							break;
+						case	setHeartRateEventVal:
+							F_showHeartReverse();
 							break;
 						case	setFocusEventVal:
 							F_showFocusReverse();

@@ -829,11 +829,6 @@
               <FilePath>.\uiMode\sysUiStart.c</FilePath>
             </File>
             <File>
-              <FileName>eng_1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\uiMode\eng_1.c</FilePath>
-            </File>
-            <File>
               <FileName>setProfiles.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\uiMode\setProfiles.c</FilePath>
@@ -843,6 +838,26 @@
               <FileType>1</FileType>
               <FilePath>.\uiMode\setNoramal.c</FilePath>
             </File>
+            <File>
+              <FileName>key_libraries.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\key_libraries.c</FilePath>
+            </File>
+            <File>
+              <FileName>sportNoramal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\sportNoramal.c</FilePath>
+            </File>
+            <File>
+              <FileName>eepromErrMode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\eepromErrMode.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Profile</GroupName>
+          <Files>
             <File>
               <FileName>setProfileChoose.c</FileName>
               <FileType>1</FileType>
@@ -883,26 +898,46 @@
               <FileType>1</FileType>
               <FilePath>.\uiMode\profileSport.c</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Engineering</GroupName>
+          <Files>
             <File>
-              <FileName>key_libraries.c</FileName>
+              <FileName>eng_1.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\key_libraries.c</FilePath>
+              <FilePath>.\uiMode\eng_1.c</FilePath>
             </File>
             <File>
-              <FileName>setUsers.c</FileName>
+              <FileName>EngineeringMode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\setUsers.c</FilePath>
+              <FilePath>.\uiMode\EngineeringMode.c</FilePath>
             </File>
             <File>
-              <FileName>setUsersNoData.c</FileName>
+              <FileName>setKeyTest.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\setUsersNoData.c</FilePath>
+              <FilePath>.\uiMode\setKeyTest.c</FilePath>
             </File>
             <File>
-              <FileName>setUsersResetData.c</FileName>
+              <FileName>setLcdTest.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\setUsersResetData.c</FilePath>
+              <FilePath>.\uiMode\setLcdTest.c</FilePath>
             </File>
+            <File>
+              <FileName>setBzTest.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setBzTest.c</FilePath>
+            </File>
+            <File>
+              <FileName>setUint.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setUint.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>User</GroupName>
+          <Files>
             <File>
               <FileName>setUsersData.c</FileName>
               <FileType>1</FileType>
@@ -914,59 +949,69 @@
               <FilePath>.\uiMode\setUsersSport.c</FilePath>
             </File>
             <File>
-              <FileName>setProfilesManual.c</FileName>
+              <FileName>setUsersResetData.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\setProfilesManual.c</FilePath>
+              <FilePath>.\uiMode\setUsersResetData.c</FilePath>
             </File>
             <File>
-              <FileName>setManualFatBurn.c</FileName>
+              <FileName>setUsersNoData.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\setManualFatBurn.c</FilePath>
+              <FilePath>.\uiMode\setUsersNoData.c</FilePath>
             </File>
             <File>
-              <FileName>sportNoramal.c</FileName>
+              <FileName>setUsers.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\sportNoramal.c</FilePath>
+              <FilePath>.\uiMode\setUsers.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Foucs</GroupName>
+          <Files>
+            <File>
+              <FileName>setProfilesFocusData.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setProfilesFocusData.c</FilePath>
             </File>
             <File>
-              <FileName>setManualCardio.c</FileName>
+              <FileName>FocusSport.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\setManualCardio.c</FilePath>
+              <FilePath>.\uiMode\FocusSport.c</FilePath>
             </File>
             <File>
-              <FileName>setManualTarget.c</FileName>
+              <FileName>setProfilesFocus.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\setManualTarget.c</FilePath>
+              <FilePath>.\uiMode\setProfilesFocus.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>HeartRate</GroupName>
+          <Files>
+            <File>
+              <FileName>setProfilesHeartRate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setProfilesHeartRate.c</FilePath>
             </File>
             <File>
-              <FileName>setProfilesManualSport.c</FileName>
+              <FileName>setHeartRateTarget.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\setProfilesManualSport.c</FilePath>
+              <FilePath>.\uiMode\setHeartRateTarget.c</FilePath>
             </File>
             <File>
-              <FileName>EngineeringMode.c</FileName>
+              <FileName>setHeartRateCardio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\EngineeringMode.c</FilePath>
+              <FilePath>.\uiMode\setHeartRateCardio.c</FilePath>
             </File>
             <File>
-              <FileName>setUint.c</FileName>
+              <FileName>setHeartRateFatBurn.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\setUint.c</FilePath>
+              <FilePath>.\uiMode\setHeartRateFatBurn.c</FilePath>
             </File>
             <File>
-              <FileName>setBzTest.c</FileName>
+              <FileName>setProfilesHeartRateSport.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\setBzTest.c</FilePath>
-            </File>
-            <File>
-              <FileName>setLcdTest.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\uiMode\setLcdTest.c</FilePath>
-            </File>
-            <File>
-              <FileName>setKeyTest.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\uiMode\setKeyTest.c</FilePath>
+              <FilePath>.\uiMode\setProfilesHeartRateSport.c</FilePath>
             </File>
           </Files>
         </Group>

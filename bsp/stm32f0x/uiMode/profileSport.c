@@ -118,7 +118,7 @@ void F_ProfileSport(void)
 						F_readWatte(calor_count.level,&calor_count.watt);					
 						F_calorie_process(&calor_count);
 						distance_data.rpm = F_readRpm();
-						F_VmsDetection(distance_data.rpm);
+						F_VmsDetection(distance_data.rpm,sport_data.resistance.number);
 						distance_data.WheelSize = 300;
 						F_distance_process(&distance_data);
 					} else {

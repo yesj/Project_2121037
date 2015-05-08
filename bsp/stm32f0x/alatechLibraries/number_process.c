@@ -311,4 +311,25 @@ void	F_Interval_2_LevelCount(rt_uint8_t MaxLevel,rt_uint8_t *LevelData,rt_uint8_
 	}
 }
 
+void	F_TotalBodyFouseCount(rt_uint8_t MaxLevel,rt_time_data_t	fouseTime,rt_fouse_count_data_t *fouse_count_data)
+{
+		
+
+
+}
+
+void	F_ArmsFouseCount(rt_uint8_t MaxLevel,rt_time_data_t	fouseTime,rt_fouse_count_data_t *fouse_count_data)
+{
+	
+	
+	
+}
+
+void	F_LegsFouseCount(rt_uint8_t MaxLevel,rt_time_data_t	fouseTime,rt_fouse_count_data_t *fouse_count_data)
+{
+	
+	
+	
+}
+
 
