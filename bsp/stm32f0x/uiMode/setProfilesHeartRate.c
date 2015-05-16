@@ -52,7 +52,6 @@ void F_setProfilesHeartRate(void)
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
 					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					F_SetUserKey(keyCode);
-					
 					switch(keyCode)
 					{
 						case	quick_start_KeyVal:

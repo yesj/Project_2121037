@@ -834,19 +834,9 @@
               <FilePath>.\uiMode\setProfiles.c</FilePath>
             </File>
             <File>
-              <FileName>setNoramal.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\uiMode\setNoramal.c</FilePath>
-            </File>
-            <File>
               <FileName>key_libraries.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\uiMode\key_libraries.c</FilePath>
-            </File>
-            <File>
-              <FileName>sportNoramal.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\uiMode\sportNoramal.c</FilePath>
             </File>
             <File>
               <FileName>eepromErrMode.c</FileName>
@@ -939,19 +929,14 @@
           <GroupName>User</GroupName>
           <Files>
             <File>
+              <FileName>setUsers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setUsers.c</FilePath>
+            </File>
+            <File>
               <FileName>setUsersData.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\uiMode\setUsersData.c</FilePath>
-            </File>
-            <File>
-              <FileName>setUsersSport.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\uiMode\setUsersSport.c</FilePath>
-            </File>
-            <File>
-              <FileName>setUsersResetData.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\uiMode\setUsersResetData.c</FilePath>
             </File>
             <File>
               <FileName>setUsersNoData.c</FileName>
@@ -959,15 +944,20 @@
               <FilePath>.\uiMode\setUsersNoData.c</FilePath>
             </File>
             <File>
-              <FileName>setUsers.c</FileName>
+              <FileName>setUsersSport.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\uiMode\setUsers.c</FilePath>
+              <FilePath>.\uiMode\setUsersSport.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Foucs</GroupName>
           <Files>
+            <File>
+              <FileName>setProfilesFocus.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setProfilesFocus.c</FilePath>
+            </File>
             <File>
               <FileName>setProfilesFocusData.c</FileName>
               <FileType>1</FileType>
@@ -977,11 +967,6 @@
               <FileName>FocusSport.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\uiMode\FocusSport.c</FilePath>
-            </File>
-            <File>
-              <FileName>setProfilesFocus.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\uiMode\setProfilesFocus.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1012,6 +997,36 @@
               <FileName>setProfilesHeartRateSport.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\uiMode\setProfilesHeartRateSport.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Menual</GroupName>
+          <Files>
+            <File>
+              <FileName>setProfileManual.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setProfileManual.c</FilePath>
+            </File>
+            <File>
+              <FileName>manualSport.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\manualSport.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Noramal</GroupName>
+          <Files>
+            <File>
+              <FileName>sportNoramal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\sportNoramal.c</FilePath>
+            </File>
+            <File>
+              <FileName>setNoramal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\setNoramal.c</FilePath>
             </File>
           </Files>
         </Group>

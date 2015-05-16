@@ -8,7 +8,7 @@ static void	F_SetProfilesChooseMode(void)
 			F_setProfileChooseInit(ui_action.ProfileEventSave);
 				break;
 			case	setManualEventVal:
-
+			F_setProfileManualInit();
 				break;
 			case	setHeartRateEventVal:
 			F_setProfilesHeartRateInit(showHeartRateFatBurnEventVal);			

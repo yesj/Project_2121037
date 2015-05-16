@@ -489,6 +489,7 @@ void  F_ShowMatrixStringLcd(rt_coordinate_t adr,const rt_uint8_t *asciiString,rt
 //==============================================================
 //
 //==============================================================
+/*
 const	rt_uint16_t	MatrixBigNumCode[][8] = 
 {																																										
 {0x03F0,0x0FFC,0x1C0E,0x1002,0x1002,0x1C0E,0x0FFC,0x03F0},		//	0
@@ -502,6 +503,21 @@ const	rt_uint16_t	MatrixBigNumCode[][8] =
 {0x0638,0x0F7C,0x18C2,0x1082,0x1082,0x19C6,0x0F7C,0x0638},		//  8
 {0x0780,0x0FC2,0x1862,0x1022,0x1026,0x184C,0x0FF8,0x07F0}			//  9
 };
+*/
+const	rt_uint16_t	MatrixBigNumCode[][8] = 
+{																																										
+{0x01F0,0x07FC,0x0E0E,0x0802,0x0802,0x0E0E,0x07FC,0x01F0},		//	0
+{0x0000,0x0002,0x0402,0x0FFE,0x0FFE,0x0002,0x0002,0x0000},		// 	1
+{0x0606,0x0E0E,0x080E,0x081A,0x0832,0x0C62,0x07C6,0x0386},		//	2
+{0x0004,0x0406,0x0C42,0x0842,0x08C2,0x0FE6,0x073C,0x0018},		//	3
+{0x0018,0x0078,0x01E8,0x0788,0x0FFE,0x0FFE,0x0008,0x0008},		//	4
+{0x0004,0x0F86,0x0F82,0x0882,0x0882,0x08C6,0x087C,0x0838},		//	5
+{0x01F8,0x03FC,0x06C6,0x0C82,0x0882,0x08C6,0x087C,0x0038},		//	6
+{0x0E00,0x0E00,0x0800,0x0806,0x083E,0x09F8,0x0FC0,0x0E00},		//  7
+{0x0318,0x07BC,0x0CE6,0x0842,0x0842,0x0CE6,0x07BC,0x0318},		//  8
+{0x0380,0x07C2,0x0C62,0x0822,0x0826,0x0C4C,0x07F8,0x03F0}			//  9
+};
+
 
 static void	F_ShowMatrixBigNumFontChange(rt_coordinate_t adr,rt_uint16_t data,rt_uint32_t *displayAdr)
 {
@@ -511,7 +527,7 @@ static void	F_ShowMatrixBigNumFontChange(rt_coordinate_t adr,rt_uint16_t data,rt
 		lcdRamAdrTemp = LcdRam[adr.x];
 	
 		dataTemp = *(displayAdr + lcdRamAdrTemp);
-    for(lcdBitAdr = adr.y;lcdBitAdr < (adr.y+12) ;lcdBitAdr++)
+    for(lcdBitAdr = adr.y;lcdBitAdr < (adr.y+11) ;lcdBitAdr++)
     {
 				lcdBitAdrTemp = LcdBit[lcdBitAdr];
 				k = data & 0x0002;
@@ -567,7 +583,7 @@ static void	F_ShowMatrixBigNumFontChangeReverse(rt_coordinate_t adr,rt_uint16_t 
 		lcdRamAdrTemp = LcdRam[adr.x];
 	
 		dataTemp = *(displayAdr + lcdRamAdrTemp);
-    for(lcdBitAdr = adr.y;lcdBitAdr < (adr.y+12) ;lcdBitAdr++)
+    for(lcdBitAdr = adr.y;lcdBitAdr < (adr.y+11) ;lcdBitAdr++)
     {
 				lcdBitAdrTemp = LcdBit[lcdBitAdr];
 				k = data & 0x0002;
@@ -603,7 +619,7 @@ void  F_ShowMatrixBigNumProcessReverse(rt_coordinate_t	adr3,rt_coordinate_t	adr2
         if(data>99) {
 					coordinateTemp.x = adr3.x-1;
 					coordinateTemp.y = adr3.y-1;
-					F_ShowMatrixLcdChossDot(coordinateTemp,10,14,LCDBuffer);
+					F_ShowMatrixLcdChossDot(coordinateTemp,10,13,LCDBuffer);
           F_ShowMatrixBigNumFontLcdReverse(adr3,a,displayAdr);
 				}
       }
@@ -611,7 +627,7 @@ void  F_ShowMatrixBigNumProcessReverse(rt_coordinate_t	adr3,rt_coordinate_t	adr2
         if(ShowHiByeFlg==1) {
 					coordinateTemp.x = adr2.x-1;
 					coordinateTemp.y = adr2.y-1;
-					F_ShowMatrixLcdChossDot(coordinateTemp,10,14,LCDBuffer);
+					F_ShowMatrixLcdChossDot(coordinateTemp,10,13,LCDBuffer);
           F_ShowMatrixBigNumFontLcdReverse(adr2,b,displayAdr);
 				}
           else
@@ -619,13 +635,13 @@ void  F_ShowMatrixBigNumProcessReverse(rt_coordinate_t	adr3,rt_coordinate_t	adr2
             if(data>9) {
 							coordinateTemp.x = adr2.x-1;
 							coordinateTemp.y = adr2.y-1;
-							F_ShowMatrixLcdChossDot(coordinateTemp,10,14,LCDBuffer);
+							F_ShowMatrixLcdChossDot(coordinateTemp,10,13,LCDBuffer);
               F_ShowMatrixBigNumFontLcdReverse(adr2,b,displayAdr);
 						}
           }
 	//=============
 		coordinateTemp.x = adr1.x-1;
 		coordinateTemp.y = adr1.y-1;
-		F_ShowMatrixLcdChossDot(coordinateTemp,10,14,LCDBuffer);
+		F_ShowMatrixLcdChossDot(coordinateTemp,10,13,LCDBuffer);
 		F_ShowMatrixBigNumFontLcdReverse(adr1,c,displayAdr);
 }

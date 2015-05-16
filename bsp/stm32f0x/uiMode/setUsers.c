@@ -53,27 +53,26 @@ void F_setUsers(void)
 							bz_short();
 							F_setNoramalInit();
 						break;
-						case	long_enter_KeyVal:
-							bz_short();
-							ui_action.UsersEventSave = ui_action.Event;
-							F_setUsersResetDataInit();
-						break;
-						case	short_enter_KeyVal:
+						case	enter_KeyVal:
 							bz_short();
 							F_UeserEnterKeyChooseMode();
 						break;
 						case	resistance_down_KeyVal:
-							bz_short();
-							ui_action.Event++;
-							if(ui_action.Event>setUser_10_EventVal)
-								ui_action.Event = setUser_1_EventVal;
+							if(LongKeyStartFlg == 0)	{
+								bz_short();
+								ui_action.Event++;
+								if(ui_action.Event>setUser_10_EventVal)
+									ui_action.Event = setUser_1_EventVal;
+							}
 							break;
 						case	resistance_up_KeyVal:
-							bz_short();
-							if(ui_action.Event > setUser_1_EventVal)
-								ui_action.Event--;
-								else
-									ui_action.Event = setUser_10_EventVal;
+							if(LongKeyStartFlg == 0)	{
+								bz_short();
+								if(ui_action.Event > setUser_1_EventVal)
+									ui_action.Event--;
+									else
+										ui_action.Event = setUser_10_EventVal;
+							}
 							break;
 					}
 				}

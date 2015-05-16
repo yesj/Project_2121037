@@ -42,6 +42,8 @@ enum _uiStatus {
     setInterval_1_Val,
     setInterval_2_Val,
 		profileSportVal,
+		setProfileManualVal,
+		manualSportVal,
 		setUsersVal,
 		setUsersNoDataVal,
 		setUsersDataVal,
@@ -122,17 +124,28 @@ enum _setUsersNoDataEvent{
 	setSeatPositionEventVal,
 	setGenderEventVal,
 	setAgeEventVal,
-	setWeightEventVal
+	setWeightEventVal,
+	setUserRollingHillEventVal,
+	setUserPeakEventVal,
+	setUserPlateauEventVal,
+	setUserClimbEventVal,
+	setUserInterval_1_EventVal,
+	setUserInterval_2_EventVal,
+	setUserProfileLevelEventVal,
+	setUserProfileWorkOutTImeEventVal
 };
 
-enum _setUsersResetDataEvent{
-	showUserResetNoEventVal,
-	showUserResetYesEventVal
-};
+//enum _setUsersResetDataEvent{
+//};
 
 enum _setUsersDataEvent{
-	showUserNameEventVal,
-	showUserDataEventVal
+	showUserStartEventVal,
+	showUserSeetingsEventVal,
+	showUserTotalEventVal,
+	showUserDataEventVal,
+	showUserResetNoEventVal,
+	showUserResetYesEventVal
+	//showUserNameEventVal,
 };
 
 enum _setHeartRateEvent{
@@ -231,6 +244,8 @@ struct	rt_set_profile_data
   uint8_Number_t interval_1_WorkoutMinTime;
   uint8_Number_t interval_2_Level;
   uint8_Number_t interval_2_WorkoutMinTime;
+	uint8_Number_t menualLevel;
+	uint8_Number_t menualWorkoutTime;
 };
 
 typedef struct	rt_set_profile_data		rt_set_profile_data_t;
@@ -311,7 +326,11 @@ struct rt_user_data
 	rt_uint16_t	calorie;
 	rt_uint32_t	SportTimeSec;
 	rt_uint32_t	SportCal;
-	rt_uint16_t	SportKm;	
+	rt_uint16_t	SportKm;
+	rt_uint8_t	UserProfileChoose;
+	uint8_Number_t userLevel;
+	uint8_Number_t userWorkoutTime;
+	
 };
 typedef struct rt_user_data rt_user_data_t;
 
@@ -393,6 +412,10 @@ extern void	F_ClimbLevelCount(rt_uint8_t MaxLevel,rt_uint8_t *LevelData,rt_uint8
 extern void	F_Interval_1_LevelCount(rt_uint8_t MaxLevel,rt_uint8_t *LevelData,rt_uint8_t DataSize);
 
 extern void	F_Interval_2_LevelCount(rt_uint8_t MaxLevel,rt_uint8_t *LevelData,rt_uint8_t DataSize);
+
+extern void	F_Menual_LevelCount(rt_uint8_t Level,rt_uint8_t *LevelData,rt_uint8_t DataSize);
+
+extern void	F_ProfileTimeSegments(rt_uint8_t *Segments,rt_time_data_t Time,rt_uint8_t SegmentsData,rt_uint8_t MaxSegments);
 //==================================================================
 // Display
 #define blankVal					255
@@ -587,6 +610,14 @@ extern void F_setProfilesFocusDataInit(void);
 extern void F_FocusSport(void);
 
 extern void F_FocusSportInit(void);
+
+extern void F_setProfileManual(void);
+
+extern void F_setProfileManualInit(void);
+
+extern void F_manualSport(void);
+
+extern void F_manualSportInit(void);
 //===========================================================================
 
 extern void  F_ShowMatrixLcd(rt_uint8_t	lcdRamAdr,rt_uint32_t data,rt_uint8_t dataLongSize,rt_uint32_t *displayAdr);
@@ -781,6 +812,12 @@ extern void	F_ShowHandlesDown(void);
 extern void	F_ShowFeetOnPedals(void);
 
 extern void	F_ShowFeetOnPegs(void);
+
+extern void	F_ShowStartReverse(void);
+
+extern void	F_ShowSettingsReverse(void);
+
+extern void	F_ShowUserTotalReverse(void);
 //=======================================
 extern void	F_SeatPositionControlAllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg);
 

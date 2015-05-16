@@ -311,6 +311,28 @@ void	F_Interval_2_LevelCount(rt_uint8_t MaxLevel,rt_uint8_t *LevelData,rt_uint8_
 	}
 }
 
+void	F_Menual_LevelCount(rt_uint8_t Level,rt_uint8_t *LevelData,rt_uint8_t DataSize)
+{
+	rt_uint8_t	TempAdr;
+	for(TempAdr = 0 ; TempAdr <DataSize ; TempAdr++) {
+		*(LevelData + TempAdr) = Level;
+	}
+}
+
+void	F_ProfileTimeSegments(rt_uint8_t *Segments,rt_time_data_t Time,rt_uint8_t SegmentsData,rt_uint8_t MaxSegments)
+{
+	rt_uint16_t timeSec;
+	rt_uint8_t	SegmentTemp;
+	timeSec = (Time.timeH * 60) + Time.timeL;
+	SegmentTemp = (timeSec / SegmentsData);
+	if(SegmentTemp > MaxSegments) {
+		SegmentTemp = 0;
+	} else {
+		SegmentTemp = MaxSegments- SegmentTemp;
+	}
+	*Segments = SegmentTemp;
+}
+
 void	F_TotalBodyFouseCount(rt_uint8_t MaxLevel,rt_time_data_t	fouseTime,rt_fouse_count_data_t *fouse_count_data)
 {
 		
@@ -331,5 +353,3 @@ void	F_LegsFouseCount(rt_uint8_t MaxLevel,rt_time_data_t	fouseTime,rt_fouse_coun
 	
 	
 }
-
-

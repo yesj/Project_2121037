@@ -3,20 +3,6 @@
 static 	rt_uint8_t	R_Segments,R_SegmentsTime;
 static 	rt_bool_t		FlickerFlg;
 
-void	F_ProfileTimeSegments(rt_uint8_t *Segments,rt_time_data_t Time,rt_uint8_t SegmentsData,rt_uint8_t MaxSegments)
-{
-	rt_uint16_t timeSec;
-	rt_uint8_t	SegmentTemp;
-	timeSec = (Time.timeH * 60) + Time.timeL;
-	SegmentTemp = (timeSec / SegmentsData);
-	if(SegmentTemp > MaxSegments) {
-		SegmentTemp = 0;
-	} else {
-		SegmentTemp = MaxSegments- SegmentTemp;
-	}
-	*Segments = SegmentTemp;
-}
-
 static void	F_MaxLevelCount(rt_uint8_t MaxLevel,rt_uint8_t Segments)
 {
 	rt_uint8_t adr;

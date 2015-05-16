@@ -3,6 +3,135 @@
 
 static	rt_time_data_t	TimeTest;
 
+static void	F_ResetUserData(void)
+{
+	rt_uint8_t	buf;
+
+		buf = 0;	// 清除資料記憶
+		F_eeprom_user_DetectionData(WriteDataVal,ui_action.UsersEventSave,&buf);	
+}
+
+static void	F_setChooseUserKey(rt_uint8_t keyCode,rt_bool_t LongKeyStartFlg)
+{
+		switch(keyCode) {
+			case	quick_start_KeyVal:
+				bz_short();
+				F_setUsersSportInit();
+				break;
+			case	stop_rest_KeyVal:
+				bz_short();
+				F_setUsersInit(ui_action.UsersEventSave);
+				break;
+			case	resistance_up_KeyVal:
+				if(LongKeyStartFlg == 0)	{
+					bz_short();
+					if(ui_action.Event > showUserStartEventVal) {
+						ui_action.Event--;
+					} else {
+						ui_action.Event = showUserTotalEventVal;
+					}
+				}
+				break;
+			case	resistance_down_KeyVal:
+				if(LongKeyStartFlg == 0)	{
+					bz_short();	
+					if(ui_action.Event < showUserTotalEventVal) {
+						ui_action.Event++;
+					} else {
+						ui_action.Event = showUserStartEventVal;
+					}
+				}
+				break;
+			}
+}
+
+static void	F_setUserStartEnter(rt_uint8_t keyCode)
+{
+		switch(keyCode) {
+			case	enter_KeyVal:
+				bz_short();
+				F_setUsersSportInit();
+				break;	
+		}
+}
+
+static void	F_setUserSeetingsEnterKey(rt_uint8_t keyCode)
+{
+		switch(keyCode) {
+			case	enter_KeyVal:
+				bz_short();
+
+				break;	
+		}
+}
+
+static void	F_setChooseUserTotalEnterKey(rt_uint8_t keyCode)
+{
+		switch(keyCode) {
+			case	enter_KeyVal:
+				bz_short();
+				ui_action.Event = showUserDataEventVal;
+				break;	
+		}
+}
+
+static void	F_setUserDataKey(rt_uint8_t keyCode)
+{
+		switch(keyCode) {
+			case	stop_rest_KeyVal:
+				bz_short();
+				ui_action.Event = showUserTotalEventVal;
+				break;	
+			case	long_enter_KeyVal:
+				bz_short();
+				ui_action.Event = showUserResetNoEventVal;
+				break;
+		}
+}
+
+static void	F_setUserResetNoKey(rt_uint8_t keyCode,rt_bool_t LongKeyStartFlg)
+{
+		switch(keyCode) {
+			case	short_enter_KeyVal:
+			bz_short();
+			ui_action.Event = showUserDataEventVal;
+				break;
+			case	stop_rest_KeyVal:
+			bz_short();
+			ui_action.Event = showUserDataEventVal;
+				break;
+			case	resistance_up_KeyVal:
+			case	resistance_down_KeyVal:
+			if(LongKeyStartFlg == 0)	{
+				bz_short();	
+				ui_action.Event = showUserResetYesEventVal;
+			}
+				break;
+		}
+}
+
+static void	F_setUserResetYesKey(rt_uint8_t keyCode,rt_bool_t LongKeyStartFlg)
+{
+		switch(keyCode) {
+			case	short_enter_KeyVal:
+			bz_short();
+			F_ResetUserData();
+			F_setUsersInit(ui_action.UsersEventSave);
+				break;
+			case	stop_rest_KeyVal:
+			bz_short();
+			ui_action.Event = showUserDataEventVal;
+				break;
+			case	resistance_up_KeyVal:
+			case	resistance_down_KeyVal:
+			if(LongKeyStartFlg == 0)	{
+				bz_short();	
+				ui_action.Event = showUserResetNoEventVal;
+			}
+				break;
+		}
+}
+
 void F_setUsersData(void)
 {
 		rt_uint8_t	keyCode = 0;
@@ -15,30 +144,27 @@ void F_setUsersData(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
-					switch(keyCode) {
-						case	stop_rest_KeyVal:
-						bz_short();
-						F_setUsersInit(ui_action.UsersEventSave);
+					switch(ui_action.Event) {
+						case showUserStartEventVal:
+						F_setChooseUserKey(keyCode,LongKeyStartFlg);
+						F_setUserStartEnter(keyCode);
+							break;	
+						case showUserSeetingsEventVal:
+						F_setChooseUserKey(keyCode,LongKeyStartFlg);
+						F_setUserSeetingsEnterKey(keyCode);
 							break;
-						case	resistance_up_KeyVal:
-						if(LongKeyStartFlg == 0)	{
-							bz_short();	
-							if(ui_action.Event < showUserDataEventVal) {
-								ui_action.Event++;
-							} else {
-								ui_action.Event = showUserNameEventVal;
-							}
-						}
+						case showUserTotalEventVal:
+						F_setChooseUserKey(keyCode,LongKeyStartFlg);
+						F_setChooseUserTotalEnterKey(keyCode);
 							break;
-						case	resistance_down_KeyVal:
-						if(LongKeyStartFlg == 0)	{
-							bz_short();
-							if(ui_action.Event > showUserNameEventVal) {
-								ui_action.Event--;
-							} else {
-								ui_action.Event = showUserDataEventVal;
-							}
-						}
+						case showUserDataEventVal:
+						F_setUserDataKey(keyCode);
+							break;
+						case	showUserResetNoEventVal:
+						F_setUserResetNoKey(keyCode,LongKeyStartFlg);
+							break;
+						case	showUserResetYesEventVal:
+						F_setUserResetYesKey(keyCode,LongKeyStartFlg);
 							break;
 					}
 				}
@@ -47,11 +173,26 @@ void F_setUsersData(void)
 				{
 					F_SetDisplayRam(0);
 					switch(ui_action.Event) {
-						case showUserNameEventVal:
-							F_showUserName(set_user_data.UserNaume,10);
+						//case showUserNameEventVal:
+						//	F_showUserName(set_user_data.UserNaume,10);
+						//	break;
+						case showUserStartEventVal:
+							F_ShowStartReverse();
+							break;
+						case showUserSeetingsEventVal:
+							F_ShowSettingsReverse();
+							break;
+						case showUserTotalEventVal:
+							F_ShowUserTotalReverse();
 							break;
 						case showUserDataEventVal:
 							F_showTimeMilesCal(TimeTest,set_user_data.SportCal,set_user_data.SportKm);
+							break;
+						case	showUserResetNoEventVal:
+						F_showResetDataNo();	
+							break;
+						case	showUserResetYesEventVal:
+						F_showResetDataYes();
 							break;
 					}
 					F_Display();
@@ -62,9 +203,9 @@ void F_setUsersData(void)
 
 void F_setUsersDataInit(void)
 {
-	rt_uint16_t	TempMin;
+		rt_uint16_t	TempMin;
 		ui_action.Status = setUsersDataVal;
-		ui_action.Event = showUserNameEventVal;
+		ui_action.Event = showUserStartEventVal;
 		F_eeprom_user_name(ReadDataVal,ui_action.UsersEventSave,set_user_data.UserNaume,0);
 		F_eeprom_user_time(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportTimeSec);
 		F_eeprom_user_cal(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportCal);

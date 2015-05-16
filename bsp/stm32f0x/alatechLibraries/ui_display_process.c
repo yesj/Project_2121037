@@ -140,6 +140,10 @@ const rt_uint8_t M71[] ={"ARMS"};
 const rt_uint8_t M72[] ={"LEGS"};
 const rt_uint8_t M73[] ={"MAXIMUM"};
 const rt_uint8_t M74[] ={"RESISTANCE"};
+const rt_uint8_t M75[] ={"START"};
+const rt_uint8_t M76[] ={"SETTINGS"};
+const rt_uint8_t M77[] ={"USER"};
+
 
 static void	F_HundredChange(rt_uint8_t	*byte2,rt_uint8_t	*byte1,rt_uint32_t data)
 {
@@ -257,22 +261,22 @@ void	F_showMatrixProfileWrokOutTime(rt_time_data_t TimeData)
 	coordinateTemp3.x = blankVal;
 	coordinateTemp3.y = blankVal;
 	coordinateTemp2.x = 11;
-	coordinateTemp2.y = 20;
+	coordinateTemp2.y = 21;
 	coordinateTemp1.x = 11+9;
-	coordinateTemp1.y = 20;
+	coordinateTemp1.y = 21;
 	
 	F_ShowMatrixBigNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,TimeData.timeH,LCDBuffer);
 
 	coordinateTemp2.x = 11+9+9+4;
-	coordinateTemp2.y = 20;
+	coordinateTemp2.y = 21;
 	coordinateTemp1.x = 11+9+9+4+9;
-	coordinateTemp1.y = 20;
+	coordinateTemp1.y = 21;
 
 	F_ShowMatrixBigNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,TimeData.timeL,LCDBuffer);
 	
 	//帽號
 	coordinateTemp1.x = 29;
-	coordinateTemp1.y = 20;
+	coordinateTemp1.y = 21;
 	F_ShowMatrixLcdChossReverse(coordinateTemp1,2,12,0x198,LCDBuffer);
 	//帽號
 }
@@ -941,7 +945,7 @@ void	F_showProfileSetWorkoutTime(rt_time_data_t TimeData)
 	//帽號
 	coordinateTemp1.x = 29;
 	coordinateTemp1.y = 1;
-	F_ShowMatrixLcdChossReverse(coordinateTemp1,2,14,0x3CCF,LCDBuffer);
+	F_ShowMatrixLcdChossReverse(coordinateTemp1,2,14,0x1CCF,LCDBuffer);
 	//帽號
 	
 	coordinateTemp2.x = 32;
@@ -1741,3 +1745,81 @@ void	F_ShowFeetOnPegs(void)
 	}
 }
 
+static void		F_showStartChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M75,sizeof(M75),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M75,sizeof(M75),LCDBuffer);	
+}
+
+static void		F_showSettingsChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M76,sizeof(M76),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M76,sizeof(M76),LCDBuffer);	
+}
+
+static void	F_showUserTotalChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	rt_coordinate_t coordinateTemp1;
+	if(Dot)
+		F_ShowMatrixStringLcd(coordinate,M77,sizeof(M77),LCDBuffer);
+		else {
+			F_ShowMatrixStringLcdReverse(coordinate,M77,sizeof(M77),LCDBuffer);
+			//點黑
+			coordinateTemp1.x = 26;
+			coordinateTemp1.y = (coordinate.y - 1);
+			F_ShowMatrixLcdChossDot(coordinateTemp1,2,9,LCDBuffer);
+			//點黑
+		}
+	coordinateTemp1.x = 29;
+	coordinateTemp1.y = coordinate.y;
+	if(Dot)
+		F_ShowMatrixStringLcd(coordinateTemp1,M69,sizeof(M69),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinateTemp1,M69,sizeof(M69),LCDBuffer);
+}
+
+void	F_ShowStartReverse(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showStartChoose(coordinateTemp1,0);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showSettingsChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
+		F_showUserTotalChoose(coordinateTemp1,1);
+}
+
+void	F_ShowSettingsReverse(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showStartChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showSettingsChoose(coordinateTemp1,0);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
+		F_showUserTotalChoose(coordinateTemp1,1);
+}
+
+void	F_ShowUserTotalReverse(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 23;
+		F_showStartChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 13;
+		F_showSettingsChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 2;
+		coordinateTemp1.y = 3;
+		F_showUserTotalChoose(coordinateTemp1,0);
+}

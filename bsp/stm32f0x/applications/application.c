@@ -180,6 +180,14 @@ static	void	F_InitSetProfileData(void)
 	set_profile_data.interval_2_WorkoutMinTime.number = workOutTimeMinuteNumVal;
 	set_profile_data.interval_2_WorkoutMinTime.maxNumber = workOutTimeMinuteNumMaxVal;
 	set_profile_data.interval_2_WorkoutMinTime.minNumber = workOutTimeMinuteNumMinVal;
+	
+	set_profile_data.menualLevel.number = 7;
+	set_profile_data.menualLevel.maxNumber = 20;
+	set_profile_data.menualLevel.minNumber = 1;
+	
+	set_profile_data.menualWorkoutTime.number = workOutTimeMinuteNumVal;
+	set_profile_data.menualWorkoutTime.maxNumber = workOutTimeMinuteNumMaxVal;
+	set_profile_data.menualWorkoutTime.minNumber = workOutTimeMinuteNumMinVal;
 }
 
 static	void	F_InitManualData(void)
@@ -334,6 +342,14 @@ static void rt_control_thread_entry(void* parameter)
 			F_ProfileSport();
 				break;
 			//==================
+			case	setProfileManualVal:
+			F_setProfileManual();
+				break;		
+			//==================
+			case	manualSportVal:
+			F_manualSport();	
+				break;		
+			//==================
 			case	setUsersVal:
 			F_setUsers();
 				break;
@@ -346,9 +362,9 @@ static void rt_control_thread_entry(void* parameter)
 			F_setUsersData();
 				break;
 			//==================
-			case	setUsersResetDataVal:
-			F_setUsersResetData();
-				break;
+			//case	setUsersResetDataVal:
+			//F_setUsersResetData();
+			//	break;
 			//==================
 			case	setUsersSportVal:
 			F_setUsersSport();
