@@ -75,6 +75,8 @@ void F_setProfilesFocusData(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_LongRestKey(keyCode);
+					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					switch(ui_action.Event) 
 					{
 						case	FocusMaximumLevelEventVal:
@@ -89,17 +91,26 @@ void F_setProfilesFocusData(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					switch(ui_action.Event) {
-						case	FocusMaximumLevelEventVal:
-							F_ShowMaximumResistanceLevel(set_focus_data.FocusLevel.number);
-							break;
-						case	FocusWorkoutTimeEventVal:
-						SetWorkoutTime.timeH = set_focus_data.FocusWorkoutMinTime.number;
-						SetWorkoutTime.timeL = 0;
-						F_showProfileSetWorkoutTime(SetWorkoutTime);	
-							break;
+					if(ui_action.TemporaryEventFlg == 0) {
+						switch(ui_action.Event) {
+							case	FocusMaximumLevelEventVal:
+								F_ShowMaximumResistanceLevel(set_focus_data.FocusLevel.number);
+								break;
+							case	FocusWorkoutTimeEventVal:
+							SetWorkoutTime.timeH = set_focus_data.FocusWorkoutMinTime.number;
+							SetWorkoutTime.timeL = 0;
+							F_showProfileSetWorkoutTime(SetWorkoutTime);	
+								break;
+						}
+					} else {
+						F_showSeatPositionMove();
 					}
 					F_Display();
+				}
+				//=====================
+				if((e & time_1s_val) == time_1s_val)
+				{
+					F_SwitchingSeatPositionDisplayTimer();
 				}
 			}
 }

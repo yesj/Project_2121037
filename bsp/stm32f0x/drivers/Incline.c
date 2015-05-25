@@ -450,6 +450,29 @@ void	rt_seat_position_stop(void)
 	IncControlFlg = 0;
 	F_RelayMoveStop();
 }
+
+rt_uint8_t	rt_inc_read_adr_number(void)
+{
+	rt_uint8_t	WholeTempAd,NowTempAd;
+	rt_uint8_t	Temp;
+	WholeTempAd = inc_data.incline_eeprom_data.incMaxAd - inc_data.incline_eeprom_data.incMinAd;
+	//-------------
+	NowTempAd = rt_inc_read_ad();
+	if(NowTempAd < inc_data.incline_eeprom_data.incMinAd) {
+		NowTempAd = inc_data.incline_eeprom_data.incMinAd;
+	}
+	if(NowTempAd < inc_data.incline_eeprom_data.incMaxNum) {
+		NowTempAd = inc_data.incline_eeprom_data.incMaxNum;
+	}
+	NowTempAd = NowTempAd - inc_data.incline_eeprom_data.incMinAd;
+	//-------------
+	Temp = (NowTempAd * 20) / WholeTempAd;
+	Temp++;	// 進1位
+	if(Temp >= 20) {
+		Temp = 20;
+	}
+	return	Temp;
+}
 //==============================================================================
 //      ADC 初始化
 //==============================================================================

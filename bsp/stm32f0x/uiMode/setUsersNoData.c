@@ -1,8 +1,14 @@
 #include "chandler.h"
 #include "24lcxx_user.h"
 
+#define NoDataSetInitVal			0
+#define DataSetInitVal				1
+
 static	rt_uint8_t	TimeCount;
-		
+static 	rt_bool_t		UserSetOrNoDataFlg;
+
+
+
 static void	F_ChooseProfileLeveArry(rt_uint8_t Profile) 
 {
 	switch(Profile) {
@@ -111,6 +117,7 @@ static void F_SetUsersNameUpDownKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg,rt_
 
 static void F_SetUsersEnterStopKey(rt_uint8_t Key)
 {
+		rt_uint8_t	buf;
 	switch(Key) {
 		case	enter_KeyVal:
 		bz_short();
@@ -126,17 +133,25 @@ static void F_SetUsersEnterStopKey(rt_uint8_t Key)
 		} else if(ui_action.Event <= setUserProfileWorkOutTImeEventVal) {
 			ui_action.Event++;
 			if(ui_action.Event > setUserProfileWorkOutTImeEventVal) {
-				F_setUsersInit(ui_action.UsersEventSave);
+				F_setUsersSportInit();
 			}
 		}
 			break;
 		case	stop_rest_KeyVal:
+		bz_short();
 		if(ui_action.Event < setUserRollingHillEventVal) {
 			if(ui_action.Event > setUsersName_1_EventVal) {
 				bz_short();
 				ui_action.Event--;
 			} else {
-				//F_setUsersInit(ui_action.UsersEventSave);
+				if(UserSetOrNoDataFlg == NoDataSetInitVal) {
+					buf = 0;
+					F_eeprom_user_DetectionData(WriteDataVal,ui_action.UsersEventSave,&buf);		// 不儲存資料 離開 
+					F_setUsersInit(ui_action.UsersEventSave);
+				} else {
+					F_setUsersDataInit(showUserSeetingsEventVal);
+					
+				}
 			}
 		} else if(ui_action.Event <= setUserInterval_2_EventVal) {
 			ui_action.Event = setWeightEventVal;
@@ -157,6 +172,8 @@ static void F_SetUsersEnterNameKey(rt_uint8_t Key,rt_uint8_t DataAdr)
 			break;
 	}
 }
+
+
 
 static void F_SetUsersGenderUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 {
@@ -207,18 +224,18 @@ static void F_SetUsersWeightUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 		if(LongKeyStartFlg == 0){
 			bz_short();
 		}
-		F_NumberUp_8(&set_user_data.Weight,1,cycleNumberVal);
+		F_NumberUp_16(&set_user_data.Weight,1,cycleNumberVal);
 			break;
 		case	resistance_down_KeyVal:
 		if(LongKeyStartFlg == 0){
 			bz_short();
 		}
-		F_NumberDown_8(&set_user_data.Weight,1,cycleNumberVal);
+		F_NumberDown_16(&set_user_data.Weight,1,cycleNumberVal);
 			break;
 	}
 }
 
-void	F_SetUserProfileChooseUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
+static void	F_SetUserProfileChooseUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 {
 		switch(Key) {
 			case	resistance_up_KeyVal:
@@ -241,7 +258,7 @@ void	F_SetUserProfileChooseUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 		}
 }
 
-void	F_SetUserLevelChooseUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
+static void	F_SetUserLevelChooseUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 {
 		switch(Key) {
 			case	resistance_up_KeyVal:
@@ -263,7 +280,7 @@ void	F_SetUserLevelChooseUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 		}
 }
 
-void	F_SetUserWorkoutTimeChooseUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
+static void	F_SetUserWorkoutTimeChooseUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 {
 		switch(Key) {
 			case	resistance_up_KeyVal:
@@ -279,6 +296,55 @@ void	F_SetUserWorkoutTimeChooseUpDown(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 			F_NumberDown_8(&set_user_data.userWorkoutTime,1,cycleNumberVal);
 				break;
 		}
+}
+
+static void	F_SetUserEnterSaveProfile(rt_uint8_t Key)
+{
+	rt_uint8_t	ProfileTemp;
+
+	switch(Key) {
+		case	enter_KeyVal:
+			switch(ui_action.Event) {
+				case setUserRollingHillEventVal:
+					ProfileTemp = setRollingHillEventVal;
+					break;
+				case setUserPeakEventVal:
+					ProfileTemp = setPeakEventVal;
+					break;
+				case setUserPlateauEventVal:
+					ProfileTemp = setPlateauEventVal;
+					break;
+				case setUserClimbEventVal:
+					ProfileTemp = setClimbEventVal;
+					break;
+				case setUserInterval_1_EventVal:
+					ProfileTemp = setInterval_1_EventVal;
+					break;
+				case setUserInterval_2_EventVal:
+					ProfileTemp = setInterval_2_EventVal;
+					break;
+			}
+			F_eeprom_profile(WriteDataVal,ui_action.UsersEventSave,&ProfileTemp);
+			break;
+	}
+}
+
+static void	F_SetUserEnterSaveLeve(rt_uint8_t Key)
+{
+	switch(Key) {
+		case	enter_KeyVal:
+			F_eeprom_level(WriteDataVal,ui_action.UsersEventSave,&set_user_data.userLevel.number);
+			break;
+	}
+}
+
+static void	F_SetUserEnterSaveWorktime(rt_uint8_t Key)
+{
+	switch(Key) {
+		case	enter_KeyVal:
+			F_eeprom_worktime(WriteDataVal,ui_action.UsersEventSave,&set_user_data.userWorkoutTime.number);
+			break;
+	}
 }
 
 void F_setUsersNoData(void)
@@ -345,11 +411,6 @@ void F_setUsersNoData(void)
 						F_SetUsersNameUpDownKey(keyCode,LongKeyStartFlg,8);
 						F_SetUsersEnterNameKey(keyCode,8);
 							break;
-						case setUsersName_10_EventVal:
-						F_SetUsersEnterStopKey(keyCode);
-						F_SetUsersNameUpDownKey(keyCode,LongKeyStartFlg,9);
-						F_SetUsersEnterNameKey(keyCode,9);
-							break;
 						case setSeatPositionEventVal:
 						F_SetUsersEnterStopKey(keyCode);
 							break;
@@ -371,14 +432,17 @@ void F_setUsersNoData(void)
 						case setUserClimbEventVal:
 						case setUserInterval_1_EventVal:
 						case setUserInterval_2_EventVal:
-						F_SetUsersEnterStopKey(keyCode);	
+						F_SetUserEnterSaveProfile(keyCode);
+						F_SetUsersEnterStopKey(keyCode);
 						F_SetUserProfileChooseUpDown(keyCode,LongKeyStartFlg);
 							break;
 						case setUserProfileLevelEventVal:
+						F_SetUserEnterSaveLeve(keyCode);
 						F_SetUsersEnterStopKey(keyCode);
 						F_SetUserLevelChooseUpDown(keyCode,LongKeyStartFlg);
 							break;
 						case setUserProfileWorkOutTImeEventVal:
+						F_SetUserEnterSaveWorktime(keyCode);
 						F_SetUsersEnterStopKey(keyCode);
 						F_SetUserWorkoutTimeChooseUpDown(keyCode,LongKeyStartFlg);
 							break;
@@ -394,34 +458,31 @@ void F_setUsersNoData(void)
 							F_TimeCount();
 							break;
 						case setUsersName_1_EventVal:
-							F_showSetUserName(0,set_user_data.UserNaume,10);
+							F_showSetUserName(0,set_user_data.UserNaume,UserNaumSizeVal);
 							break;
 						case setUsersName_2_EventVal:
-							F_showSetUserName(1,set_user_data.UserNaume,10);
+							F_showSetUserName(1,set_user_data.UserNaume,UserNaumSizeVal);
 							break;
 						case setUsersName_3_EventVal:
-							F_showSetUserName(2,set_user_data.UserNaume,10);
+							F_showSetUserName(2,set_user_data.UserNaume,UserNaumSizeVal);
 							break;
 						case setUsersName_4_EventVal:
-							F_showSetUserName(3,set_user_data.UserNaume,10);
+							F_showSetUserName(3,set_user_data.UserNaume,UserNaumSizeVal);
 							break;
 						case setUsersName_5_EventVal:
-							F_showSetUserName(4,set_user_data.UserNaume,10);
+							F_showSetUserName(4,set_user_data.UserNaume,UserNaumSizeVal);
 							break;
 						case setUsersName_6_EventVal:
-							F_showSetUserName(5,set_user_data.UserNaume,10);
+							F_showSetUserName(5,set_user_data.UserNaume,UserNaumSizeVal);
 							break;
 						case setUsersName_7_EventVal:
-							F_showSetUserName(6,set_user_data.UserNaume,10);
+							F_showSetUserName(6,set_user_data.UserNaume,UserNaumSizeVal);
 							break;
 						case setUsersName_8_EventVal:
-							F_showSetUserName(7,set_user_data.UserNaume,10);
+							F_showSetUserName(7,set_user_data.UserNaume,UserNaumSizeVal);
 							break;
 						case setUsersName_9_EventVal:
-							F_showSetUserName(8,set_user_data.UserNaume,10);
-							break;
-						case setUsersName_10_EventVal:
-							F_showSetUserName(9,set_user_data.UserNaume,10);
+							F_showSetUserName(8,set_user_data.UserNaume,UserNaumSizeVal);
 							break;
 						case setSeatPositionEventVal:
 							F_showSetSeatPosition();
@@ -437,21 +498,33 @@ void F_setUsersNoData(void)
 							break;
 						case setUserRollingHillEventVal:
 							F_showRollingHillGraph();
+							F_RollingHillLevelCount(15,sport_data.progfileArry,ProgfileDataSizeVal);
+							F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
 							break;
 						case setUserPeakEventVal:
 							F_showPeakGraph();
+							F_PeakLevelCount(15,sport_data.progfileArry,ProgfileDataSizeVal);
+							F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
 							break;
 						case setUserPlateauEventVal:
 							F_showPlateauGraph();
+							F_PlateauLevelCount(15,sport_data.progfileArry,ProgfileDataSizeVal);
+							F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
 							break;
 						case setUserClimbEventVal:
 							F_showClimbGraph();
+							F_ClimbLevelCount(15,sport_data.progfileArry,ProgfileDataSizeVal);
+							F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
 							break;
 						case setUserInterval_1_EventVal:
 							F_showInterval_1_Graph();
+							F_Interval_1_LevelCount(15,sport_data.progfileArry,ProgfileDataSizeVal);
+							F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
 							break;
 						case setUserInterval_2_EventVal:
 							F_showInterval_2_Graph();
+							F_Interval_2_LevelCount(15,sport_data.progfileArry,ProgfileDataSizeVal);
+							F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
 							break;
 						case setUserProfileLevelEventVal:
 							F_showProfileSetLeve(set_user_data.userLevel.number);
@@ -481,8 +554,10 @@ void F_setUsersNoDataInit(void)
 	
 		ui_action.Status = setUsersNoDataVal;
 		ui_action.Event = setUsersNoDataEventVal;
+		UserSetOrNoDataFlg = NoDataSetInitVal;
 		TimeCount = 0;
-		for(i=0;i<10;i++) {
+	
+		for(i=0;i < UserNaumSizeVal ;i++) {
 			set_user_data.UserNaume[i] = ' ';
 		}
 		
@@ -490,21 +565,21 @@ void F_setUsersNoDataInit(void)
 		AdTemp = rt_inc_read_ad();
 		F_eeprom_user_seat_position(WriteDataVal,ui_action.UsersEventSave,&AdTemp);
 		
-		set_user_data.age.maxNumber = 99;
-		set_user_data.age.minNumber = 10;
-		set_user_data.age.number = 40;
+		set_user_data.age.maxNumber = ageNumMaxVal;
+		set_user_data.age.minNumber = ageNumMinVal;
+		set_user_data.age.number = ageNumVal;
 		F_eeprom_user_age(WriteDataVal,ui_action.UsersEventSave,&set_user_data.age.number);
 		
-		set_user_data.Weight.maxNumber = 250;
-		set_user_data.Weight.minNumber = 100;
-		set_user_data.Weight.number = 150;
-		F_eeprom_user_wigeht(WriteDataVal,ui_action.UsersEventSave,&set_user_data.Weight.number);
+		set_user_data.Weight.maxNumber = WeightNumMaxVal;
+		set_user_data.Weight.minNumber = WeightNumMinVal;
+		set_user_data.Weight.number = WeightNumVal;
+		//F_eeprom_user_wigeht(WriteDataVal,ui_action.UsersEventSave,&set_user_data.Weight.number);
 		set_user_data.Gender = 1;
 		F_eeprom_user_gender(WriteDataVal,ui_action.UsersEventSave,&set_user_data.Gender);
 				
-		set_user_data.userLevel.number = 7;
-		set_user_data.userLevel.maxNumber = 20;
-		set_user_data.userLevel.minNumber = 1;
+		set_user_data.userLevel.number = LevelNumVal;
+		set_user_data.userLevel.maxNumber = LevelNumMaxVal;
+		set_user_data.userLevel.minNumber = LevelNumMinVal;
 		
 		set_user_data.userWorkoutTime.number = workOutTimeMinuteNumVal;
 		set_user_data.userWorkoutTime.maxNumber = workOutTimeMinuteNumMaxVal;
@@ -513,5 +588,12 @@ void F_setUsersNoDataInit(void)
 		set_user_data.UserProfileChoose = setUserRollingHillEventVal;
 }
 
-
+void F_setUsersDataSetInit(void)
+{
+		ui_action.Status = setUsersNoDataVal;
+		ui_action.Event = setUsersName_1_EventVal;
+		UserSetOrNoDataFlg = DataSetInitVal;
+		F_eeprom_user_name(ReadDataVal,ui_action.UsersEventSave,set_user_data.UserNaume,0);
+	
+}
 

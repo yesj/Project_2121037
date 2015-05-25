@@ -1,5 +1,5 @@
 #include "chandler.h"
-
+#include "24lcxx_user.h"
 
 void F_SysUiStart(void)
 {
@@ -23,7 +23,12 @@ void F_SysUiStart(void)
 					switch(keyCode) {
 						case engineering_KeyVal:
 							F_EngineeringModeInit(UnitEventVal);
-							break;		
+							break;
+						case view_programs_KeyVal:
+						F_eeprom_whether_rest();	
+						IWDG_Config(0);	
+						while(1)
+							break;
 					}
 				}
 				if((e & time_1s_val) == time_1s_val)

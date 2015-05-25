@@ -11,6 +11,7 @@ const rt_uint16_t P02[] = {
 0x0FF8,0x0FF0,0x0FE0,0x07C0,0x0380
 };
 
+/*
 const rt_uint16_t P03[] = {
 0x01FF,0x01FF,0x00FF,0x00FF,0x007F,0x007F,0x003F,0x003F,0x007F,0x007F,
 0x00FF,0x00FF,0x01FF,0x01FF,0x03FF,0x03FF,0x07FF,0x07FF,0x0FFF,0x0FFF,
@@ -64,7 +65,7 @@ const rt_uint32_t P08[] = {
 0x0001FFFF,0x0001FFFF,0x00000007,0x00000007,0x00000007,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x00000007,
 0x00000007,0x00000007,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x0001FFFF,0x00000007,0x00000007,0x00000007,0x00000007
 };
-
+*/
 
 const rt_uint8_t M01[] ={"QUICKSTART"};
 const rt_uint8_t M02[] ={"TIME"};
@@ -143,6 +144,27 @@ const rt_uint8_t M74[] ={"RESISTANCE"};
 const rt_uint8_t M75[] ={"START"};
 const rt_uint8_t M76[] ={"SETTINGS"};
 const rt_uint8_t M77[] ={"USER"};
+const rt_uint8_t M78[] ={"/20"};
+//FOCUS
+const rt_uint8_t M79[] ={"AND PUSH W"};
+const rt_uint8_t M80[] ={"ARMS LEGS"};
+const rt_uint8_t M81[] ={"PUSH WITH"};
+const rt_uint8_t M82[] ={"ARMS"};
+const rt_uint8_t M83[] ={"PALMS UP"};
+const rt_uint8_t M84[] ={"PALMS DOWN"};
+const rt_uint8_t M85[] ={"(BICEPS)"};
+const rt_uint8_t M86[] ={"(TRICEPS)"};
+const rt_uint8_t M87[] ={"NO ARMS"};
+const rt_uint8_t M88[] ={"PUSH WITH"};
+const rt_uint8_t M89[] ={"TOES"};
+const rt_uint8_t M90[] ={"HEELS"};
+const rt_uint8_t M91[] ={"RIGHT LEG"};
+const rt_uint8_t M92[] ={"ONLY"};
+const rt_uint8_t M93[] ={"PUSE AND"};
+const rt_uint8_t M94[] ={"PULL"};
+const rt_uint8_t M95[] ={"LEFT LEG"};
+//=========
+const rt_uint8_t M96[] ={"MAX LEVEL"};
 
 
 static void	F_HundredChange(rt_uint8_t	*byte2,rt_uint8_t	*byte1,rt_uint32_t data)
@@ -242,9 +264,9 @@ void	F_showMatrixTime(rt_time_data_t TimeData)
 	
 	F_ShowMatrixBigNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,TimeData.timeH,LCDBuffer);
 
-	coordinateTemp2.x = 9+9+9+4;
+	coordinateTemp2.x = 9+9+9+3;
 	coordinateTemp2.y = 7;
-	coordinateTemp1.x = 9+9+9+4+9;
+	coordinateTemp1.x = 9+9+9+3+9;
 	coordinateTemp1.y = 7;
 
 	F_ShowMatrixBigNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,TimeData.timeL,LCDBuffer);
@@ -267,9 +289,9 @@ void	F_showMatrixProfileWrokOutTime(rt_time_data_t TimeData)
 	
 	F_ShowMatrixBigNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,TimeData.timeH,LCDBuffer);
 
-	coordinateTemp2.x = 11+9+9+4;
+	coordinateTemp2.x = 11+9+9+3;
 	coordinateTemp2.y = 21;
-	coordinateTemp1.x = 11+9+9+4+9;
+	coordinateTemp1.x = 11+9+9+3+9;
 	coordinateTemp1.y = 21;
 
 	F_ShowMatrixBigNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,TimeData.timeL,LCDBuffer);
@@ -284,8 +306,13 @@ void	F_showMatrixProfileWrokOutTime(rt_time_data_t TimeData)
 void	F_showResistance(rt_uint8_t resistance)
 {
 		F_showResistanceDot();
-		F_Show_8_LcdDot(5,0x31,LCDBuffer);		//	L
-		F_Show_8_Lcd(blankVal,6,7,ShowNoHiByeVal,resistance,LCDBuffer);
+		if(resistance < 9) {
+			F_Show_8_Lcd(blankVal,6,7,ShowNoHiByeVal,resistance,LCDBuffer);
+			F_Show_8_LcdDot(6,0x31,LCDBuffer);		//	L
+		} else {
+			F_Show_8_Lcd(blankVal,6,7,ShowNoHiByeVal,resistance,LCDBuffer);
+			F_Show_8_LcdDot(5,0x31,LCDBuffer);		//	L	
+		}
 }
 
 void	F_show8HearRate(rt_uint8_t HandHeartRate,rt_uint8_t wHeartRate)
@@ -827,7 +854,7 @@ void	F_showUsers_10(void)
 void	F_showRollingHillGraph(void)
 {
 	rt_coordinate_t coordinateTemp1;
-	rt_uint8_t	adr;
+	//rt_uint8_t	adr;
 	
 	coordinateTemp1.x = 11;
 	coordinateTemp1.y = 24;
@@ -837,70 +864,70 @@ void	F_showRollingHillGraph(void)
 	coordinateTemp1.y = 16;
 	F_ShowMatrixStringLcd(coordinateTemp1,M16,sizeof(M16),LCDBuffer);
 	
-	for(adr = 0; adr < 60 ; adr++) {
-		F_ShowMatrixLcd(adr,P03[adr],15,LCDBuffer);
-	}
+	//for(adr = 0; adr < 60 ; adr++) {
+	//	F_ShowMatrixLcd(adr,P03[adr],15,LCDBuffer);
+	//}
 }
 
 void	F_showPeakGraph(void)
 {
 	rt_coordinate_t coordinateTemp1;
-	rt_uint8_t	adr;
+	//rt_uint8_t	adr;
 	coordinateTemp1.x = 18;
 	coordinateTemp1.y = 24;
 	F_ShowMatrixStringLcd(coordinateTemp1,M17,sizeof(M17),LCDBuffer);
 	
-	for(adr = 0; adr < 60 ; adr++) {
-		F_ShowMatrixLcd(adr,P04[adr],20,LCDBuffer);
-	}
+	//for(adr = 0; adr < 60 ; adr++) {
+	//	F_ShowMatrixLcd(adr,P04[adr],20,LCDBuffer);
+	//}
 }
 
 void	F_showPlateauGraph(void)
 {
 	rt_coordinate_t coordinateTemp1;
-	rt_uint8_t	adr;
+	//rt_uint8_t	adr;
 	coordinateTemp1.x = 10;
 	coordinateTemp1.y = 24;
 	F_ShowMatrixStringLcd(coordinateTemp1,M18,sizeof(M18),LCDBuffer);
-	for(adr = 0; adr < 60 ; adr++) {
-		F_ShowMatrixLcd(adr,P05[adr],20,LCDBuffer);
-	}
+	//for(adr = 0; adr < 60 ; adr++) {
+	//	F_ShowMatrixLcd(adr,P05[adr],20,LCDBuffer);
+	//}
 }
 
 void	F_showClimbGraph(void)
 {
 	rt_coordinate_t coordinateTemp1;
-	rt_uint8_t	adr;	
+	//rt_uint8_t	adr;	
 	coordinateTemp1.x = 16;
 	coordinateTemp1.y = 23;
 	F_ShowMatrixStringLcd(coordinateTemp1,M19,sizeof(M19),LCDBuffer);
-	for(adr = 0; adr < 60 ; adr++) {
-		F_ShowMatrixLcd(adr,P06[adr],19,LCDBuffer);
-	}
+	//for(adr = 0; adr < 60 ; adr++) {
+	//	F_ShowMatrixLcd(adr,P06[adr],19,LCDBuffer);
+	//}
 }
 
 void	F_showInterval_1_Graph(void)
 {
 	rt_coordinate_t coordinateTemp1;
-	rt_uint8_t	adr;	
+	//rt_uint8_t	adr;	
 	coordinateTemp1.x = 3;
 	coordinateTemp1.y = 24;
 	F_ShowMatrixStringLcd(coordinateTemp1,M20,sizeof(M20),LCDBuffer);
-	for(adr = 0; adr < 60 ; adr++) {
-		F_ShowMatrixLcd(adr,P07[adr],16,LCDBuffer);
-	}
+	//for(adr = 0; adr < 60 ; adr++) {
+	//	F_ShowMatrixLcd(adr,P07[adr],16,LCDBuffer);
+	//}
 }
 
 void	F_showInterval_2_Graph(void)
 {
 	rt_coordinate_t coordinateTemp1;
-	rt_uint8_t	adr;	
+	//rt_uint8_t	adr;	
 	coordinateTemp1.x = 3;
 	coordinateTemp1.y = 24;
 	F_ShowMatrixStringLcd(coordinateTemp1,M21,sizeof(M21),LCDBuffer);
-	for(adr = 0; adr < 60 ; adr++) {
-		F_ShowMatrixLcd(adr,P08[adr],17,LCDBuffer);
-	}
+	//for(adr = 0; adr < 60 ; adr++) {
+	//	F_ShowMatrixLcd(adr,P08[adr],17,LCDBuffer);
+	//}
 }
 
 void	F_showProfileSetLeve(rt_uint8_t Level)
@@ -919,7 +946,6 @@ void	F_showProfileSetLeve(rt_uint8_t Level)
 	coordinateTemp1.y = 24;
 	
 	F_ShowMatrixNumProcessReverse(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,Level,LCDBuffer);
-	
 }
 
 void	F_showProfileSetWorkoutTime(rt_time_data_t TimeData)
@@ -1068,7 +1094,7 @@ void	F_showSetUserName(rt_uint8_t adr,rt_uint8_t *data,rt_uint8_t size)
 		F_ShowMatrixFontLcd(coordinateTemp1,*(data),LCDBuffer);
 	}
 	//========
-	for(i=1 ; i < 10 ; i++) {
+	for(i=1 ; i < UserNaumSizeVal ; i++) {
 		coordinateTemp1.x = (UserNameAdr * i);
 		coordinateTemp1.y = 9;
 		if(adr == i) {
@@ -1111,6 +1137,28 @@ void	F_showSetSeatPosition(void)
 		F_ShowMatrixStringLcd(coordinateTemp1,M40,sizeof(M40),LCDBuffer);
 }
 
+void	F_showSeatPositionMove(void)
+{
+		rt_coordinate_t coordinateTemp1,coordinateTemp2,coordinateTemp3;
+		coordinateTemp1.x = 17;
+		coordinateTemp1.y = 23;
+		F_ShowMatrixStringLcd(coordinateTemp1,M39,sizeof(M39),LCDBuffer);
+		coordinateTemp1.x = 6;
+		coordinateTemp1.y = 13;
+		F_ShowMatrixStringLcd(coordinateTemp1,M40,sizeof(M40),LCDBuffer);	
+	
+		coordinateTemp3.x = blankVal;
+		coordinateTemp3.y = blankVal;
+		coordinateTemp2.x = 6;
+		coordinateTemp2.y = 3;
+		coordinateTemp1.x = 6+6;
+		coordinateTemp1.y = 3;
+		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,rt_inc_read_adr_number(),LCDBuffer);
+		coordinateTemp1.x = 6+6+6;
+		coordinateTemp1.y = 3;
+		F_ShowMatrixStringLcd(coordinateTemp1,M78,sizeof(M78),LCDBuffer);
+}
+
 void	F_showGender(rt_uint8_t Gender)
 {
 		rt_coordinate_t coordinateTemp1;
@@ -1151,7 +1199,7 @@ void	F_showSetAge(rt_uint8_t Age)
 		F_ShowMatrixNumProcessReverse(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,Age,LCDBuffer);
 }
 
-void	F_showSetWeight(rt_uint8_t Weight)
+void	F_showSetWeight(rt_uint16_t Weight)
 {
 		rt_coordinate_t coordinateTemp1,coordinateTemp2,coordinateTemp3;
 		coordinateTemp1.x = 13;
@@ -1713,38 +1761,6 @@ void	F_ShowMaximumResistanceLevel(rt_uint8_t Level)
 		F_ShowMatrixNumProcessReverse(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,Level,LCDBuffer);
 }
 
-void	F_ShowHandlesUp(void)
-{
-	rt_uint8_t	adr;
-	for(adr = 0; adr < 11; adr++) {
-		F_ShowMatrixLcd(adr,0x03,2,LCDBuffer);
-	}
-}
-
-void	F_ShowHandlesDown(void)
-{
-	rt_uint8_t	adr;
-	for(adr = 13; adr < 28; adr++) {
-		F_ShowMatrixLcd(adr,0x03,2,LCDBuffer);
-	}
-}
-
-void	F_ShowFeetOnPedals(void)
-{
-	rt_uint8_t	adr;
-	for(adr = 30; adr < 45; adr++) {
-		F_ShowMatrixLcd(adr,0x03,2,LCDBuffer);
-	}
-}
-
-void	F_ShowFeetOnPegs(void)
-{
-	rt_uint8_t	adr;
-	for(adr = 47; adr < 60; adr++) {
-		F_ShowMatrixLcd(adr,0x03,2,LCDBuffer);
-	}
-}
-
 static void		F_showStartChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
 {
 	if(Dot) 
@@ -1822,4 +1838,295 @@ void	F_ShowUserTotalReverse(void)
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
 		F_showUserTotalChoose(coordinateTemp1,0);
+}
+
+static	void	F_ShowHandlesUp(void)
+{
+	rt_uint8_t	adr;
+	for(adr = 0; adr < 11; adr++) {
+		F_ShowMatrixLcd(adr,0x03,2,LCDBuffer);
+	}
+}
+
+static	void	F_ShowHandlesDown(void)
+{
+	rt_uint8_t	adr;
+	for(adr = 13; adr < 28; adr++) {
+		F_ShowMatrixLcd(adr,0x03,2,LCDBuffer);
+	}
+}
+
+static	void	F_ShowFeetOnPedals(void)
+{
+	rt_uint8_t	adr;
+	for(adr = 30; adr < 45; adr++) {
+		F_ShowMatrixLcd(adr,0x03,2,LCDBuffer);
+	}
+}
+
+static	void	F_ShowFeetOnPegs(void)
+{
+	rt_uint8_t	adr;
+	for(adr = 47; adr < 60; adr++) {
+		F_ShowMatrixLcd(adr,0x03,2,LCDBuffer);
+	}
+}
+
+void	F_ShowAndPuseWArmsLegs(void)
+{
+	rt_coordinate_t coordinateTemp1;
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 23;
+	F_ShowMatrixStringLcd(coordinateTemp1,M79,sizeof(M79),LCDBuffer);
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 13;
+	F_ShowMatrixStringLcd(coordinateTemp1,M80,sizeof(M80),LCDBuffer);
+}
+
+void	F_ShowAndPuseWithArms(void)
+{
+	rt_coordinate_t coordinateTemp1;
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 23;
+	F_ShowMatrixStringLcd(coordinateTemp1,M81,sizeof(M81),LCDBuffer);
+	coordinateTemp1.x = 18;
+	coordinateTemp1.y = 13;
+	F_ShowMatrixStringLcd(coordinateTemp1,M82,sizeof(M82),LCDBuffer);
+}
+
+void	F_ShowPalmsUpBiceps(void)
+{
+	rt_coordinate_t coordinateTemp1;
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 23;
+	F_ShowMatrixStringLcd(coordinateTemp1,M83,sizeof(M83),LCDBuffer);
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 13;
+	F_ShowMatrixStringLcd(coordinateTemp1,M85,sizeof(M85),LCDBuffer);
+}
+
+void	F_ShowPalmsDownTriceps(void)
+{
+	rt_coordinate_t coordinateTemp1;
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 23;
+	F_ShowMatrixStringLcd(coordinateTemp1,M84,sizeof(M84),LCDBuffer);
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 13;
+	F_ShowMatrixStringLcd(coordinateTemp1,M86,sizeof(M86),LCDBuffer);
+}
+
+void	F_ShowPushWithToes(void)
+{
+	rt_coordinate_t coordinateTemp1;
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 23;
+	F_ShowMatrixStringLcd(coordinateTemp1,M88,sizeof(M88),LCDBuffer);
+	coordinateTemp1.x = 18;
+	coordinateTemp1.y = 13;
+	F_ShowMatrixStringLcd(coordinateTemp1,M89,sizeof(M89),LCDBuffer);
+}
+
+void	F_ShowPushWithHeels(void)
+{
+	rt_coordinate_t coordinateTemp1;
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 23;
+	F_ShowMatrixStringLcd(coordinateTemp1,M88,sizeof(M88),LCDBuffer);
+	coordinateTemp1.x = 12;
+	coordinateTemp1.y = 13;
+	F_ShowMatrixStringLcd(coordinateTemp1,M90,sizeof(M90),LCDBuffer);
+}
+
+void	F_ShowPushAndPull(void)
+{
+	rt_coordinate_t coordinateTemp1;
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 23;
+	F_ShowMatrixStringLcd(coordinateTemp1,M93,sizeof(M93),LCDBuffer);
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 13;
+	F_ShowMatrixStringLcd(coordinateTemp1,M94,sizeof(M94),LCDBuffer);
+}
+
+void	F_ShowRightLegOnly(void)
+{
+	rt_coordinate_t coordinateTemp1;
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 23;
+	F_ShowMatrixStringLcd(coordinateTemp1,M91,sizeof(M91),LCDBuffer);
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 13;
+	F_ShowMatrixStringLcd(coordinateTemp1,M92,sizeof(M92),LCDBuffer);
+}
+
+void	F_ShowLeftLegOnly(void)
+{
+	rt_coordinate_t coordinateTemp1;
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 23;
+	F_ShowMatrixStringLcd(coordinateTemp1,M95,sizeof(M95),LCDBuffer);
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 13;
+	F_ShowMatrixStringLcd(coordinateTemp1,M92,sizeof(M92),LCDBuffer);
+}
+
+void	F_ShowNoArms(void)
+{
+	rt_coordinate_t coordinateTemp1;
+	coordinateTemp1.x = 0;
+	coordinateTemp1.y = 23;
+	F_ShowMatrixStringLcd(coordinateTemp1,M87,sizeof(M87),LCDBuffer);
+}
+
+void	F_ShowTotalBodyFocus(rt_uint8_t FocusSegment)
+{
+	FocusSegment = FocusSegment % 8;
+		switch(FocusSegment) {
+			case	0:
+				F_ShowHandlesUp();
+				F_ShowFeetOnPedals();	
+				F_ShowAndPuseWArmsLegs();
+				break;
+			case	1:
+				F_ShowHandlesUp();
+				F_ShowFeetOnPedals();
+				F_ShowAndPuseWArmsLegs();
+				break;
+			case	2:
+				F_ShowHandlesUp();
+				F_ShowFeetOnPegs();
+				F_ShowAndPuseWithArms();
+				break;
+			case	3:
+				F_ShowHandlesUp();
+				F_ShowFeetOnPegs();
+				F_ShowAndPuseWithArms();
+				break;
+			case	4:
+				F_ShowHandlesDown();
+				F_ShowFeetOnPedals();
+				F_ShowPalmsUpBiceps();
+				break;
+			case	5:
+				F_ShowHandlesDown();
+				F_ShowFeetOnPedals();
+				F_ShowPalmsDownTriceps();
+				break;
+			case	6:
+				F_ShowHandlesDown();
+				F_ShowFeetOnPegs();
+				F_ShowPalmsUpBiceps();
+				break;
+			case	7:
+				F_ShowHandlesDown();
+				F_ShowFeetOnPegs();
+				F_ShowPalmsDownTriceps();
+				break;
+		}
+}
+
+void	F_ShowArmsFocus(rt_uint8_t FocusSegment)
+{
+	FocusSegment = FocusSegment % 8;
+		switch(FocusSegment) {
+			case	0:
+				F_ShowHandlesUp();
+				F_ShowFeetOnPegs();
+				F_ShowAndPuseWithArms();
+				break;
+			case	1:
+				F_ShowHandlesUp();
+				F_ShowFeetOnPegs();
+				F_ShowAndPuseWithArms();
+				break;
+			case	2:
+				F_ShowHandlesUp();
+				F_ShowFeetOnPegs();
+				F_ShowAndPuseWithArms();
+				break;
+			case	3:
+				F_ShowHandlesUp();
+				F_ShowFeetOnPegs();
+				F_ShowAndPuseWithArms();
+				break;
+			case	4:
+				F_ShowHandlesDown();
+				F_ShowFeetOnPegs();
+				F_ShowPushAndPull();
+				break;
+			case	5:
+				F_ShowHandlesDown();
+				F_ShowFeetOnPegs();
+				F_ShowPalmsUpBiceps();
+				break;
+			case	6:
+				F_ShowHandlesDown();
+				F_ShowFeetOnPegs();
+				F_ShowPalmsDownTriceps();
+				break;
+			case	7:
+				F_ShowHandlesDown();
+				F_ShowFeetOnPegs();
+				F_ShowPalmsDownTriceps();
+				break;
+		}
+}
+
+void	F_ShowLegsFocus(rt_uint8_t FocusSegment)
+{
+	FocusSegment = FocusSegment % 8;
+		switch(FocusSegment) {
+			case	0:
+				F_ShowFeetOnPedals();
+				F_ShowNoArms();
+				break;
+			case	1:
+				F_ShowFeetOnPedals();
+				F_ShowPushWithToes();
+				break;
+			case	2:
+				F_ShowFeetOnPedals();
+				F_ShowPushWithHeels();
+				break;
+			case	3:
+				F_ShowFeetOnPedals();
+				F_ShowPushWithToes();
+				break;
+			case	4:
+				F_ShowFeetOnPedals();
+				F_ShowPushWithHeels();
+				break;
+			case	5:
+			F_ShowRightLegOnly();
+				break;
+			case	6:
+				F_ShowLeftLegOnly();
+				break;
+			case	7:
+				F_ShowFeetOnPedals();
+				F_ShowPalmsDownTriceps();
+				break;
+		}
+}
+
+void	F_ShowMexLevel(rt_uint8_t MexLevel)
+{
+	rt_coordinate_t coordinateTemp1,coordinateTemp2,coordinateTemp3;
+	coordinateTemp1.x = 2;
+	coordinateTemp1.y = 23;
+	F_ShowMatrixStringLcd(coordinateTemp1,M96,sizeof(M96),LCDBuffer);
+	coordinateTemp3.x = blankVal;
+	coordinateTemp3.y = blankVal;
+	coordinateTemp2.x = 25;
+	coordinateTemp2.y = 13;
+	coordinateTemp1.x = 25+6;
+	coordinateTemp1.y = 13;
+	F_ShowMatrixNumProcessReverse(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,MexLevel,LCDBuffer);
+}
+
+void	F_Show8Rpm(rt_uint16_t Rpm)
+{
+	F_showRpmDot();
+	F_Show_8_Lcd(1,2,3,ShowHiByeVal,Rpm,LCDBuffer);
 }

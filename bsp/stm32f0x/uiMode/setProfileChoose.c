@@ -38,6 +38,8 @@ void F_setProfileChoose(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_LongRestKey(keyCode);
+					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					F_SetUserKey(keyCode);
 					switch(keyCode)
 					{
@@ -77,30 +79,50 @@ void F_setProfileChoose(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					switch(ui_action.Event) 
-					{
-						case	setRollingHillEventVal:
-							F_showRollingHillGraph();
-							break;
-						case	setPeakEventVal:
-							F_showPeakGraph();
-							break;
-						case	setPlateauEventVal:
-							F_showPlateauGraph();
-							break;
-						case	setClimbEventVal:
-							F_showClimbGraph();
-							break;
-						case	setInterval_1_EventVal:
-							F_showInterval_1_Graph();
-							break;
-						case	setInterval_2_EventVal:
-							F_showInterval_2_Graph();
-							break;
+					if(ui_action.TemporaryEventFlg == 0) {
+						switch(ui_action.Event) 
+						{
+							case	setRollingHillEventVal:
+								F_showRollingHillGraph();
+								F_RollingHillLevelCount(15,sport_data.progfileArry,ProgfileDataSizeVal);
+								F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
+								break;
+							case	setPeakEventVal:
+								F_showPeakGraph();
+								F_PeakLevelCount(15,sport_data.progfileArry,ProgfileDataSizeVal);
+								F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
+								break;
+							case	setPlateauEventVal:
+								F_showPlateauGraph();
+								F_PlateauLevelCount(15,sport_data.progfileArry,ProgfileDataSizeVal);
+								F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
+								break;
+							case	setClimbEventVal:
+								F_showClimbGraph();
+								F_ClimbLevelCount(15,sport_data.progfileArry,ProgfileDataSizeVal);
+								F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
+								break;
+							case	setInterval_1_EventVal:
+								F_showInterval_1_Graph();
+								F_Interval_1_LevelCount(15,sport_data.progfileArry,ProgfileDataSizeVal);
+								F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
+								break;
+							case	setInterval_2_EventVal:
+								F_showInterval_2_Graph();
+								F_Interval_2_LevelCount(15,sport_data.progfileArry,ProgfileDataSizeVal);
+								F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
+								break;
+						}
+					} else {
+						F_showSeatPositionMove();
 					}
 					F_Display();
 				}
 				//=====================
+				if((e & time_1s_val) == time_1s_val)
+				{
+					F_SwitchingSeatPositionDisplayTimer();
+				}
 			}
 }
 

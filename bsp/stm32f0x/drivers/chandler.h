@@ -21,6 +21,14 @@
 #define workOutTimeMinuteNumMaxVal		99
 #define workOutTimeMinuteNumMinVal		5
 #define workOutTimeMinuteNumVal				15
+
+#define WeightNumMaxVal			350
+#define WeightNumMinVal			50
+#define WeightNumVal				150
+
+#define LevelNumMaxVal			20		
+#define LevelNumMinVal			1
+#define LevelNumVal					7
 //=================================
 enum _uiStatus {
 		sysPowerStartVal,
@@ -58,13 +66,24 @@ enum _uiStatus {
 		setProfilesFocusDataVal,
 		FocusSportVal,
     eepromErrVal,
-    sportErrVal,
+    sportErrVal
 };
 
-enum _sportManualEvent{
+enum _sportNormalEvent {
+	StandardViewVal,
 	BasicViewVal,
 	HeartRateViewVal,
 	CalorieVewVal
+};
+
+enum _sportProfileEvent {
+	CalHrViewVal,
+	RpmDisViewVal
+};
+
+enum _sportProfileSportEvent{
+	sportProfileSportNormalEvent,
+	sportProfileSportStopEvent
 };
 
 enum _eng1Event{
@@ -120,7 +139,6 @@ enum _setUsersNoDataEvent{
 	setUsersName_7_EventVal,
 	setUsersName_8_EventVal,
 	setUsersName_9_EventVal,
-	setUsersName_10_EventVal,
 	setSeatPositionEventVal,
 	setGenderEventVal,
 	setAgeEventVal,
@@ -204,6 +222,9 @@ struct	rt_ui_action
 	rt_uint8_t	UsersEventSave;
 	rt_uint8_t	HeartRateEventSave;
 	rt_uint8_t	FocusEventSave;
+	rt_uint8_t	TemporaryEventTimer;
+	rt_bool_t		TemporaryEventFlg;
+	rt_bool_t		TemporarySportStopEventFlg;
 };
 typedef struct	rt_ui_action	rt_ui_action_t;
 #define ProgfileDataSizeVal					60
@@ -313,13 +334,14 @@ struct rt_coordinate
 };
 typedef struct rt_coordinate rt_coordinate_t;
 //================================
+#define UserNaumSizeVal			9
 struct rt_user_data
 {
 	rt_uint8_t	DetectionDataFlg;
-	rt_uint8_t	UserNaume[10];
+	rt_uint8_t	UserNaume[UserNaumSizeVal];
 	rt_uint8_t	SetSeatPositionAd;
 	rt_uint8_t	Gender;
-	uint8_Number_t	Weight;
+	uint16_Number_t	Weight;
 	uint8_Number_t	age;
 	rt_uint8_t	TimeH;
 	rt_uint8_t	TimeM;
@@ -387,11 +409,11 @@ typedef void (*app_err_treadmill_handler_t)(rt_uint8_t message);
 //===================================================================
 extern	rt_comply_t	F_NumberUp_8(uint8_Number_t *Number_t,rt_uint8_t upNumber,rt_uint8_t mode);
 
-extern void F_NumberUp_16(uint16_Number_t *Number_t,rt_uint16_t upNumber,rt_uint8_t mode);
+extern rt_comply_t F_NumberUp_16(uint16_Number_t *Number_t,rt_uint16_t upNumber,rt_uint8_t mode);
 
 extern rt_comply_t	F_NumberDown_8(uint8_Number_t *Number_t,rt_uint8_t upNumber,rt_uint8_t mode);
 
-extern void F_NumberDown_16(uint16_Number_t *Number_t,rt_uint16_t upNumber,rt_uint8_t mode);
+extern rt_comply_t F_NumberDown_16(uint16_Number_t *Number_t,rt_uint16_t upNumber,rt_uint8_t mode);
 
 extern void	F_timer_process_up(rt_time_data_t *time_data);
 
@@ -476,6 +498,8 @@ extern void		rt_seat_position_down(void);
 
 extern void		rt_seat_position_stop(void);
 
+extern rt_uint8_t	rt_inc_read_adr_number(void);
+
 extern void		rt_inc_control_start(rt_uint8_t set_inc);
 
 extern void		rt_inc_control_auto_init(void);
@@ -543,9 +567,11 @@ extern void F_setUsersNoData(void);
 
 extern void F_setUsersNoDataInit(void);
 
+extern void F_setUsersDataSetInit(void);
+
 extern void F_setUsersData(void);
 
-extern void F_setUsersDataInit(void);
+extern void F_setUsersDataInit(rt_uint8_t	Event);
 
 extern void F_setUsersResetData(void);
 
@@ -749,11 +775,13 @@ extern void	F_showUserName(rt_uint8_t *data,rt_uint8_t size);
 
 extern void	F_showSetSeatPosition(void);
 
+extern void	F_showSeatPositionMove(void);
+
 extern void	F_showGender(rt_uint8_t Gender);
 
 extern void	F_showSetAge(rt_uint8_t Age);
 
-extern void	F_showSetWeight(rt_uint8_t Weight);
+extern void	F_showSetWeight(rt_uint16_t Weight);
 
 extern void	F_showTimeMilesCal(rt_time_data_t TimeData,rt_uint16_t	Miles,rt_uint32_t	Cal);
 
@@ -805,23 +833,31 @@ extern void	F_ShowChooseLegs(void);
 
 extern void	F_ShowMaximumResistanceLevel(rt_uint8_t Level);
 
-extern void	F_ShowHandlesUp(void);
-
-extern void	F_ShowHandlesDown(void);
-
-extern void	F_ShowFeetOnPedals(void);
-
-extern void	F_ShowFeetOnPegs(void);
-
 extern void	F_ShowStartReverse(void);
 
 extern void	F_ShowSettingsReverse(void);
 
 extern void	F_ShowUserTotalReverse(void);
+
+extern void	F_ShowTotalBodyFocus(rt_uint8_t FocusSegment);
+
+extern void	F_ShowArmsFocus(rt_uint8_t FocusSegment);
+
+extern void	F_ShowLegsFocus(rt_uint8_t FocusSegment);
+
+extern void	F_ShowMexLevel(rt_uint8_t MexLevel);
+
+extern void	F_Show8Rpm(rt_uint16_t Rpm);
 //=======================================
+extern void	F_SwitchingSeatPositionDisplayTimer(void);
+
 extern void	F_SeatPositionControlAllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg);
 
 extern void	F_SetUserKey(rt_uint8_t keyCode);
+
+extern void	F_SetProgramsKey(rt_uint8_t keyCode);
+
+extern void	F_LongRestKey(rt_uint8_t keyCode);
 
 extern void	F_VmsDetection(rt_uint8_t rpm,rt_uint8_t resistance);
 

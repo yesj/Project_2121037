@@ -79,33 +79,43 @@ void F_setHeartRateTarget(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_LongRestKey(keyCode);
+					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					F_SportKey(keyCode);
-					switch(ui_action.Event) {
-						case	showHeartRateSetTargetEventVal:
-						F_setTargetKey(keyCode,LongKeyStartFlg);
-							break;
-						case	showHeartRateWorkoutEventVal:
-						F_setFatBurnWorkOutTImeKey(keyCode,LongKeyStartFlg);
-							break;
-					}
+						switch(ui_action.Event) {
+							case	showHeartRateSetTargetEventVal:
+							F_setTargetKey(keyCode,LongKeyStartFlg);
+								break;
+							case	showHeartRateWorkoutEventVal:
+							F_setFatBurnWorkOutTImeKey(keyCode,LongKeyStartFlg);
+								break;
+						}
 				}
 				//=====================
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					switch(ui_action.Event) {
-						case	showHeartRateSetTargetEventVal:
-						F_showSetTargetNum(profile_heartrate_data.TargetTarget.number,0);
-							break;
-						case	showHeartRateWorkoutEventVal:
-						SetWorkoutTime.timeH = profile_heartrate_data.TargetWorkoutMinTime.number;
-						SetWorkoutTime.timeL = 0;
-						F_showProfileSetWorkoutTime(SetWorkoutTime);
-							break;
+					if(ui_action.TemporaryEventFlg == 0) {
+						switch(ui_action.Event) {
+							case	showHeartRateSetTargetEventVal:
+							F_showSetTargetNum(profile_heartrate_data.TargetTarget.number,0);
+								break;
+							case	showHeartRateWorkoutEventVal:
+							SetWorkoutTime.timeH = profile_heartrate_data.TargetWorkoutMinTime.number;
+							SetWorkoutTime.timeL = 0;
+							F_showProfileSetWorkoutTime(SetWorkoutTime);
+								break;
+						}
+					} else {
+						F_showSeatPositionMove();
 					}
 					F_Display();
 				}
 				//=====================
+				if((e & time_1s_val) == time_1s_val)
+				{
+					F_SwitchingSeatPositionDisplayTimer();
+				}
 			}
 }
 

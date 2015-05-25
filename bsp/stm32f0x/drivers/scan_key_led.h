@@ -33,6 +33,9 @@
 #define long_enter_KeyVal				104
 
 #define engineering_KeyVal			105		//	seat_position_down_KeyVal + enter_KeyVal
+#define long_stop_rest_KeyVal		106
+
+#define view_programs_KeyVal		107	
 
 //typedef void (*app_button_handler_t)(rt_uint8_t button_action);
 

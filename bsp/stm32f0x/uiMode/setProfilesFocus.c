@@ -19,6 +19,8 @@ void F_setProfilesFocus(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_LongRestKey(keyCode);
+					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					switch(keyCode)
 					{
 						case	quick_start_KeyVal:
@@ -58,18 +60,27 @@ void F_setProfilesFocus(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					switch(ui_action.Event) {
-						case	FocusTotalBodyEventVal:
-							F_ShowChooseTotalBody();
-							break;
-						case	FocusArmsEventVal:
-							F_ShowChooseArms();
-							break;
-						case	FocusLegsEventVal:
-							F_ShowChooseLegs();
-							break;
+					if(ui_action.TemporaryEventFlg == 0) {
+						switch(ui_action.Event) {
+							case	FocusTotalBodyEventVal:
+								F_ShowChooseTotalBody();
+								break;
+							case	FocusArmsEventVal:
+								F_ShowChooseArms();
+								break;
+							case	FocusLegsEventVal:
+								F_ShowChooseLegs();
+								break;
+						}
+					} else {
+						F_showSeatPositionMove();
 					}
 					F_Display();
+				}
+				//=====================
+				if((e & time_1s_val) == time_1s_val)
+				{
+					F_SwitchingSeatPositionDisplayTimer();
 				}
 			}
 }

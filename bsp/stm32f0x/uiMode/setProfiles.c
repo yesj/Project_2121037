@@ -35,6 +35,7 @@ void F_setProfiles(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_LongRestKey(keyCode);
 					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					F_SetUserKey(keyCode);
 					switch(keyCode)
@@ -69,26 +70,34 @@ void F_setProfiles(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					switch(ui_action.Event) {
-						case	setProfileEventVal:
-							F_showProfileReverse();
-							break;
-						case	setManualEventVal:
-							F_showManualReverse();
-							break;
-						case	setHeartRateEventVal:
-							F_showHeartReverse();
-							break;
-						case	setFocusEventVal:
-							F_showFocusReverse();
-							break;
-						case	setMetsEventVal:
-							F_showMetsReverse();
-							break;
-					}
+					if(ui_action.TemporaryEventFlg == 0) {
+						switch(ui_action.Event) {
+							case	setProfileEventVal:
+								F_showProfileReverse();
+								break;
+							case	setManualEventVal:
+								F_showManualReverse();
+								break;
+							case	setHeartRateEventVal:
+								F_showHeartReverse();
+								break;
+							case	setFocusEventVal:
+								F_showFocusReverse();
+								break;
+							case	setMetsEventVal:
+								F_showMetsReverse();
+								break;
+							}	
+						} else {
+							F_showSeatPositionMove();
+						}
 					F_Display();
 				}
 				//=====================
+				if((e & time_1s_val) == time_1s_val)
+				{
+					F_SwitchingSeatPositionDisplayTimer();
+				}
 			}
 }
 

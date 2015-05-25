@@ -3,6 +3,8 @@
 static 	rt_uint8_t	R_Segments,R_SegmentsTime;
 static 	rt_bool_t		FlickerFlg;
 
+
+
 static void	F_MaxLevelCount(rt_uint8_t MaxLevel,rt_uint8_t Segments)
 {
 	rt_uint8_t adr;
@@ -36,9 +38,65 @@ static void F_ShowBasicView(void)
 {
 		F_showMatrixProfileWrokOutTime(TimeData);
 		F_ShowProgfileGraph(sport_data.progfileArryBuf,ProgfileDataSizeVal,FlickerModeVal,R_Segments,FlickerFlg);
-		F_showResistance(sport_data.resistance.number);
-		F_show8HearRate(F_readHandHeartRate(),F_readwHeartRate());
-		F_showCal(calor_count.calorie);
+		F_showResistance(sport_data.progfileArryBuf[R_Segments]);
+		switch(ui_action.Event) {
+			case	CalHrViewVal:
+			F_show8HearRate(F_readHandHeartRate(),F_readwHeartRate());
+			F_showCal(calor_count.calorie);
+				break;
+			case	RpmDisViewVal:
+			F_showDistance(distance_data.distance_count);
+			F_Show8Rpm(F_readRpm());
+				break;
+		}
+}
+
+static void F_ProfileSportNormalKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
+{
+	switch(Key) {
+		case	resistance_up_KeyVal:
+		if(F_NumberUp_8(&sport_data.resistance,1,noCycleNumberVal).complyFlg == YesComplyVal) {
+			if(LongKeyStartFlg == 0){
+				bz_short();
+			}
+			F_MaxLevelCount(sport_data.resistance.number,R_Segments);
+		}
+		break;
+		case	resistance_down_KeyVal:
+		if(F_NumberDown_8(&sport_data.resistance,1,noCycleNumberVal).complyFlg == YesComplyVal) {
+			if(LongKeyStartFlg == 0){
+				bz_short();
+			}
+			F_MaxLevelCount(sport_data.resistance.number,R_Segments);
+		}
+		break;
+		case	view_KeyVal:
+			bz_short();
+			ui_action.Event++;
+			if(ui_action.Event > RpmDisViewVal) 
+			{
+				ui_action.Event = CalHrViewVal;
+			}
+		break;
+		case	stop_rest_KeyVal:
+			bz_short();
+			ui_action.TemporarySportStopEventFlg = 1;
+		break;
+	}
+}
+
+static void F_ProfileSportStopKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
+{
+	switch(Key) {
+		case	stop_rest_KeyVal:
+			bz_short();
+			F_setProfileInit(setProfileEventVal);
+		break;
+		case	quick_start_KeyVal:
+			bz_short();
+			ui_action.TemporarySportStopEventFlg = 0;
+		break;
+	}
 }
 
 void F_ProfileSport(void)
@@ -54,36 +112,23 @@ void F_ProfileSport(void)
 				{
 					keyCode = 0;
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_LongRestKey(keyCode);
 					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
-					switch(keyCode)
-					{
-						case	resistance_up_KeyVal:
-						if(F_NumberUp_8(&sport_data.resistance,1,noCycleNumberVal).complyFlg == YesComplyVal) {
-							if(LongKeyStartFlg == 0){
-								bz_short();
-							}
-							F_MaxLevelCount(sport_data.resistance.number,R_Segments);
+						if(ui_action.TemporarySportStopEventFlg == 0) {
+							F_ProfileSportNormalKey(keyCode,LongKeyStartFlg);
+						} else {
+							F_ProfileSportStopKey(keyCode,LongKeyStartFlg);
 						}
-						break;
-						case	resistance_down_KeyVal:
-						if(F_NumberDown_8(&sport_data.resistance,1,noCycleNumberVal).complyFlg == YesComplyVal) {
-							if(LongKeyStartFlg == 0){
-								bz_short();
-							}
-							F_MaxLevelCount(sport_data.resistance.number,R_Segments);
-						}
-						break;
-						case	stop_rest_KeyVal:
-							bz_short();
-							F_setProfileInit(setProfileEventVal);
-						break;
-					}
 				}
 				//=====================
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					F_ShowBasicView();
+					if(ui_action.TemporaryEventFlg == 0) {
+						F_ShowBasicView();
+					} else {
+						F_showSeatPositionMove();
+					}
 					F_Display();
 				}
 				//=====================
@@ -97,19 +142,22 @@ void F_ProfileSport(void)
 				//=====================
 				if((e & time_1s_val) == time_1s_val)
 				{
-					F_timer_process_down(&TimeData);
-					if(TimeData.timeH != 0 || TimeData.timeL != 0) {
-						F_ProfileTimeSegments(&R_Segments,TimeData,R_SegmentsTime,59);
-						calor_count.level = sport_data.resistance.number;
-						F_readWatte(calor_count.level,&calor_count.watt);					
-						F_calorie_process(&calor_count);
-						distance_data.rpm = F_readRpm();
-						F_VmsDetection(distance_data.rpm,sport_data.resistance.number);
-						distance_data.WheelSize = 300;
-						F_distance_process(&distance_data);
-					} else {
-						F_setProfileInit(setProfileEventVal);
-					}
+					F_SwitchingSeatPositionDisplayTimer();
+						if(ui_action.TemporarySportStopEventFlg == 0) {
+							F_timer_process_down(&TimeData);
+							if(TimeData.timeH != 0 || TimeData.timeL != 0) {
+								F_ProfileTimeSegments(&R_Segments,TimeData,R_SegmentsTime,59);
+								calor_count.level = sport_data.resistance.number;
+								F_readWatte(calor_count.level,&calor_count.watt);					
+								F_calorie_process(&calor_count);
+								distance_data.rpm = F_readRpm();
+								F_VmsDetection(distance_data.rpm,sport_data.progfileArryBuf[R_Segments]);
+								distance_data.WheelSize = 300;
+								F_distance_process(&distance_data);
+							} else {
+								F_setProfileInit(setProfileEventVal);
+							}
+						}
 				}
 			}
 }
@@ -117,7 +165,8 @@ void F_ProfileSport(void)
 void	F_ProfileSportInit(rt_uint8_t Evnet)
 {
 	ui_action.Status = profileSportVal;
-	ui_action.Event	= BasicViewVal;
+	ui_action.Event	= CalHrViewVal;
+	ui_action.TemporarySportStopEventFlg = 0;
 	ui_action.ProfileEventSave = Evnet;
 	memset(&calor_count,0,sizeof(calor_count));
 	F_setVmsDetectionVal(30);
@@ -148,7 +197,6 @@ void	F_ProfileSportInit(rt_uint8_t Evnet)
 			sport_data.resistance.number = set_profile_data.interval_2_Level.number;
 				break;
 		}
-		
 		TimeData.timeL = 0;
 		R_SegmentsTime = TimeData.timeH;
 		F_ProfileTimeSegments(&R_Segments,TimeData,R_SegmentsTime,59);

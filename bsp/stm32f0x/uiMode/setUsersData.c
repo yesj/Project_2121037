@@ -11,6 +11,17 @@ static void	F_ResetUserData(void)
 		F_eeprom_user_DetectionData(WriteDataVal,ui_action.UsersEventSave,&buf);	
 }
 
+static void	F_ReadUserData(void)
+{
+		rt_uint16_t	TempMin;
+		F_eeprom_user_time(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportTimeSec);
+		F_eeprom_user_cal(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportCal);
+		F_eeprom_user_km(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportKm);
+		TempMin =  set_user_data.SportTimeSec / 60;
+		TimeTest.timeH = (TempMin / 60);
+		TimeTest.timeL = (TempMin % 60);
+}
+
 static void	F_setChooseUserKey(rt_uint8_t keyCode,rt_bool_t LongKeyStartFlg)
 {
 		switch(keyCode) {
@@ -29,6 +40,7 @@ static void	F_setChooseUserKey(rt_uint8_t keyCode,rt_bool_t LongKeyStartFlg)
 						ui_action.Event--;
 					} else {
 						ui_action.Event = showUserTotalEventVal;
+						F_ReadUserData();
 					}
 				}
 				break;
@@ -60,7 +72,7 @@ static void	F_setUserSeetingsEnterKey(rt_uint8_t keyCode)
 		switch(keyCode) {
 			case	enter_KeyVal:
 				bz_short();
-
+				F_setUsersDataSetInit();
 				break;	
 		}
 }
@@ -144,6 +156,8 @@ void F_setUsersData(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_LongRestKey(keyCode);
+					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					switch(ui_action.Event) {
 						case showUserStartEventVal:
 						F_setChooseUserKey(keyCode,LongKeyStartFlg);
@@ -172,45 +186,45 @@ void F_setUsersData(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					switch(ui_action.Event) {
-						//case showUserNameEventVal:
-						//	F_showUserName(set_user_data.UserNaume,10);
-						//	break;
-						case showUserStartEventVal:
-							F_ShowStartReverse();
-							break;
-						case showUserSeetingsEventVal:
-							F_ShowSettingsReverse();
-							break;
-						case showUserTotalEventVal:
-							F_ShowUserTotalReverse();
-							break;
-						case showUserDataEventVal:
-							F_showTimeMilesCal(TimeTest,set_user_data.SportCal,set_user_data.SportKm);
-							break;
-						case	showUserResetNoEventVal:
-						F_showResetDataNo();	
-							break;
-						case	showUserResetYesEventVal:
-						F_showResetDataYes();
-							break;
+					if(ui_action.TemporaryEventFlg == 0) {
+						switch(ui_action.Event) {
+							//case showUserNameEventVal:
+							//	F_showUserName(set_user_data.UserNaume,10);
+							//	break;
+							case showUserStartEventVal:
+								F_ShowStartReverse();
+								break;
+							case showUserSeetingsEventVal:
+								F_ShowSettingsReverse();
+								break;
+							case showUserTotalEventVal:
+								F_ShowUserTotalReverse();
+								break;
+							case showUserDataEventVal:
+								F_showTimeMilesCal(TimeTest,set_user_data.SportCal,set_user_data.SportKm);
+								break;
+							case	showUserResetNoEventVal:
+							F_showResetDataNo();	
+								break;
+							case	showUserResetYesEventVal:
+							F_showResetDataYes();
+								break;
+						}
+					} else {
+						F_showSeatPositionMove();
 					}
 					F_Display();
 				}
 				//=====================
+				if((e & time_1s_val) == time_1s_val)
+				{
+					F_SwitchingSeatPositionDisplayTimer();
+				}
 			}
 }
 
-void F_setUsersDataInit(void)
+void F_setUsersDataInit(rt_uint8_t	Event)
 {
-		rt_uint16_t	TempMin;
 		ui_action.Status = setUsersDataVal;
-		ui_action.Event = showUserStartEventVal;
-		F_eeprom_user_name(ReadDataVal,ui_action.UsersEventSave,set_user_data.UserNaume,0);
-		F_eeprom_user_time(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportTimeSec);
-		F_eeprom_user_cal(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportCal);
-		F_eeprom_user_km(ReadDataVal,ui_action.UsersEventSave,&set_user_data.SportKm);
-		TempMin =  set_user_data.SportTimeSec / 60;
-		TimeTest.timeH = (TempMin / 60);
-		TimeTest.timeL = (TempMin % 60);
+		ui_action.Event = Event;
 }

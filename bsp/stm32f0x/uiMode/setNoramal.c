@@ -21,7 +21,9 @@ void F_setNoramal(void)
 						rt_kprintf("setNoramalVal:%d\r\n>",keyCode);
 					}
 					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
+					F_LongRestKey(keyCode);
 					F_SetUserKey(keyCode);
+					F_SetProgramsKey(keyCode);
 					switch(keyCode)
 					{
 						case	quick_start_KeyVal:
@@ -40,20 +42,24 @@ void F_setNoramal(void)
 						F_EngMode1_Init();
 						bz_short();
 						break;
-						case	programs_KeyVal:
-						F_setProfileInit(setProfileEventVal);
-						bz_short();
-						break;
 					}
 				}
 				//=====================
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					F_showNoramal();
+					if(ui_action.TemporaryEventFlg == 0) {
+						F_showNoramal();
+					} else {
+						F_showSeatPositionMove();
+					}
 					F_Display();
 				}
 				//=====================
+				if((e & time_1s_val) == time_1s_val)
+				{
+					F_SwitchingSeatPositionDisplayTimer();
+				}
 			}
 }
 

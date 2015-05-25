@@ -50,6 +50,7 @@ void F_setProfilesHeartRate(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_LongRestKey(keyCode);
 					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					F_SetUserKey(keyCode);
 					switch(keyCode)
@@ -85,20 +86,28 @@ void F_setProfilesHeartRate(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					switch(ui_action.Event) {
-						case	showHeartRateFatBurnEventVal:
-							F_showFatburn();
-							break;
-						case	showHeartRateCardicEventVal:
-							F_showCardio();
-							break;
-						case	showHeartRateTargetEventVal:
-							F_showTarget();
-							break;
+					if(ui_action.TemporaryEventFlg == 0) {
+						switch(ui_action.Event) {
+							case	showHeartRateFatBurnEventVal:
+								F_showFatburn();
+								break;
+							case	showHeartRateCardicEventVal:
+								F_showCardio();
+								break;
+							case	showHeartRateTargetEventVal:
+								F_showTarget();
+								break;
+						}
+					} else {
+						F_showSeatPositionMove();
 					}
 					F_Display();
 				}
 				//=====================
+				if((e & time_1s_val) == time_1s_val)
+				{
+					F_SwitchingSeatPositionDisplayTimer();
+				}
 			}
 }
 

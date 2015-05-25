@@ -288,6 +288,7 @@ static void rt_control_thread_entry(void* parameter)
 				F_InitManualData();
 				F_InitFocusData();
 				ui_action.Status = sysUiStartVal;
+				bz_long();
 			} else {
 				rt_kprintf("eeprom_ERR");
 				F_eepromErrModeInit();

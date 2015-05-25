@@ -85,6 +85,8 @@
 #define RT_KEY_NUM_103		103
 #define RT_KEY_NUM_104		104
 #define RT_KEY_NUM_105		105
+#define RT_KEY_NUM_106		106
+#define RT_KEY_NUM_107		107
 
 /* 定時器的控制塊 */
 //static rt_timer_t	key_led_scan_timer;
@@ -314,8 +316,12 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
     default :			KeyRam=0;       break;
     }
 
-		if(R_ScanKey[0] == 0x18) {
+		if(R_ScanKey[2] == 0x0C) {
 			KeyRam=RT_KEY_NUM_105;
+		}
+		
+		if(R_ScanKey[2] == 0x06) {
+			KeyRam=RT_KEY_NUM_107;
 		}
 		
 			for(i=0;i<5;i++)
@@ -365,6 +371,7 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
               case	RT_KEY_NUM_29:      *KeyCode=RT_KEY_NUM_29;      break;
               case	RT_KEY_NUM_31:      *KeyCode=RT_KEY_NUM_31;      break;
 							case	RT_KEY_NUM_105:			*KeyCode=RT_KEY_NUM_105;			break;
+							case	RT_KEY_NUM_107:			*KeyCode=RT_KEY_NUM_107;			break;
             }
           }
           //=====================
@@ -400,7 +407,7 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
             }
           }
           //=====================
-          if(KeyCnt==100)    //20mS*20=0.4s
+          if(KeyCnt==100)    //20mS*100=2s
           {	
             switch(KeyRam)  //long key
             {
@@ -412,6 +419,9 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
                 break;
               case	RT_KEY_NUM_3:
                 *KeyCode = RT_KEY_NUM_104;
+                break;
+              case	RT_KEY_NUM_2:
+                *KeyCode = RT_KEY_NUM_106;
                 break;
             }	
 						KeyCodeSave = *KeyCode;

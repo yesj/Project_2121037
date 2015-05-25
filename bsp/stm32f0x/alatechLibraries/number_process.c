@@ -24,24 +24,28 @@ rt_comply_t	F_NumberUp_8(uint8_Number_t *Number_t,rt_uint8_t upNumber,rt_uint8_t
 			return	comply;
 }
 
-void F_NumberUp_16(uint16_Number_t *Number_t,rt_uint16_t upNumber,rt_uint8_t mode)
+rt_comply_t F_NumberUp_16(uint16_Number_t *Number_t,rt_uint16_t upNumber,rt_uint8_t mode)
 {
-      if((Number_t ->number) >= (Number_t->maxNumber)) {
-        switch(mode) {
-          case cycleNumberVal:
-            Number_t ->number = Number_t ->minNumber;
-            break;
-          case noCycleNumberVal:
-            
-            break; 
-        }
-      } else {
-        if((0xFFFF-Number_t ->number) >= upNumber) {
-          Number_t ->number = (Number_t ->number + upNumber);
-        } else {
-          Number_t ->number = 0xFFFF;
-        }
-      }
+		rt_comply_t		comply;
+		if((Number_t ->number) >= (Number_t->maxNumber)) {
+			switch(mode) {
+				case cycleNumberVal:
+					Number_t ->number = Number_t ->minNumber;
+					comply.complyFlg = YesComplyVal;
+					break;
+				case noCycleNumberVal:
+					comply.complyFlg = NoComplyVal;
+					break; 
+			}
+		} else {
+			if((0xFFFF - Number_t ->number) >= upNumber) {
+				Number_t ->number = (Number_t ->number + upNumber);
+			} else {
+				Number_t ->number = 0xFFFF;
+			}
+			comply.complyFlg = YesComplyVal;
+		}
+		return	comply;
 }
 //========================================================================
 rt_comply_t	F_NumberDown_8(uint8_Number_t *Number_t,rt_uint8_t upNumber,rt_uint8_t mode) 
@@ -68,24 +72,29 @@ rt_comply_t	F_NumberDown_8(uint8_Number_t *Number_t,rt_uint8_t upNumber,rt_uint8
 			return	comply;
 }
 
-void F_NumberDown_16(uint16_Number_t *Number_t,rt_uint16_t upNumber,rt_uint8_t mode) 
+rt_comply_t F_NumberDown_16(uint16_Number_t *Number_t,rt_uint16_t upNumber,rt_uint8_t mode) 
 {
-      if((Number_t ->number) < (Number_t->minNumber)) {
-        switch(mode) {
-          case cycleNumberVal:
-            Number_t ->number = Number_t ->maxNumber;
-            break;
-          case noCycleNumberVal:
-            
-            break; 
-        }
-      } else {
-        if((Number_t ->number) >= upNumber) {
-          Number_t ->number = (Number_t ->number - upNumber);
-        } else {
-          Number_t ->number = 0;
-        }
-      }
+		rt_comply_t		comply;
+		if((Number_t ->number) <= (Number_t->minNumber)) {
+			switch(mode) {
+				case cycleNumberVal:
+					Number_t ->number = Number_t ->maxNumber;
+					comply.complyFlg = YesComplyVal;
+					break;
+				case noCycleNumberVal:
+					comply.complyFlg = NoComplyVal;
+					break; 
+			}
+		} else {
+			if((Number_t ->number) >= upNumber) {
+				Number_t ->number = ((Number_t ->number) - upNumber);
+			} else {
+				Number_t ->number = Number_t->minNumber;
+			}
+			comply.complyFlg = YesComplyVal;
+		}
+		
+		return	comply;
 }
 //========================================================================
 void	F_timer_process_up(rt_time_data_t *time_data)

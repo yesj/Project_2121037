@@ -48,7 +48,7 @@ static rt_uint16_t	R_SpeedCnt;
 //static rt_uint8_t		R_LowSpeedCntDelay;
 //static rt_uint8_t		R_SpeedErrTime;
 static rt_uint16_t	R_Rpm;
-static rt_uint8_t		realSpeed;
+//static rt_uint8_t		realSpeed;
 
 static rt_bool_t SpeedStatusFlg;
 static rt_bool_t FriestSpeedFlg;
@@ -96,7 +96,7 @@ static void	F_SpeedDetection(void)
 
 rt_uint16_t	F_readRpm(void)
 {
-	float Temp;
+	//float Temp;
 			if(R_SpeedCnt==0)
 			{
 				R_Rpm=0;
@@ -111,8 +111,8 @@ rt_uint16_t	F_readRpm(void)
 					else
 						i=0.0004785;
 			*/		
-				Temp=(float)(0.0004785 * R_Rpm * 254);   // 單位  60*RpmTemp*R_WheelSize*3.14*2.54)/1000000
-				realSpeed=(rt_uint8_t)Temp;
+				//Temp=(float)(0.0004785 * R_Rpm * 254);   // 單位  60*RpmTemp*R_WheelSize*3.14*2.54)/1000000
+				//realSpeed=(rt_uint8_t)Temp;
 			return	R_Rpm;
 }
 //==========================================

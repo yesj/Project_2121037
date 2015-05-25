@@ -459,6 +459,11 @@
               <FilePath>.\drivers\scan_key_led.c</FilePath>
             </File>
             <File>
+              <FileName>scan_key_led.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\drivers\scan_key_led.h</FilePath>
+            </File>
+            <File>
               <FileName>i2c.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\drivers\i2c.c</FilePath>
@@ -789,6 +794,11 @@
               <FilePath>.\alatechLibraries\24lcxx_user.c</FilePath>
             </File>
             <File>
+              <FileName>24lcxx_user.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\alatechLibraries\24lcxx_user.h</FilePath>
+            </File>
+            <File>
               <FileName>chandler.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\drivers\chandler.h</FilePath>
@@ -1019,14 +1029,14 @@
           <GroupName>Noramal</GroupName>
           <Files>
             <File>
-              <FileName>sportNoramal.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\uiMode\sportNoramal.c</FilePath>
-            </File>
-            <File>
               <FileName>setNoramal.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\uiMode\setNoramal.c</FilePath>
+            </File>
+            <File>
+              <FileName>sportNoramal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\sportNoramal.c</FilePath>
             </File>
           </Files>
         </Group>

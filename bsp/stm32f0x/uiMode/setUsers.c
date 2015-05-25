@@ -7,7 +7,7 @@ static void F_UeserEnterKeyChooseMode(void)
 		F_eeprom_user_DetectionData(ReadDataVal,ui_action.Event,&buf);	
 		ui_action.UsersEventSave = ui_action.Event;
 		if(buf) {
-			F_setUsersDataInit();
+			F_setUsersDataInit(showUserStartEventVal);
 		} else {
 			buf = 1;
 			F_eeprom_user_DetectionData(WriteDataVal,ui_action.Event,&buf);	
@@ -42,7 +42,9 @@ void F_setUsers(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_LongRestKey(keyCode);
 					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
+					F_SetProgramsKey(keyCode);
 					switch(keyCode)
 					{
 						case	quick_start_KeyVal:
@@ -80,41 +82,49 @@ void F_setUsers(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					switch(ui_action.Event) {
-						case setUser_1_EventVal:
-							F_showUsers_1();
-							break;
-						case setUser_2_EventVal:
-							F_showUsers_2();
-							break;
-						case setUser_3_EventVal:
-							F_showUsers_3();
-							break;
-						case setUser_4_EventVal:
-							F_showUsers_4();
-							break;
-						case setUser_5_EventVal:
-							F_showUsers_5();
-							break;
-						case setUser_6_EventVal:
-							F_showUsers_6();
-							break;
-						case setUser_7_EventVal:
-							F_showUsers_7();
-							break;
-						case setUser_8_EventVal:
-							F_showUsers_8();
-							break;
-						case setUser_9_EventVal:
-							F_showUsers_9();
-							break;
-						case setUser_10_EventVal:
-							F_showUsers_10();
-							break;
+					if(ui_action.TemporaryEventFlg == 0) {
+						switch(ui_action.Event) {
+							case setUser_1_EventVal:
+								F_showUsers_1();
+								break;
+							case setUser_2_EventVal:
+								F_showUsers_2();
+								break;
+							case setUser_3_EventVal:
+								F_showUsers_3();
+								break;
+							case setUser_4_EventVal:
+								F_showUsers_4();
+								break;
+							case setUser_5_EventVal:
+								F_showUsers_5();
+								break;
+							case setUser_6_EventVal:
+								F_showUsers_6();
+								break;
+							case setUser_7_EventVal:
+								F_showUsers_7();
+								break;
+							case setUser_8_EventVal:
+								F_showUsers_8();
+								break;
+							case setUser_9_EventVal:
+								F_showUsers_9();
+								break;
+							case setUser_10_EventVal:
+								F_showUsers_10();
+								break;
+						}
+					} else {
+						F_showSeatPositionMove();
 					}
 					F_Display();
 				}
 				//=====================
+				if((e & time_1s_val) == time_1s_val)
+				{
+					F_SwitchingSeatPositionDisplayTimer();
+				}
 			}
 }
 

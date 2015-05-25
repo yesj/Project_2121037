@@ -77,6 +77,8 @@ void F_setProfileRollingHill(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_LongRestKey(keyCode);
+					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
 					F_SetUserKey(keyCode);
 					switch(ui_action.Event) 
 					{
@@ -92,21 +94,29 @@ void F_setProfileRollingHill(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					switch(ui_action.Event) 
-					{
-						case	setProfileLevelEventVal:
-						F_showProfileSetLeve(set_profile_data.roolingHillLevel.number);
-						F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
-							break;
-						case	setProfileWorkOutTImeEventVal:
-						SetWorkoutTime.timeH = set_profile_data.roolingHillWorkoutMinTime.number;
-						SetWorkoutTime.timeL = 0;
-						F_showProfileSetWorkoutTime(SetWorkoutTime);
-							break;
+					if(ui_action.TemporaryEventFlg == 0) {
+						switch(ui_action.Event) 
+						{
+							case	setProfileLevelEventVal:
+							F_showProfileSetLeve(set_profile_data.roolingHillLevel.number);
+							F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,CommonModeVal,0,0);
+								break;
+							case	setProfileWorkOutTImeEventVal:
+							SetWorkoutTime.timeH = set_profile_data.roolingHillWorkoutMinTime.number;
+							SetWorkoutTime.timeL = 0;
+							F_showProfileSetWorkoutTime(SetWorkoutTime);
+								break;
+						}
+					} else {
+						F_showSeatPositionMove();
 					}
 					F_Display();
 				}
 				//=====================
+				if((e & time_1s_val) == time_1s_val)
+				{
+					F_SwitchingSeatPositionDisplayTimer();
+				}
 			}
 }
 

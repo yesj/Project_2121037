@@ -142,7 +142,9 @@ void	F_Show_8_FontLcd(rt_uint8_t	adr,rt_uint8_t	dataNum,rt_uint32_t *displayAdr)
 void  F_Show_8_Lcd(rt_uint8_t	adr3,rt_uint8_t	adr2,rt_uint8_t	adr1,rt_bool_t ShowHiByeFlg,rt_uint16_t data,rt_uint32_t *displayAdr)
 {
     rt_uint8_t a,b,c;
-	
+		if(data>999) {
+			data = 999;
+		}
     a=data/100;
     b=(data%100)/10;
     c=data%10;
