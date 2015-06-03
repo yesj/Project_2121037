@@ -1,15 +1,29 @@
 #include "chandler.h"
 #include "24lcxx_user.h"
 
-void	F_ClearSwitchingSeatPositionDisplay(void)
+static rt_uint8_t SeatPositionUnlockEvent = 0;
+
+static void	F_ClearSwitchingSeatPositionDisplay(void)
 {
-	ui_action.TemporaryEventFlg = 0;
+	ui_action.TemporarySeatPositionEvent = TemporarySeatPositionNormalEventVal;
 	//ui_action.TemporaryEventTimer = 3;
 }
 
-void	F_SwitchingSeatPositionDisplay(void)
+static void	F_SwitchingSeatPositionMoveDisplay(void)
 {
-	ui_action.TemporaryEventFlg = 1;
+	ui_action.TemporarySeatPositionEvent = TemporarySeatPositionMoveEventVal;
+	ui_action.TemporaryEventTimer = 0;
+}
+
+static void	F_SwitchingSeatPositionUnlockDisplay(void)
+{
+	ui_action.TemporarySeatPositionEvent = TemporarySeatPositionUnlockEventVal;
+	ui_action.TemporaryEventTimer = 0;
+}
+
+static void	F_SwitchingSeatPositionUnlockNoDisplay(void)
+{
+	ui_action.TemporarySeatPositionEvent = TemporarySeatPositionUnlockNoEventVal;
 	ui_action.TemporaryEventTimer = 0;
 }
 
@@ -18,66 +32,133 @@ void	F_SwitchingSeatPositionDisplayTimer(void)
 		ui_action.TemporaryEventTimer++;
 		if(ui_action.TemporaryEventTimer > 3) {
 			ui_action.TemporaryEventTimer=3;
-			ui_action.TemporaryEventFlg = 0;
+			ui_action.TemporarySeatPositionEvent = TemporarySeatPositionNormalEventVal;
+			if(SeatPositionUnlockEvent == 2) {
+				SeatPositionUnlockEvent = 1;
+			}
 		}
 }
 
-void	F_SeatPositionControlAllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
+void	F_SeatPositionControlAllKey(rt_uint8_t *Key,rt_bool_t LongKeyStartFlg)
 {
 	rt_bool_t	TempFlg = 0;
-		switch(Key)
-		{
-			case	seat_position_stop_KeyVal:
-				TempFlg = 1;
-				rt_seat_position_stop();
-				bz_short();
-			break;
-			case	seat_position_up_KeyVal:
-			case	fast_seat_position_up_KeyVal:
-				TempFlg = 1;
-				rt_seat_position_up();
-				F_SwitchingSeatPositionDisplay();
-				if(LongKeyStartFlg==0)
+
+	switch(SeatPositionUnlockEvent) {
+		case	0:
+			switch(*Key)
+			{
+				case	long_view_KeyVal:
 					bz_short();
-			break;
-			case	seat_position_down_KeyVal:
-			case	fast_seat_position_down_KeyVal:
-				TempFlg = 1;
-				rt_seat_position_down();
-				F_SwitchingSeatPositionDisplay();
-				if(LongKeyStartFlg==0)
+					SeatPositionUnlockEvent = 1;
+					TempFlg = 1;
+					F_SwitchingSeatPositionUnlockDisplay();
+					break;
+				case	seat_position_stop_KeyVal:
 					bz_short();
+					TempFlg = 1;
+					rt_seat_position_stop();
+				break;
+				case	seat_position_up_KeyVal:
+				case	fast_seat_position_up_KeyVal:
+					TempFlg = 1;
+					rt_seat_position_up();
+					F_SwitchingSeatPositionMoveDisplay();
+					if(LongKeyStartFlg==0)
+						bz_short();
+				break;
+				case	seat_position_down_KeyVal:
+				case	fast_seat_position_down_KeyVal:
+					TempFlg = 1;
+					rt_seat_position_down();
+					F_SwitchingSeatPositionMoveDisplay();
+					if(LongKeyStartFlg==0)
+						bz_short();
+				break;
+				case	seat_position_home_1_KeyVal:	// 程蔼翴
+					bz_short();			
+				rt_inc_micro_control(sport_data.saveSeatPositionHome_1);
+				TempFlg = 1;
+				F_SwitchingSeatPositionMoveDisplay();
+				break;	
+				case	seat_position_home_2_KeyVal:	// 程翴
+					bz_short();
+				rt_inc_micro_control(sport_data.saveSeatPositionHome_2);
+				TempFlg = 1;
+				F_SwitchingSeatPositionMoveDisplay();
+				break;	
+				case	seat_position_home_1_long_KeyVal:
+				bz_short3bz();
+				sport_data.saveSeatPositionHome_1 = rt_inc_read_ad();
+				F_eeprom_home1_data(1,&sport_data.saveSeatPositionHome_1);
+				break;	
+				case	seat_position_home_2_long_KeyVal:
+				bz_short3bz();
+				sport_data.saveSeatPositionHome_2 = rt_inc_read_ad();
+				F_eeprom_home2_data(1,&sport_data.saveSeatPositionHome_2);
+				break;	
+			}
 			break;
-			case	seat_position_home_1_KeyVal:	// 程蔼翴
-				bz_short();			
-			rt_inc_micro_control(sport_data.saveSeatPositionHome_1);
-			TempFlg = 1;
-			F_SwitchingSeatPositionDisplay();
-			break;	
-			case	seat_position_home_2_KeyVal:	// 程翴
-				bz_short();
-			rt_inc_micro_control(sport_data.saveSeatPositionHome_2);
-			TempFlg = 1;
-			F_SwitchingSeatPositionDisplay();
-			break;	
-			case	seat_position_home_1_long_KeyVal:
-			bz_short3bz();
-			sport_data.saveSeatPositionHome_1 = rt_inc_read_ad();
-			F_eeprom_home1_data(1,&sport_data.saveSeatPositionHome_1);
-			break;	
-			case	seat_position_home_2_long_KeyVal:
-			bz_short3bz();
-			sport_data.saveSeatPositionHome_2 = rt_inc_read_ad();
-			F_eeprom_home2_data(1,&sport_data.saveSeatPositionHome_2);
-			break;	
-		}
+		//====================================
+		case	1:
+			switch(*Key)
+			{
+				case	long_view_KeyVal:
+					bz_short();
+					TempFlg = 1;
+					SeatPositionUnlockEvent = 2;
+					F_SwitchingSeatPositionUnlockNoDisplay();		
+					break;
+				case	seat_position_stop_KeyVal:
+				case	seat_position_up_KeyVal:
+				case	fast_seat_position_up_KeyVal:
+				case	seat_position_down_KeyVal:
+				case	fast_seat_position_down_KeyVal:
+				case	seat_position_home_1_KeyVal:
+				case	seat_position_home_2_KeyVal:
+				case	seat_position_home_1_long_KeyVal:
+				case	seat_position_home_2_long_KeyVal:
+				TempFlg = 1;
+				F_SwitchingSeatPositionUnlockDisplay();
+					break;
+			}
+			break;
+		//====================================
+		case	2:
+			switch(*Key)
+			{
+				case	seat_position_stop_KeyVal:
+					TempFlg = 1;		
+					break;
+				case	seat_position_up_KeyVal:
+				case	seat_position_down_KeyVal:
+					ui_action.TemporaryEventTimer = 0;
+					TempFlg = 1;
+					if(LongKeyStartFlg==0) {
+						bz_short();
+						if(ui_action.TemporarySeatPositionEvent == TemporarySeatPositionUnlockYesEventVal)
+							ui_action.TemporarySeatPositionEvent = TemporarySeatPositionUnlockNoEventVal;
+							else
+								ui_action.TemporarySeatPositionEvent = TemporarySeatPositionUnlockYesEventVal;
+					}
+					break;
+				case	enter_KeyVal:
+					bz_short();
+					*Key = 0;
+					if(ui_action.TemporarySeatPositionEvent == TemporarySeatPositionUnlockYesEventVal) {
+						SeatPositionUnlockEvent = 0;
+					}
+					break;
+			}
+			break;
+	}
+
 	if(TempFlg == 0)	{
-		if(Key) {
-			if(ui_action.TemporaryEventFlg) {
+		if(*Key) {
+			if(ui_action.TemporarySeatPositionEvent) {
 				F_ClearSwitchingSeatPositionDisplay();
 			}
 		}
-	}
+	}	
 }
 
 void	F_SetUserKey(rt_uint8_t keyCode) 

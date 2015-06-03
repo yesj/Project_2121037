@@ -70,7 +70,7 @@ const rt_uint32_t P08[] = {
 const rt_uint8_t M01[] ={"QUICKSTART"};
 const rt_uint8_t M02[] ={"TIME"};
 const rt_uint8_t M03[] ={"CAL"}; 
-const rt_uint8_t M04[] ={"CAL HR"};
+const rt_uint8_t M04[] ={"CAL/HR"};
 const rt_uint8_t M05[] ={"INC H"};
 const rt_uint8_t M06[] ={"INC L"};
 const rt_uint8_t M07[] ={"OK"};
@@ -120,7 +120,7 @@ const rt_uint8_t M50[] ={"FAT"};
 const rt_uint8_t M51[] ={"BURN"};
 const rt_uint8_t M52[] ={"CARDIO"};
 const rt_uint8_t M53[] ={"TARGET"};
-const rt_uint8_t M54[] ={"METERC"};
+const rt_uint8_t M54[] ={"METRIC"};
 const rt_uint8_t M55[] ={"ENGLISH"};
 const rt_uint8_t M56[] ={"SOFTWARE"};
 const rt_uint8_t M57[] ={"VERSION"};
@@ -165,7 +165,14 @@ const rt_uint8_t M94[] ={"PULL"};
 const rt_uint8_t M95[] ={"LEFT LEG"};
 //=========
 const rt_uint8_t M96[] ={"MAX LEVEL"};
-
+const rt_uint8_t M97[] ={"SEAT LOCK"};
+const rt_uint8_t M98[] ={"ACTIVATED"};
+const rt_uint8_t M99[] ={"UNLOCK"};
+const rt_uint8_t M100[] ={"SEAT?"};
+const rt_uint8_t M101[] ={"SEAT LIFT"};
+const rt_uint8_t M102[] ={"INSTALL"};
+const rt_uint8_t M103[] ={"TIME  H  M"};
+const rt_uint8_t M104[] ={"KM"};
 
 static void	F_HundredChange(rt_uint8_t	*byte2,rt_uint8_t	*byte1,rt_uint32_t data)
 {
@@ -306,7 +313,18 @@ void	F_showMatrixProfileWrokOutTime(rt_time_data_t TimeData)
 void	F_showResistance(rt_uint8_t resistance)
 {
 		F_showResistanceDot();
-		if(resistance < 9) {
+		if(resistance < 10) {
+			F_Show_8_Lcd(blankVal,6,7,ShowNoHiByeVal,resistance,LCDBuffer);
+			F_Show_8_LcdDot(6,0x31,LCDBuffer);		//	L
+		} else {
+			F_Show_8_Lcd(blankVal,6,7,ShowNoHiByeVal,resistance,LCDBuffer);
+			F_Show_8_LcdDot(5,0x31,LCDBuffer);		//	L	
+		}
+}
+
+void	F_showMaxResistance(rt_uint8_t resistance)
+{
+		if(resistance < 10) {
 			F_Show_8_Lcd(blankVal,6,7,ShowNoHiByeVal,resistance,LCDBuffer);
 			F_Show_8_LcdDot(6,0x31,LCDBuffer);		//	L
 		} else {
@@ -390,11 +408,18 @@ void	F_showCal(rt_uint32_t Cal)
 	F_showCalDot();
 }
 
-void	F_showDistance(rt_uint32_t DistanceNum)
+void	F_showDistance(rt_uint32_t DistanceNum,rt_bool_t Unit)
 {
 	rt_uint8_t byte1,byte2;
+	//  DistanceNum  單位是公分
+	DistanceNum = DistanceNum / 100;  //轉換單位變公尺
+	if(Unit == UintMetricVal) {
+		DistanceNum = F_ChangeKmToMile(DistanceNum);  //轉換單位變英哩
+	}
 	
-	DistanceNum = DistanceNum / 100;		// 百公尺
+	if(DistanceNum > 9999) // 顯示限制
+		DistanceNum = 9999;
+
 	F_HundredChange(&byte2,&byte1,DistanceNum);
 	
 	if(byte2>0)
@@ -403,22 +428,19 @@ void	F_showDistance(rt_uint32_t DistanceNum)
 	}
 	
 	F_Show_8_Lcd(blankVal,10,11,ShowHiByeVal,byte1,LCDBuffer);	
-	
 	LCDBuffer[63] |= 0x4000000; 
 	F_showDistanceDot();
 }
 
-void	F_showMatrixCal(rt_uint32_t Cal)
+void	F_showMatrixCal(rt_uint32_t Cal,rt_uint32_t CalHour)
 {
 	rt_uint8_t byte1,byte2;
 	rt_coordinate_t coordinateTemp3,coordinateTemp2,coordinateTemp1;
 	
-	coordinateTemp1.x = 5;
+	coordinateTemp1.x = 0;
 	coordinateTemp1.y = 17;
 	F_ShowMatrixStringLcd(coordinateTemp1,M03,sizeof(M03),LCDBuffer);
-	
 	F_CalChange(&Cal);
-	
 	coordinateTemp3.x = blankVal;
 	coordinateTemp3.y = blankVal;
 	
@@ -426,33 +448,49 @@ void	F_showMatrixCal(rt_uint32_t Cal)
 	{
 		F_HundredChange(&byte2,&byte1,Cal);
 		coordinateTemp2.x = 25;
-		coordinateTemp2.y = 16;
+		coordinateTemp2.y = 17;
 		coordinateTemp1.x = 25+6;
-		coordinateTemp1.y = 16;
+		coordinateTemp1.y = 17;
 		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,byte2,LCDBuffer);
 		coordinateTemp2.x = 25+6+6;
-		coordinateTemp2.y = 16;
+		coordinateTemp2.y = 17;
 		coordinateTemp1.x = 25+6+6+6;
-		coordinateTemp1.y = 16;
+		coordinateTemp1.y = 17;
 		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,byte1,LCDBuffer);
 	} else {
 		coordinateTemp2.x = 25+6+6;
-		coordinateTemp2.y = 16;
+		coordinateTemp2.y = 17;
 		coordinateTemp1.x = 25+6+6+6;
-		coordinateTemp1.y = 16;
+		coordinateTemp1.y = 17;
 		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,Cal,LCDBuffer);
 	}
-}
-
-void	F_showMatrixCalHr(rt_uint32_t Cal)
-{
-	//rt_uint8_t byte1,byte2;
-	rt_coordinate_t coordinateTemp1;
-	
-	coordinateTemp1.x = 5;
+	//=======================
+	// Cal/Hour
+	coordinateTemp1.x = 0;
 	coordinateTemp1.y = 8;
 	F_ShowMatrixStringLcd(coordinateTemp1,M04,sizeof(M04),LCDBuffer);
-	
+	coordinateTemp3.x = blankVal;
+	coordinateTemp3.y = blankVal;
+	if(CalHour >= 100) 
+	{
+		F_HundredChange(&byte2,&byte1,CalHour);
+		coordinateTemp2.x = 37;
+		coordinateTemp2.y = 8;
+		coordinateTemp1.x = 37+6;
+		coordinateTemp1.y = 8;
+		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,byte2,LCDBuffer);
+		coordinateTemp2.x = 37+6+6;
+		coordinateTemp2.y = 8;
+		coordinateTemp1.x = 37+6+6+6;
+		coordinateTemp1.y = 8;
+		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowHiByeVal,byte1,LCDBuffer);
+	} else {
+		coordinateTemp2.x = 37+6+6;
+		coordinateTemp2.y = 8;
+		coordinateTemp1.x = 37+6+6+6;
+		coordinateTemp1.y = 8;
+		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,CalHour,LCDBuffer);
+	}
 }
 
 void	F_showIncAd(rt_uint8_t IncAdNum)
@@ -631,224 +669,304 @@ void	F_showMetsReverse(void)
 		F_showMatrixMets(coordinateTemp1,0);
 }
 
-static void	F_showSetUser_1(rt_coordinate_t coordinate,rt_uint8_t Dot)
+static void	F_showSetUser_1(rt_coordinate_t coordinate,rt_user_name_detection_t userName,rt_uint8_t Dot)
 {
-	if(Dot)
-		F_ShowMatrixStringLcd(coordinate,M26,sizeof(M26),LCDBuffer);
-		else
-			F_ShowMatrixStringLcdReverse(coordinate,M26,sizeof(M26),LCDBuffer);
+	if(userName.User_DetectionFlg) {	
+		// Name Data
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+	} else {
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,M26,sizeof(M26),LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,M26,sizeof(M26),LCDBuffer);
+	}
 }
 
-static void	F_showSetUser_2(rt_coordinate_t coordinate,rt_uint8_t Dot)
+static void	F_showSetUser_2(rt_coordinate_t coordinate,rt_user_name_detection_t userName,rt_uint8_t Dot)
 {
-	if(Dot)
-		F_ShowMatrixStringLcd(coordinate,M27,sizeof(M27),LCDBuffer);
-		else
-			F_ShowMatrixStringLcdReverse(coordinate,M27,sizeof(M27),LCDBuffer);
+	if(userName.User_DetectionFlg) {	
+		// Name Data
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+	} else {
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,M27,sizeof(M27),LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,M27,sizeof(M27),LCDBuffer);
+	}
 }
 
-static void	F_showSetUser_3(rt_coordinate_t coordinate,rt_uint8_t Dot)
+static void	F_showSetUser_3(rt_coordinate_t coordinate,rt_user_name_detection_t userName,rt_uint8_t Dot)
 {
-	if(Dot)
-		F_ShowMatrixStringLcd(coordinate,M28,sizeof(M28),LCDBuffer);
-		else
-			F_ShowMatrixStringLcdReverse(coordinate,M28,sizeof(M28),LCDBuffer);
+	if(userName.User_DetectionFlg) {	
+		// Name Data
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+	} else {
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,M28,sizeof(M28),LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,M28,sizeof(M28),LCDBuffer);
+	}
 }
 
-static void	F_showSetUser_4(rt_coordinate_t coordinate,rt_uint8_t Dot)
+static void	F_showSetUser_4(rt_coordinate_t coordinate,rt_user_name_detection_t userName,rt_uint8_t Dot)
 {
-	if(Dot)
-		F_ShowMatrixStringLcd(coordinate,M29,sizeof(M29),LCDBuffer);
-		else
-			F_ShowMatrixStringLcdReverse(coordinate,M29,sizeof(M29),LCDBuffer);
+	if(userName.User_DetectionFlg) {	
+		// Name Data
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+	} else {
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,M29,sizeof(M29),LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,M29,sizeof(M29),LCDBuffer);
+	}
 }
 
-static void	F_showSetUser_5(rt_coordinate_t coordinate,rt_uint8_t Dot)
+static void	F_showSetUser_5(rt_coordinate_t coordinate,rt_user_name_detection_t userName,rt_uint8_t Dot)
 {
-	if(Dot)
-		F_ShowMatrixStringLcd(coordinate,M30,sizeof(M30),LCDBuffer);
-		else
-			F_ShowMatrixStringLcdReverse(coordinate,M30,sizeof(M30),LCDBuffer);
+	if(userName.User_DetectionFlg) {	
+		// Name Data
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+	} else {
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,M30,sizeof(M30),LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,M30,sizeof(M30),LCDBuffer);
+	}
 }
 
-static void	F_showSetUser_6(rt_coordinate_t coordinate,rt_uint8_t Dot)
+static void	F_showSetUser_6(rt_coordinate_t coordinate,rt_user_name_detection_t userName,rt_uint8_t Dot)
 {
-	if(Dot)
-		F_ShowMatrixStringLcd(coordinate,M31,sizeof(M31),LCDBuffer);
-		else
-			F_ShowMatrixStringLcdReverse(coordinate,M31,sizeof(M31),LCDBuffer);
+	if(userName.User_DetectionFlg) {	
+		// Name Data
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+	} else {
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,M31,sizeof(M31),LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,M31,sizeof(M31),LCDBuffer);
+	}
 }
 
-static void	F_showSetUser_7(rt_coordinate_t coordinate,rt_uint8_t Dot)
+static void	F_showSetUser_7(rt_coordinate_t coordinate,rt_user_name_detection_t userName,rt_uint8_t Dot)
 {
-	if(Dot)
-		F_ShowMatrixStringLcd(coordinate,M32,sizeof(M32),LCDBuffer);
-		else
-			F_ShowMatrixStringLcdReverse(coordinate,M32,sizeof(M32),LCDBuffer);
+	if(userName.User_DetectionFlg) {	
+		// Name Data
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+	} else {
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,M32,sizeof(M32),LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,M32,sizeof(M32),LCDBuffer);
+	}
 }
 
-static void	F_showSetUser_8(rt_coordinate_t coordinate,rt_uint8_t Dot)
+static void	F_showSetUser_8(rt_coordinate_t coordinate,rt_user_name_detection_t userName,rt_uint8_t Dot)
 {
-	if(Dot)
-		F_ShowMatrixStringLcd(coordinate,M33,sizeof(M33),LCDBuffer);
-		else
-			F_ShowMatrixStringLcdReverse(coordinate,M33,sizeof(M33),LCDBuffer);
+	if(userName.User_DetectionFlg) {	
+		// Name Data
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+	} else {
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,M33,sizeof(M33),LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,M33,sizeof(M33),LCDBuffer);
+	}
 }
 
-static void	F_showSetUser_9(rt_coordinate_t coordinate,rt_uint8_t Dot)
+static void	F_showSetUser_9(rt_coordinate_t coordinate,rt_user_name_detection_t userName,rt_uint8_t Dot)
 {
-	if(Dot)
-		F_ShowMatrixStringLcd(coordinate,M34,sizeof(M34),LCDBuffer);
-		else
-			F_ShowMatrixStringLcdReverse(coordinate,M34,sizeof(M34),LCDBuffer);
+	if(userName.User_DetectionFlg) {	
+		// Name Data
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+	} else {
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,M34,sizeof(M34),LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,M34,sizeof(M34),LCDBuffer);
+	}
 }
 
-static void	F_showSetUser_10(rt_coordinate_t coordinate,rt_uint8_t Dot)
+static void	F_showSetUser_10(rt_coordinate_t coordinate,rt_user_name_detection_t userName,rt_uint8_t Dot)
 {
-	if(Dot)
-		F_ShowMatrixStringLcd(coordinate,M35,sizeof(M35),LCDBuffer);
-		else
-			F_ShowMatrixStringLcdReverse(coordinate,M35,sizeof(M35),LCDBuffer);
+	if(userName.User_DetectionFlg) {	
+		// Name Data
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,userName.UserName,UserNaumSizeVal+1,LCDBuffer);
+	} else {
+		if(Dot)
+			F_ShowMatrixStringLcd(coordinate,M35,sizeof(M35),LCDBuffer);
+			else
+				F_ShowMatrixStringLcdReverse(coordinate,M35,sizeof(M35),LCDBuffer);
+	}
 }
 
-void	F_showUsers_1(void)
+void	F_showUsers_1(rt_user_name_detection_t user_1,rt_user_name_detection_t user_2,rt_user_name_detection_t user_3)
 {
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 23;
-		F_showSetUser_1(coordinateTemp1,0);
+		F_showSetUser_1(coordinateTemp1,user_1,0);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 13;
-		F_showSetUser_2(coordinateTemp1,1);
+		F_showSetUser_2(coordinateTemp1,user_2,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
-		F_showSetUser_3(coordinateTemp1,1);
+		F_showSetUser_3(coordinateTemp1,user_3,1);
 }
 
-void	F_showUsers_2(void)
+void	F_showUsers_2(rt_user_name_detection_t user_1,rt_user_name_detection_t user_2,rt_user_name_detection_t user_3)
 {
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 23;
-		F_showSetUser_1(coordinateTemp1,1);
+		F_showSetUser_1(coordinateTemp1,user_1,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 13;
-		F_showSetUser_2(coordinateTemp1,0);
+		F_showSetUser_2(coordinateTemp1,user_2,0);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
-		F_showSetUser_3(coordinateTemp1,1);
+		F_showSetUser_3(coordinateTemp1,user_3,1);
 }
 
-void	F_showUsers_3(void)
+void	F_showUsers_3(rt_user_name_detection_t user_1,rt_user_name_detection_t user_2,rt_user_name_detection_t user_3)
 {
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 23;
-		F_showSetUser_1(coordinateTemp1,1);
+		F_showSetUser_1(coordinateTemp1,user_1,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 13;
-		F_showSetUser_2(coordinateTemp1,1);
+		F_showSetUser_2(coordinateTemp1,user_2,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
-		F_showSetUser_3(coordinateTemp1,0);
+		F_showSetUser_3(coordinateTemp1,user_3,0);
 }
 
-void	F_showUsers_4(void)
+void	F_showUsers_4(rt_user_name_detection_t user_2,rt_user_name_detection_t user_3,rt_user_name_detection_t user_4)
 {
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 23;
-		F_showSetUser_2(coordinateTemp1,1);
+		F_showSetUser_2(coordinateTemp1,user_2,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 13;
-		F_showSetUser_3(coordinateTemp1,1);
+		F_showSetUser_3(coordinateTemp1,user_3,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
-		F_showSetUser_4(coordinateTemp1,0);
+		F_showSetUser_4(coordinateTemp1,user_4,0);
 }
 
-void	F_showUsers_5(void)
+void	F_showUsers_5(rt_user_name_detection_t user_3,rt_user_name_detection_t user_4,rt_user_name_detection_t user_5)
 {
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 23;
-		F_showSetUser_3(coordinateTemp1,1);
+		F_showSetUser_3(coordinateTemp1,user_3,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 13;
-		F_showSetUser_4(coordinateTemp1,1);
+		F_showSetUser_4(coordinateTemp1,user_4,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
-		F_showSetUser_5(coordinateTemp1,0);
+		F_showSetUser_5(coordinateTemp1,user_5,0);
 }
 
-void	F_showUsers_6(void)
+void	F_showUsers_6(rt_user_name_detection_t user_4,rt_user_name_detection_t user_5,rt_user_name_detection_t user_6)
 {
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 23;
-		F_showSetUser_4(coordinateTemp1,1);
+		F_showSetUser_4(coordinateTemp1,user_4,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 13;
-		F_showSetUser_5(coordinateTemp1,1);
+		F_showSetUser_5(coordinateTemp1,user_5,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
-		F_showSetUser_6(coordinateTemp1,0);
+		F_showSetUser_6(coordinateTemp1,user_6,0);
 }
 
-void	F_showUsers_7(void)
+void	F_showUsers_7(rt_user_name_detection_t user_5,rt_user_name_detection_t user_6,rt_user_name_detection_t user_7)
 {
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 23;
-		F_showSetUser_5(coordinateTemp1,1);
+		F_showSetUser_5(coordinateTemp1,user_5,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 13;
-		F_showSetUser_6(coordinateTemp1,1);
+		F_showSetUser_6(coordinateTemp1,user_6,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
-		F_showSetUser_7(coordinateTemp1,0);
+		F_showSetUser_7(coordinateTemp1,user_7,0);
 }
 
-void	F_showUsers_8(void)
+void	F_showUsers_8(rt_user_name_detection_t user_6,rt_user_name_detection_t user_7,rt_user_name_detection_t user_8)
 {
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 23;
-		F_showSetUser_6(coordinateTemp1,1);
+		F_showSetUser_6(coordinateTemp1,user_6,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 13;
-		F_showSetUser_7(coordinateTemp1,1);
+		F_showSetUser_7(coordinateTemp1,user_7,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
-		F_showSetUser_8(coordinateTemp1,0);
+		F_showSetUser_8(coordinateTemp1,user_8,0);
 }
 
-void	F_showUsers_9(void)
+void	F_showUsers_9(rt_user_name_detection_t user_7,rt_user_name_detection_t user_8,rt_user_name_detection_t user_9)
 {
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 23;
-		F_showSetUser_7(coordinateTemp1,1);
+		F_showSetUser_7(coordinateTemp1,user_7,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 13;
-		F_showSetUser_8(coordinateTemp1,1);
+		F_showSetUser_8(coordinateTemp1,user_8,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
-		F_showSetUser_9(coordinateTemp1,0);
+		F_showSetUser_9(coordinateTemp1,user_9,0);
 }
 
-void	F_showUsers_10(void)
+void	F_showUsers_10(rt_user_name_detection_t user_8,rt_user_name_detection_t user_9,rt_user_name_detection_t user_10)
 {
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 23;
-		F_showSetUser_8(coordinateTemp1,1);
+		F_showSetUser_8(coordinateTemp1,user_8,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 13;
-		F_showSetUser_9(coordinateTemp1,1);
+		F_showSetUser_9(coordinateTemp1,user_9,1);
 		coordinateTemp1.x = 2;
 		coordinateTemp1.y = 3;
-		F_showSetUser_10(coordinateTemp1,0);
+		F_showSetUser_10(coordinateTemp1,user_10,0);
 }
 
 void	F_showRollingHillGraph(void)
@@ -1137,7 +1255,22 @@ void	F_showSetSeatPosition(void)
 		F_ShowMatrixStringLcd(coordinateTemp1,M40,sizeof(M40),LCDBuffer);
 }
 
-void	F_showSeatPositionMove(void)
+static void		F_showYesChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M48,sizeof(M48),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M48,sizeof(M48),LCDBuffer);
+}
+
+static void		F_showNoChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
+{
+	if(Dot) 
+		F_ShowMatrixStringLcd(coordinate,M49,sizeof(M49),LCDBuffer);
+		else
+			F_ShowMatrixStringLcdReverse(coordinate,M49,sizeof(M49),LCDBuffer);
+}
+static void	F_showSeatPositionMove(void)
 {
 		rt_coordinate_t coordinateTemp1,coordinateTemp2,coordinateTemp3;
 		coordinateTemp1.x = 17;
@@ -1157,6 +1290,65 @@ void	F_showSeatPositionMove(void)
 		coordinateTemp1.x = 6+6+6;
 		coordinateTemp1.y = 3;
 		F_ShowMatrixStringLcd(coordinateTemp1,M78,sizeof(M78),LCDBuffer);
+}
+
+static void	F_ShowSeatLockActivated(void)
+{
+		rt_coordinate_t coordinateTemp1;
+		
+		coordinateTemp1.x = 0;
+		coordinateTemp1.y = 23;
+		F_ShowMatrixStringLcd(coordinateTemp1,M97,sizeof(M97),LCDBuffer);
+
+		coordinateTemp1.x = 0;
+		coordinateTemp1.y = 13;
+		F_ShowMatrixStringLcd(coordinateTemp1,M98,sizeof(M98),LCDBuffer);
+}
+
+static void	F_ShowSeatLock(rt_uint8_t YesNo)
+{
+	rt_coordinate_t coordinateTemp1;
+	coordinateTemp1.x = 12;
+	coordinateTemp1.y = 23;
+	F_ShowMatrixStringLcd(coordinateTemp1,M99,sizeof(M99),LCDBuffer);
+	coordinateTemp1.x = 12;
+	coordinateTemp1.y = 13;
+	F_ShowMatrixStringLcd(coordinateTemp1,M100,sizeof(M100),LCDBuffer);
+	if(YesNo) {
+		// Yes	
+		coordinateTemp1.x = 8;
+		coordinateTemp1.y = 3;	
+		F_showYesChoose(coordinateTemp1,0);
+		coordinateTemp1.x = 36;
+		coordinateTemp1.y = 3;	
+		F_showNoChoose(coordinateTemp1,1);
+	} else {
+		// No	
+		coordinateTemp1.x = 8;
+		coordinateTemp1.y = 3;	
+		F_showYesChoose(coordinateTemp1,1);
+		coordinateTemp1.x = 36;
+		coordinateTemp1.y = 3;	
+		F_showNoChoose(coordinateTemp1,0);
+	}
+}
+
+void	F_showSeatPositionStatus(rt_uint8_t event)
+{
+		switch(event) {
+			case	TemporarySeatPositionMoveEventVal:
+				F_showSeatPositionMove();
+				break;
+			case	TemporarySeatPositionUnlockEventVal:
+				F_ShowSeatLockActivated();
+				break;
+			case	TemporarySeatPositionUnlockYesEventVal:
+				F_ShowSeatLock(1);
+				break;
+			case	TemporarySeatPositionUnlockNoEventVal:
+				F_ShowSeatLock(0);
+				break;
+		}
 }
 
 void	F_showGender(rt_uint8_t Gender)
@@ -1218,12 +1410,12 @@ void	F_showSetWeight(rt_uint16_t Weight)
 		F_ShowMatrixNumProcessReverse(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,Weight,LCDBuffer);
 }
 
-void	F_showTimeMilesCal(rt_time_data_t TimeData,rt_uint16_t	Miles,rt_uint32_t	Cal)
+void	F_showTimeMilesCal(rt_time_data_t TimeData,rt_uint16_t	KM,rt_uint32_t	Cal,rt_bool_t UnitFlg)
 {
 		rt_coordinate_t coordinateTemp1,coordinateTemp2,coordinateTemp3;
 		coordinateTemp1.x = 0;
 		coordinateTemp1.y = 23;
-		F_ShowMatrixStringLcd(coordinateTemp1,M02,sizeof(M02),LCDBuffer);
+		F_ShowMatrixStringLcd(coordinateTemp1,M103,sizeof(M103),LCDBuffer);
 	
 		coordinateTemp3.x = blankVal;
 		coordinateTemp3.y = blankVal;
@@ -1240,15 +1432,28 @@ void	F_showTimeMilesCal(rt_time_data_t TimeData,rt_uint16_t	Miles,rt_uint32_t	Ca
 		
 		coordinateTemp1.x = 20;
 		coordinateTemp1.y = 13;
-		F_ShowMatrixStringLcd(coordinateTemp1,M45,sizeof(M45),LCDBuffer);
 	
+		if(UnitFlg == UintMetricVal) {
+			F_ShowMatrixStringLcd(coordinateTemp1,M104,sizeof(M104),LCDBuffer);
+		} else {
+			F_ShowMatrixStringLcd(coordinateTemp1,M45,sizeof(M45),LCDBuffer);
+		}
+		
 		coordinateTemp3.x = 0;
 		coordinateTemp3.y = 13;
 		coordinateTemp2.x = 0+6;
 		coordinateTemp2.y = 13;
 		coordinateTemp1.x = 0+6+6;
 		coordinateTemp1.y = 13;
-		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,Miles,LCDBuffer);	
+		//====
+		KM = KM / 10; // 公尺 轉 公里
+		if(UnitFlg == UintMetricVal) {
+			KM = F_ChangeKmToMile(KM);
+		}
+		if(KM > 999)	
+			KM = 999;
+		//====
+		F_ShowMatrixNumProcess(coordinateTemp3,coordinateTemp2,coordinateTemp1,ShowNoHiByeVal,KM,LCDBuffer);	
 	
 		coordinateTemp1.x = 32;
 		coordinateTemp1.y = 3;
@@ -1275,36 +1480,29 @@ void	F_showTimeMilesCal(rt_time_data_t TimeData,rt_uint16_t	Miles,rt_uint32_t	Ca
 		}
 }
 
-void	F_showResetDataNo(void)
+void	F_showResetDataYesNo(rt_uint8_t YesNo)
 {
 		rt_coordinate_t coordinateTemp1;
 		coordinateTemp1.x = 0;
 		coordinateTemp1.y = 22;
 		F_ShowMatrixStringLcd(coordinateTemp1,M47,sizeof(M47),LCDBuffer);
-	
-		coordinateTemp1.x = 6;
-		coordinateTemp1.y = 12;
-		F_ShowMatrixStringLcd(coordinateTemp1,M48,sizeof(M48),LCDBuffer);		//	YES
-	
-		coordinateTemp1.x = 9;
-		coordinateTemp1.y = 2;
-		F_ShowMatrixStringLcdReverse(coordinateTemp1,M49,sizeof(M49),LCDBuffer);		//	NO
-}
-
-void	F_showResetDataYes(void)
-{
-		rt_coordinate_t coordinateTemp1;
-		coordinateTemp1.x = 0;
-		coordinateTemp1.y = 22;
-		F_ShowMatrixStringLcd(coordinateTemp1,M47,sizeof(M47),LCDBuffer);
-	
-		coordinateTemp1.x = 6;
-		coordinateTemp1.y = 12;
-		F_ShowMatrixStringLcdReverse(coordinateTemp1,M48,sizeof(M48),LCDBuffer);		//	YES
-
-		coordinateTemp1.x = 9;
-		coordinateTemp1.y = 2;
-		F_ShowMatrixStringLcd(coordinateTemp1,M49,sizeof(M49),LCDBuffer);		//	NO
+		if(YesNo) {
+			// Yes
+			coordinateTemp1.x = 6;
+			coordinateTemp1.y = 12;
+			F_showYesChoose(coordinateTemp1,0);
+			coordinateTemp1.x = 9;
+			coordinateTemp1.y = 2;
+			F_showNoChoose(coordinateTemp1,1);
+		} else {
+			// No
+			coordinateTemp1.x = 6;
+			coordinateTemp1.y = 12;
+			F_showYesChoose(coordinateTemp1,1);
+			coordinateTemp1.x = 9;
+			coordinateTemp1.y = 2;
+			F_showNoChoose(coordinateTemp1,0);
+		}
 }
 
 static void		F_showManualFartburnChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)
@@ -1502,6 +1700,19 @@ void	F_ShowKeypedTest(void)
 	coordinateTemp.x = 0;
 	coordinateTemp.y = 0;
 	F_ShowMatrixStringLcd(coordinateTemp,M61,sizeof(M61),LCDBuffer);
+}
+
+void	F_ShowSeatLiftInstall(void)
+{
+	rt_coordinate_t coordinateTemp;
+	
+	coordinateTemp.x = 0;
+	coordinateTemp.y = 20;
+	F_ShowMatrixStringLcd(coordinateTemp,M101,sizeof(M101),LCDBuffer);
+	
+	coordinateTemp.x = 0;
+	coordinateTemp.y = 10;
+	F_ShowMatrixStringLcd(coordinateTemp,M102,sizeof(M102),LCDBuffer);
 }
 
 static void		F_showMetricChoose(rt_coordinate_t coordinate,rt_uint8_t Dot)

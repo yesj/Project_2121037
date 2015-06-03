@@ -36,7 +36,7 @@ void F_setProfiles(void)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
 					F_LongRestKey(keyCode);
-					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
+					F_SeatPositionControlAllKey(&keyCode,LongKeyStartFlg);
 					F_SetUserKey(keyCode);
 					switch(keyCode)
 					{
@@ -53,14 +53,14 @@ void F_setProfiles(void)
 							if(ui_action.Event > setProfileEventVal)
 								ui_action.Event--;
 								else
-									ui_action.Event = setMetsEventVal;
+									ui_action.Event = setFocusEventVal;
 							}
 							break;
 						case	resistance_down_KeyVal:
 						if(LongKeyStartFlg == 0)	{
 							bz_short();
 							ui_action.Event++;
-							if(ui_action.Event>setMetsEventVal)
+							if(ui_action.Event>setFocusEventVal)
 								ui_action.Event = setProfileEventVal;
 						}
 							break;
@@ -70,7 +70,7 @@ void F_setProfiles(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					if(ui_action.TemporaryEventFlg == 0) {
+					if(ui_action.TemporarySeatPositionEvent == TemporarySeatPositionNormalEventVal) {
 						switch(ui_action.Event) {
 							case	setProfileEventVal:
 								F_showProfileReverse();
@@ -85,11 +85,11 @@ void F_setProfiles(void)
 								F_showFocusReverse();
 								break;
 							case	setMetsEventVal:
-								F_showMetsReverse();
+								//F_showMetsReverse();
 								break;
 							}	
 						} else {
-							F_showSeatPositionMove();
+							F_showSeatPositionStatus(ui_action.TemporarySeatPositionEvent);
 						}
 					F_Display();
 				}

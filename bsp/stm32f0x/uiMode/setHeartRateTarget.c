@@ -80,7 +80,7 @@ void F_setHeartRateTarget(void)
 				{
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
 					F_LongRestKey(keyCode);
-					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
+					F_SeatPositionControlAllKey(&keyCode,LongKeyStartFlg);
 					F_SportKey(keyCode);
 						switch(ui_action.Event) {
 							case	showHeartRateSetTargetEventVal:
@@ -95,7 +95,7 @@ void F_setHeartRateTarget(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					if(ui_action.TemporaryEventFlg == 0) {
+					if(ui_action.TemporarySeatPositionEvent == TemporarySeatPositionNormalEventVal) {
 						switch(ui_action.Event) {
 							case	showHeartRateSetTargetEventVal:
 							F_showSetTargetNum(profile_heartrate_data.TargetTarget.number,0);
@@ -107,7 +107,7 @@ void F_setHeartRateTarget(void)
 								break;
 						}
 					} else {
-						F_showSeatPositionMove();
+						F_showSeatPositionStatus(ui_action.TemporarySeatPositionEvent);
 					}
 					F_Display();
 				}

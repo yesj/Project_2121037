@@ -136,7 +136,8 @@ void	F_calorie_process(rt_calor_data_t *calorie_data)
 	
 		calorieTemp = ((2-((calorie_data ->level)-1)*0.05) * ((calorie_data->watt) * 6) * (100000 / 1000) / 4.1854) + (100000 / 36);
 	
-
+		calorie_data -> calorieHr = ((calorieTemp * 3600)/100000);
+	
 		calorie_data-> calorie = (calorie_data-> calorie) + calorieTemp;
 	
 		if((calorie_data-> calorie) >= 999999999) {
@@ -144,15 +145,16 @@ void	F_calorie_process(rt_calor_data_t *calorie_data)
 		}
 }
 
-// 距離單位 公分
+// 距離單位 
 //	time 
 //
 void	F_distance_process(rt_distance_data_t *distance_data_t)
 {
-		distance_data_t->distance_count = (((distance_data_t->rpm) * (distance_data_t->WheelSize) *0.01 * 3.14 * 2.54) / 60) + distance_data_t->distance_count;
-	
-		if(distance_data_t->distance_count >= 99999) {
-			distance_data_t->distance_count = 99999;
+		// (cm)厘米
+		distance_data_t->distance_count = (((distance_data_t->rpm) * ((distance_data_t->WheelSize) *0.01) * 3.14 * 2.54) / 60) + distance_data_t->distance_count;
+
+		if(distance_data_t->distance_count >= 1999999) { // 限制數值 1999.999公里
+			distance_data_t->distance_count = 1999999;
 		}
 }
 // Progfile RollingHill
@@ -342,23 +344,18 @@ void	F_ProfileTimeSegments(rt_uint8_t *Segments,rt_time_data_t Time,rt_uint8_t S
 	*Segments = SegmentTemp;
 }
 
-void	F_TotalBodyFouseCount(rt_uint8_t MaxLevel,rt_time_data_t	fouseTime,rt_fouse_count_data_t *fouse_count_data)
+rt_uint32_t F_ChangeKmToMile(rt_uint32_t Data)
 {
-		
-
-
+    float Num;
+    Num = Data *0.6214;
+    Data = (rt_uint32_t)Num;
+		return Data;
 }
 
-void	F_ArmsFouseCount(rt_uint8_t MaxLevel,rt_time_data_t	fouseTime,rt_fouse_count_data_t *fouse_count_data)
+rt_uint32_t F_ChangeMileToKm(rt_uint32_t Data)
 {
-	
-	
-	
-}
-
-void	F_LegsFouseCount(rt_uint8_t MaxLevel,rt_time_data_t	fouseTime,rt_fouse_count_data_t *fouse_count_data)
-{
-	
-	
-	
+  float Num;
+    Num = (float) Data *1.6092;
+    Data = (rt_uint32_t)Num;
+		return Data;
 }

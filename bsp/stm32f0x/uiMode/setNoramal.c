@@ -20,7 +20,7 @@ void F_setNoramal(void)
 					{
 						rt_kprintf("setNoramalVal:%d\r\n>",keyCode);
 					}
-					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
+					F_SeatPositionControlAllKey(&keyCode,LongKeyStartFlg);
 					F_LongRestKey(keyCode);
 					F_SetUserKey(keyCode);
 					F_SetProgramsKey(keyCode);
@@ -39,8 +39,8 @@ void F_setNoramal(void)
 						rt_kprintf("Temp:%d\r\n",Temp);
 						break;
 						case	eng1_KeyVal:
-						F_EngMode1_Init();
-						bz_short();
+						//F_EngMode1_Init();
+						//bz_short();
 						break;
 					}
 				}
@@ -48,11 +48,19 @@ void F_setNoramal(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					if(ui_action.TemporaryEventFlg == 0) {
+					if(ui_action.TemporarySeatPositionEvent == TemporarySeatPositionNormalEventVal) {
 						F_showNoramal();
 					} else {
-						F_showSeatPositionMove();
+						F_showSeatPositionStatus(ui_action.TemporarySeatPositionEvent);
 					}
+					/*
+					F_showMatrixProfileWrokOutTime(TimeData);
+					F_Menual_LevelCount(20,sport_data.progfileArry,ProgfileDataSizeVal);
+					F_ShowProgfileGraph(sport_data.progfileArry,ProgfileDataSizeVal,FlickerModeVal,0,0);
+					F_showResistance(sport_data.resistance.number);
+					F_show8HearRate(F_readHandHeartRate(),F_readwHeartRate());
+					F_showCal(calor_count.calorie);
+					*/
 					F_Display();
 				}
 				//=====================
@@ -67,6 +75,6 @@ void F_setNoramalInit(void)
 {
 	ui_action.Status = setNoramalVal;
 	sport_data.resistance.number = 0;
-	F_vms_control(sport_data.resistance.number);
+	F_vms_control(0);
 }
 

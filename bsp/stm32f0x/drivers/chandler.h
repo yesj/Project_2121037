@@ -73,7 +73,8 @@ enum _sportNormalEvent {
 	StandardViewVal,
 	BasicViewVal,
 	HeartRateViewVal,
-	CalorieVewVal
+	CalorieVewVal,
+	FocusVewVal
 };
 
 enum _sportProfileEvent {
@@ -183,7 +184,8 @@ enum _setEngineeringModeEvent{
 	VersionEventVal,
 	BeeperTestEventVal,
 	DisplayTestEventVal,
-	KeypadTestEventVal
+	KeypadTestEventVal,
+	SeatLiftInstallEventVal
 };
 
 enum _setUintEvent{
@@ -213,6 +215,20 @@ enum _uint{
 	UintEnglishVal
 };
 
+enum _TemporarySeatPositionEvent{
+	TemporarySeatPositionNormalEventVal,
+	TemporarySeatPositionMoveEventVal,
+	TemporarySeatPositionUnlockEventVal,
+	TemporarySeatPositionUnlockYesEventVal,
+	TemporarySeatPositionUnlockNoEventVal
+};
+
+enum _TemporarySportStopEvent{
+	TemporarySportStopNormalEventVal,
+	TemporarySportStopEventVal,
+	TemporarySportStopSetTimeEventVal
+};
+
 //================================
 struct	rt_ui_action
 {
@@ -223,21 +239,24 @@ struct	rt_ui_action
 	rt_uint8_t	HeartRateEventSave;
 	rt_uint8_t	FocusEventSave;
 	rt_uint8_t	TemporaryEventTimer;
-	rt_bool_t		TemporaryEventFlg;
-	rt_bool_t		TemporarySportStopEventFlg;
+	rt_uint8_t	TemporarySeatPositionEvent;
+	rt_uint8_t	TemporarySportStopEvent;
 };
 typedef struct	rt_ui_action	rt_ui_action_t;
-#define ProgfileDataSizeVal					60
 
 //================================
+struct rt_time_data
+{
+	rt_uint8_t		timeH;
+	rt_uint8_t		timeL;
+};
+typedef struct rt_time_data rt_time_data_t;
+//================================
+#define ProgfileDataSizeVal					60
 struct	rt_sport_data
 {
   uint8_Number_t age;
   uint16_Number_t weight;
-  //uint16_Number_t calories;
-  //uint8_Number_t timeMin;
-  //uint8_Number_t timeSec;
-  //uint16_Number_t distance;
   uint8_Number_t seatPosition;
   uint8_Number_t targetHeart;
   uint16_Number_t wheelSize;
@@ -248,6 +267,8 @@ struct	rt_sport_data
 	rt_uint8_t	saveSeatPositionHome_1;
 	rt_uint8_t	saveSeatPositionHome_2;
   rt_bool_t		UnitFlg;
+	uint8_Number_t	sportSetTimer;
+	rt_time_data_t	SetWorkoutTime;
 };
 typedef struct	rt_sport_data		rt_sport_data_t;
 
@@ -303,19 +324,12 @@ struct rt_incline_eeprom_data
 
 typedef struct rt_incline_eeprom_data rt_incline_eeprom_data_t;
 //================================
-struct rt_time_data
-{
-	rt_uint8_t		timeH;
-	rt_uint8_t		timeL;
-};
-
-typedef struct rt_time_data rt_time_data_t;
-//================================
 struct rt_calor_data
 {
 	rt_uint8_t	level;
 	rt_uint16_t	watt;
 	rt_uint32_t calorie;
+	rt_uint16_t calorieHr;
 };
 typedef struct rt_calor_data rt_calor_data_t;
 //================================
@@ -355,6 +369,29 @@ struct rt_user_data
 	
 };
 typedef struct rt_user_data rt_user_data_t;
+
+struct rt_user_name_detection
+{
+	rt_bool_t	 User_DetectionFlg;
+	rt_uint8_t	UserName[UserNaumSizeVal];
+};
+
+typedef struct rt_user_name_detection rt_user_name_detection_t;
+
+struct rt_user_name_data
+{
+	rt_user_name_detection_t	user_1;
+	rt_user_name_detection_t	user_2;
+	rt_user_name_detection_t	user_3;
+	rt_user_name_detection_t	user_4;
+	rt_user_name_detection_t	user_5;
+	rt_user_name_detection_t	user_6;
+	rt_user_name_detection_t	user_7;
+	rt_user_name_detection_t	user_8;
+	rt_user_name_detection_t	user_9;
+	rt_user_name_detection_t	user_10;
+};
+typedef struct rt_user_name_data rt_user_name_data_t;
 
 struct rt_fouse_count_data
 {
@@ -438,6 +475,10 @@ extern void	F_Interval_2_LevelCount(rt_uint8_t MaxLevel,rt_uint8_t *LevelData,rt
 extern void	F_Menual_LevelCount(rt_uint8_t Level,rt_uint8_t *LevelData,rt_uint8_t DataSize);
 
 extern void	F_ProfileTimeSegments(rt_uint8_t *Segments,rt_time_data_t Time,rt_uint8_t SegmentsData,rt_uint8_t MaxSegments);
+
+extern rt_uint32_t F_ChangeKmToMile(rt_uint32_t Data);
+
+extern rt_uint32_t F_ChangeMileToKm(rt_uint32_t Data);
 //==================================================================
 // Display
 #define blankVal					255
@@ -693,6 +734,8 @@ extern void	F_showMatrixProfileWrokOutTime(rt_time_data_t TimeData);
 
 extern void	F_showResistance(rt_uint8_t resistance);
 
+extern void	F_showMaxResistance(rt_uint8_t resistance);
+
 extern void	F_show8HearRate(rt_uint8_t HandHeartRate,rt_uint8_t wHeartRate);
 
 extern void	F_showHearRateGraph(rt_uint8_t HandHeartRate,rt_uint8_t wHeartRate);
@@ -701,11 +744,9 @@ extern void	F_show8Time(rt_time_data_t TimeData);
 
 extern void	F_showCal(rt_uint32_t Cal);
 
-extern void	F_showDistance(rt_uint32_t DistanceNum);
+extern void	F_showDistance(rt_uint32_t DistanceNum,rt_bool_t Unit);
 
-extern void	F_showMatrixCal(rt_uint32_t Cal);
-
-extern void	F_showMatrixCalHr(rt_uint32_t Cal);
+extern void	F_showMatrixCal(rt_uint32_t Cal,rt_uint32_t CalHour);
 
 extern void	F_showIncAd(rt_uint8_t IncAdNum);
 
@@ -729,25 +770,25 @@ extern void	F_showFocusReverse(void);
 
 extern void	F_showMetsReverse(void);
 
-extern void	F_showUsers_1(void);
+extern void	F_showUsers_1(rt_user_name_detection_t user_1,rt_user_name_detection_t user_2,rt_user_name_detection_t user_3);
 
-extern void	F_showUsers_2(void);
+extern void	F_showUsers_2(rt_user_name_detection_t user_1,rt_user_name_detection_t user_2,rt_user_name_detection_t user_3);
 
-extern void	F_showUsers_3(void);
+extern void	F_showUsers_3(rt_user_name_detection_t user_1,rt_user_name_detection_t user_2,rt_user_name_detection_t user_3);
 
-extern void	F_showUsers_4(void);
+extern void	F_showUsers_4(rt_user_name_detection_t user_2,rt_user_name_detection_t user_3,rt_user_name_detection_t user_4);
 
-extern void	F_showUsers_5(void);
+extern void	F_showUsers_5(rt_user_name_detection_t user_3,rt_user_name_detection_t user_4,rt_user_name_detection_t user_5);
 
-extern void	F_showUsers_6(void);
+extern void	F_showUsers_6(rt_user_name_detection_t user_4,rt_user_name_detection_t user_5,rt_user_name_detection_t user_6);
 
-extern void	F_showUsers_7(void);
+extern void	F_showUsers_7(rt_user_name_detection_t user_5,rt_user_name_detection_t user_6,rt_user_name_detection_t user_7);
 
-extern void	F_showUsers_8(void);
+extern void	F_showUsers_8(rt_user_name_detection_t user_6,rt_user_name_detection_t user_7,rt_user_name_detection_t user_8);
 
-extern void	F_showUsers_9(void);
+extern void	F_showUsers_9(rt_user_name_detection_t user_7,rt_user_name_detection_t user_8,rt_user_name_detection_t user_9);
 
-extern void	F_showUsers_10(void);
+extern void	F_showUsers_10(rt_user_name_detection_t user_8,rt_user_name_detection_t user_9,rt_user_name_detection_t user_10);
 
 extern void	F_showRollingHillGraph(void);
 
@@ -775,7 +816,7 @@ extern void	F_showUserName(rt_uint8_t *data,rt_uint8_t size);
 
 extern void	F_showSetSeatPosition(void);
 
-extern void	F_showSeatPositionMove(void);
+extern void	F_showSeatPositionStatus(rt_uint8_t event);
 
 extern void	F_showGender(rt_uint8_t Gender);
 
@@ -783,11 +824,9 @@ extern void	F_showSetAge(rt_uint8_t Age);
 
 extern void	F_showSetWeight(rt_uint16_t Weight);
 
-extern void	F_showTimeMilesCal(rt_time_data_t TimeData,rt_uint16_t	Miles,rt_uint32_t	Cal);
+extern void	F_showTimeMilesCal(rt_time_data_t TimeData,rt_uint16_t	KM,rt_uint32_t	Cal,rt_bool_t UnitFlg);
 
-extern void	F_showResetDataNo(void);
-
-extern void	F_showResetDataYes(void);
+extern void	F_showResetDataYesNo(rt_uint8_t YesNo);
 
 extern void	F_showFatburn(void);
 
@@ -806,6 +845,8 @@ extern void	F_ShowBeeperTest(void);
 extern void	F_ShowDisplayTest(void);
 
 extern void	F_ShowKeypedTest(void);
+
+extern void	F_ShowSeatLiftInstall(void);
 
 extern void	F_ShowChooseMetric(void);
 
@@ -848,10 +889,11 @@ extern void	F_ShowLegsFocus(rt_uint8_t FocusSegment);
 extern void	F_ShowMexLevel(rt_uint8_t MexLevel);
 
 extern void	F_Show8Rpm(rt_uint16_t Rpm);
+
 //=======================================
 extern void	F_SwitchingSeatPositionDisplayTimer(void);
 
-extern void	F_SeatPositionControlAllKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg);
+extern void	F_SeatPositionControlAllKey(rt_uint8_t *Key,rt_bool_t LongKeyStartFlg);
 
 extern void	F_SetUserKey(rt_uint8_t keyCode);
 

@@ -50,18 +50,20 @@ rt_uint32_t LCDBuffer[C_LCDRamSize];
 
 static void F_EEDelay(volatile rt_uint32_t us)
 {
+	
     while(us>1)
     {
       us--;
     }
     us=0;	
+
     //rt_uint32_t delta;
     /* 獲得延時經過 tick 數 */
     //us = us * (SysTick->LOAD/(1000000/RT_TICK_PER_SECOND));
     /* 獲得當前的時間 */
     //delta = SysTick->VAL;
     /* 循環獲得當前的時間，直到達到指定的時間後退出循環 */
-    //while (delta - SysTick->VAL< us);
+   // while (delta - SysTick->VAL< us);
 }
 /*============================================================================
 * Function	: F_165XCS

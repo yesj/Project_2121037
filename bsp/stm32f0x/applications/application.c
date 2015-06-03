@@ -129,6 +129,9 @@ static	void	F_InitSportParameters(void)
 	sport_data.seatPosition.maxNumber = InclineMaxAdrVal;
 	sport_data.seatPosition.minNumber = 0;
 	sport_data.seatPosition.number = 0;
+	
+	sport_data.sportSetTimer.maxNumber = workOutTimeMinuteNumMaxVal;
+	sport_data.sportSetTimer.minNumber = workOutTimeMinuteNumMinVal;
 }
 
 static	void	F_InitSetProfileData(void)
@@ -238,7 +241,7 @@ static void rt_control_thread_entry(void* parameter)
     volatile rt_uint32_t count=0;
     rt_uint8_t major, minor;
 		rt_uint8_t	buf;
-	//char buf[20];
+	//char CPU_buf[20];
 	//static rt_uint8_t uart_rx_data_buf[segLengthVal];
 	
 	rt_hw_key_led_scan_init();
@@ -275,7 +278,7 @@ static void rt_control_thread_entry(void* parameter)
 					buf = 0;
 					F_eeprom_user_DetectionData(InitDataVal,EepromNothingVal,&buf);		
 					F_eeprom_write_init();
-					sport_data.UnitFlg = UintEnglishVal;
+					sport_data.UnitFlg = UintMetricVal;
 					F_eeprom_uint(WriteDataVal,&sport_data.UnitFlg);
 				}
 				incline_control_init(incline_eeprom_data);
@@ -433,8 +436,8 @@ static void rt_control_thread_entry(void* parameter)
 		//memset(uart_rx_data_buf,0xFF,sizeof(uart_rx_data_buf));
 		//F_WriteHT1625(uart_rx_data_buf,segLengthVal);
 		cpu_usage_get(&major, &minor);
-		//rt_sprintf(buf,"%d.%d%%",major,minor);
-		//rt_kprintf(" CPU usage is: %s \r\n", buf);
+		//rt_sprintf(CPU_buf,"%d.%d%%",major,minor);
+		//rt_kprintf(" CPU usage is: %s \r\n", CPU_buf);
 		
 		//rt_kprintf("test");
 		/*

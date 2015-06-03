@@ -36,6 +36,7 @@
 #define long_stop_rest_KeyVal		106
 
 #define view_programs_KeyVal		107	
+#define long_view_KeyVal				108
 
 //typedef void (*app_button_handler_t)(rt_uint8_t button_action);
 

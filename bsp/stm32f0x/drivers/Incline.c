@@ -280,12 +280,12 @@ void  F_IncAuto(void)
   R_IncAutoTime++;
   F_IncAd(R_IncAutoAd);
   //=====================
-  if(R_IncAutoTemp1<=253)
-    R_IncAutoTemp1=R_IncAutoTemp1+2;
+  if(R_IncAutoTemp1<=254)
+    R_IncAutoTemp1=R_IncAutoTemp1+1;
   else
     R_IncAutoTemp1=R_IncAutoTemp1;
-  if(R_IncAutoTemp2>=2)	
-    R_IncAutoTemp2=R_IncAutoTemp2-2;
+  if(R_IncAutoTemp2>=1)	
+    R_IncAutoTemp2=R_IncAutoTemp2-1;
   else
     R_IncAutoTemp2=R_IncAutoTemp2;
   //=====================
@@ -454,24 +454,27 @@ void	rt_seat_position_stop(void)
 rt_uint8_t	rt_inc_read_adr_number(void)
 {
 	rt_uint8_t	WholeTempAd,NowTempAd;
-	rt_uint8_t	Temp;
-	WholeTempAd = inc_data.incline_eeprom_data.incMaxAd - inc_data.incline_eeprom_data.incMinAd;
-	//-------------
-	NowTempAd = rt_inc_read_ad();
-	if(NowTempAd < inc_data.incline_eeprom_data.incMinAd) {
-		NowTempAd = inc_data.incline_eeprom_data.incMinAd;
+	static rt_uint8_t	adr_Temp;
+	
+	if(IncControlFlg) {
+		WholeTempAd = inc_data.incline_eeprom_data.incMaxAd - inc_data.incline_eeprom_data.incMinAd;
+		//-------------
+		NowTempAd = rt_inc_read_ad();
+		if(NowTempAd < inc_data.incline_eeprom_data.incMinAd) {
+			NowTempAd = inc_data.incline_eeprom_data.incMinAd;
+		}
+		if(NowTempAd < inc_data.incline_eeprom_data.incMaxNum) {
+			NowTempAd = inc_data.incline_eeprom_data.incMaxNum;
+		}
+		NowTempAd = NowTempAd - inc_data.incline_eeprom_data.incMinAd;
+		//-------------
+		adr_Temp = (NowTempAd * 20) / WholeTempAd;
+		adr_Temp++;	// 進1位
+		if(adr_Temp >= 20) {
+			adr_Temp = 20;
+		}
 	}
-	if(NowTempAd < inc_data.incline_eeprom_data.incMaxNum) {
-		NowTempAd = inc_data.incline_eeprom_data.incMaxNum;
-	}
-	NowTempAd = NowTempAd - inc_data.incline_eeprom_data.incMinAd;
-	//-------------
-	Temp = (NowTempAd * 20) / WholeTempAd;
-	Temp++;	// 進1位
-	if(Temp >= 20) {
-		Temp = 20;
-	}
-	return	Temp;
+	return	adr_Temp;
 }
 //==============================================================================
 //      ADC 初始化
@@ -626,6 +629,8 @@ int incline_adr(int argc , char** argv)
 		{
 			rt_kprintf("inc adr must <= %d\n", inc_data.incline_eeprom_data.incMaxNum);
 		}
+	rt_kprintf("test1 <= %d\n", atoi(argv[2]));	
+	rt_kprintf("test2 <= %d\n", atoi(argv[3]));	
 		return 0;
 }
 

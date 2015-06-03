@@ -24,7 +24,7 @@ static void F_ShowHeartRateView(void)
 {
 	F_show8Time(TimeData);
 	F_showResistance(sport_data.resistance.number);
-	F_showDistance(distance_data.distance_count);
+	F_showDistance(distance_data.distance_count,sport_data.UnitFlg);
 	F_showHearRateGraph(F_readHandHeartRate(),F_readwHeartRate());
 }
 
@@ -33,8 +33,7 @@ static void F_ShowCalorieView(void)
 	F_show8Time(TimeData);
 	F_showResistance(sport_data.resistance.number);
 	F_show8HearRate(F_readHandHeartRate(),F_readwHeartRate());
-	F_showMatrixCal(calor_count.calorie);
-	//F_showMatrixCalHr(calor_count.calorie);
+	F_showMatrixCal(calor_count.calorie,calor_count.calorieHr);
 }
 
 static void	F_NoramalLevelCount(rt_uint8_t Level,rt_uint8_t Segments)
@@ -82,14 +81,14 @@ static void F_NoramalSportNormalKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 			case	view_KeyVal:
 				bz_short();
 				ui_action.Event++;
-				if(ui_action.Event > CalorieVewVal) 
-				{
+				if(ui_action.Event > CalorieVewVal)  {
 					ui_action.Event = StandardViewVal;
 				}
 			break;
 			case	stop_rest_KeyVal:
 				bz_short();
-				ui_action.TemporarySportStopEventFlg = 1;
+				F_vms_control(0);
+				ui_action.TemporarySportStopEvent = TemporarySportStopEventVal;
 			break;	
 		}
 }
@@ -103,7 +102,7 @@ static void F_NoramalSportStopKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 		break;
 		case	quick_start_KeyVal:
 			bz_short();
-			ui_action.TemporarySportStopEventFlg = 0;
+			ui_action.TemporarySportStopEvent = TemporarySportStopNormalEventVal;
 		break;
 	}
 }
@@ -122,8 +121,8 @@ void F_SportNoramal(void)
 					keyCode = 0;
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
 					F_LongRestKey(keyCode);
-					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
-					if(ui_action.TemporarySportStopEventFlg == 0) {
+					F_SeatPositionControlAllKey(&keyCode,LongKeyStartFlg);
+					if(ui_action.TemporarySportStopEvent == TemporarySportStopNormalEventVal) {
 						F_NoramalSportNormalKey(keyCode,LongKeyStartFlg);
 					} else {
 						F_NoramalSportStopKey(keyCode,LongKeyStartFlg);
@@ -133,7 +132,7 @@ void F_SportNoramal(void)
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					if(ui_action.TemporaryEventFlg == 0) {
+					if(ui_action.TemporarySeatPositionEvent == TemporarySeatPositionNormalEventVal) {
 						switch(ui_action.Event)
 						{
 							case	StandardViewVal:
@@ -150,7 +149,7 @@ void F_SportNoramal(void)
 								break;
 						}
 					} else {
-						F_showSeatPositionMove();
+						F_showSeatPositionStatus(ui_action.TemporarySeatPositionEvent);
 					}
 					F_Display();
 				}
@@ -166,7 +165,7 @@ void F_SportNoramal(void)
 				if((e & time_1s_val) == time_1s_val)
 				{
 					F_SwitchingSeatPositionDisplayTimer();
-						if(ui_action.TemporarySportStopEventFlg == 0) {
+						if(ui_action.TemporarySportStopEvent == TemporarySportStopNormalEventVal) {
 							F_timer_process_up(&TimeData);
 							F_NormalSegmenTimeCount();
 							calor_count.level = sport_data.resistance.number;
@@ -185,9 +184,10 @@ void	F_SportNoramalInit(void)
 {
 	ui_action.Status = sportManualVal;
 	ui_action.Event	= StandardViewVal;
-	ui_action.TemporarySportStopEventFlg = 0;
+	ui_action.TemporarySportStopEvent = TemporarySportStopNormalEventVal;
 	memset(&TimeData,0,sizeof(TimeData));
 	memset(&calor_count,0,sizeof(calor_count));
+	distance_data.distance_count = 0;
 	sport_data.resistance.number = 1;
 	F_setVmsDetectionVal(30);
 	//fristSportFlg = 1;

@@ -23,6 +23,10 @@ static void	F_ChooseMode(void)
 				BzOnFlg = 1;
 				F_setKeyTestInit();
 				break;
+			case	SeatLiftInstallEventVal:
+				BzOnFlg = 1;
+				F_EngMode1_Init();
+				break;
 		}
 		if(BzOnFlg) {
 			bz_short();
@@ -55,7 +59,7 @@ void F_EngineeringMode(void)
 						if(LongKeyStartFlg == 0)	{
 							bz_short();
 							ui_action.Event++;
-							if(ui_action.Event>KeypadTestEventVal)
+							if(ui_action.Event>SeatLiftInstallEventVal)
 								ui_action.Event = UnitEventVal;
 						}
 							break;
@@ -65,7 +69,7 @@ void F_EngineeringMode(void)
 							if(ui_action.Event > UnitEventVal)
 								ui_action.Event--;
 								else
-									ui_action.Event = KeypadTestEventVal;
+									ui_action.Event = SeatLiftInstallEventVal;
 						}
 							break;
 					}
@@ -89,6 +93,9 @@ void F_EngineeringMode(void)
 							break;
 						case	KeypadTestEventVal:
 							F_ShowKeypedTest();
+							break;
+						case	SeatLiftInstallEventVal:
+							F_ShowSeatLiftInstall();
 							break;
 					}
 					F_Display();

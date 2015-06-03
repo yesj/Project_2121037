@@ -55,8 +55,9 @@ void	F_RestKey(rt_uint8_t keyCode)
 		{
 			case	stop_rest_KeyVal:
 			//bz_short();
-			IWDG_Config(0);	
-			while(1)
+			//IWDG_Config(0);	
+			//while(1)
+			F_EngineeringModeInit(SeatLiftInstallEventVal);
 				break;
 		}
 }

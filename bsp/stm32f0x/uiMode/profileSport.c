@@ -3,8 +3,6 @@
 static 	rt_uint8_t	R_Segments,R_SegmentsTime;
 static 	rt_bool_t		FlickerFlg;
 
-
-
 static void	F_MaxLevelCount(rt_uint8_t MaxLevel,rt_uint8_t Segments)
 {
 	rt_uint8_t adr;
@@ -28,10 +26,24 @@ static void	F_MaxLevelCount(rt_uint8_t MaxLevel,rt_uint8_t Segments)
 			case	setInterval_2_EventVal:
 			F_Interval_2_LevelCount(MaxLevel,sport_data.progfileArry,ProgfileDataSizeVal);
 				break;
+			default :	// ¿ù»~
+				
+				break;
 		}
 		for(adr = Segments ; adr < ProgfileDataSizeVal ; adr++) {
 			sport_data.progfileArryBuf[adr] = sport_data.progfileArry[adr];
 		}
+}
+
+static void	F_ProfileSportTimerInit(void)
+{
+		ui_action.TemporarySportStopEvent = TemporarySportStopNormalEventVal;
+		TimeData.timeH = sport_data.sportSetTimer.number;
+		TimeData.timeL = 0;
+		R_SegmentsTime = TimeData.timeH;
+		F_ProfileTimeSegments(&R_Segments,TimeData,R_SegmentsTime,59);
+		F_MaxLevelCount(sport_data.resistance.number,R_Segments);
+		FlickerFlg = 0;
 }
 
 static void F_ShowBasicView(void)
@@ -45,7 +57,7 @@ static void F_ShowBasicView(void)
 			F_showCal(calor_count.calorie);
 				break;
 			case	RpmDisViewVal:
-			F_showDistance(distance_data.distance_count);
+			F_showDistance(distance_data.distance_count,sport_data.UnitFlg);
 			F_Show8Rpm(F_readRpm());
 				break;
 		}
@@ -73,14 +85,14 @@ static void F_ProfileSportNormalKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 		case	view_KeyVal:
 			bz_short();
 			ui_action.Event++;
-			if(ui_action.Event > RpmDisViewVal) 
-			{
+			if(ui_action.Event > RpmDisViewVal) {
 				ui_action.Event = CalHrViewVal;
 			}
 		break;
 		case	stop_rest_KeyVal:
 			bz_short();
-			ui_action.TemporarySportStopEventFlg = 1;
+			F_vms_control(0);
+			ui_action.TemporarySportStopEvent = TemporarySportStopEventVal;
 		break;
 	}
 }
@@ -88,13 +100,45 @@ static void F_ProfileSportNormalKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 static void F_ProfileSportStopKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
 {
 	switch(Key) {
+		case	programs_KeyVal:
+			bz_short();
+			ui_action.TemporarySportStopEvent = TemporarySportStopSetTimeEventVal;
+			sport_data.sportSetTimer.number = TimeData.timeH;
+			break;
 		case	stop_rest_KeyVal:
 			bz_short();
 			F_setProfileInit(setProfileEventVal);
 		break;
 		case	quick_start_KeyVal:
 			bz_short();
-			ui_action.TemporarySportStopEventFlg = 0;
+			ui_action.TemporarySportStopEvent = TemporarySportStopNormalEventVal;
+		break;
+	}
+}
+
+static void F_ProfileSportStopSetTimeKey(rt_uint8_t Key,rt_bool_t LongKeyStartFlg)
+{
+	switch(Key) {
+		case	quick_start_KeyVal:
+		case	enter_KeyVal:
+			bz_short();
+			F_ProfileSportTimerInit();
+		break;
+		case	stop_rest_KeyVal:
+			bz_short();
+			ui_action.TemporarySportStopEvent = TemporarySportStopEventVal;
+		break;
+		case	resistance_up_KeyVal:
+			if(LongKeyStartFlg == 0){
+				bz_short();
+			}
+			F_NumberUp_8(&sport_data.sportSetTimer,1,cycleNumberVal);
+		break;
+		case	resistance_down_KeyVal:
+			if(LongKeyStartFlg == 0){
+				bz_short();
+			}
+			F_NumberDown_8(&sport_data.sportSetTimer,1,cycleNumberVal);
 		break;
 	}
 }
@@ -104,6 +148,7 @@ void F_ProfileSport(void)
 		rt_uint8_t	keyCode;
 		rt_bool_t	LongKeyStartFlg = 0;
 		rt_uint32_t e;
+	
 			if (rt_event_recv(&sport_timer_event, 0xFFFF,
 					RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR,
 					RT_WAITING_FOREVER, &e) == RT_EOK)
@@ -113,21 +158,37 @@ void F_ProfileSport(void)
 					keyCode = 0;
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
 					F_LongRestKey(keyCode);
-					F_SeatPositionControlAllKey(keyCode,LongKeyStartFlg);
-						if(ui_action.TemporarySportStopEventFlg == 0) {
+					F_SeatPositionControlAllKey(&keyCode,LongKeyStartFlg);
+					switch(ui_action.TemporarySportStopEvent) {
+						case	TemporarySportStopNormalEventVal:
 							F_ProfileSportNormalKey(keyCode,LongKeyStartFlg);
-						} else {
+							break;
+						case	TemporarySportStopEventVal:
 							F_ProfileSportStopKey(keyCode,LongKeyStartFlg);
-						}
+							break;
+						case	TemporarySportStopSetTimeEventVal:
+							F_ProfileSportStopSetTimeKey(keyCode,LongKeyStartFlg);
+							break;
+					}
 				}
 				//=====================
 				if((e & time_100ms_val) == time_100ms_val)
 				{
 					F_SetDisplayRam(0);
-					if(ui_action.TemporaryEventFlg == 0) {
-						F_ShowBasicView();
+					if(ui_action.TemporarySeatPositionEvent == TemporarySeatPositionNormalEventVal) {
+						switch(ui_action.TemporarySportStopEvent) {
+							case	TemporarySportStopNormalEventVal:
+							case	TemporarySportStopEventVal:
+								F_ShowBasicView();
+								break;
+							case	TemporarySportStopSetTimeEventVal:
+								sport_data.SetWorkoutTime.timeH = sport_data.sportSetTimer.number;
+								sport_data.SetWorkoutTime.timeL = 0;
+								F_showProfileSetWorkoutTime(sport_data.SetWorkoutTime);
+								break;
+						}
 					} else {
-						F_showSeatPositionMove();
+						F_showSeatPositionStatus(ui_action.TemporarySeatPositionEvent);
 					}
 					F_Display();
 				}
@@ -143,11 +204,11 @@ void F_ProfileSport(void)
 				if((e & time_1s_val) == time_1s_val)
 				{
 					F_SwitchingSeatPositionDisplayTimer();
-						if(ui_action.TemporarySportStopEventFlg == 0) {
+						if(ui_action.TemporarySportStopEvent == TemporarySportStopNormalEventVal) {
 							F_timer_process_down(&TimeData);
 							if(TimeData.timeH != 0 || TimeData.timeL != 0) {
 								F_ProfileTimeSegments(&R_Segments,TimeData,R_SegmentsTime,59);
-								calor_count.level = sport_data.resistance.number;
+								calor_count.level = sport_data.progfileArryBuf[R_Segments];
 								F_readWatte(calor_count.level,&calor_count.watt);					
 								F_calorie_process(&calor_count);
 								distance_data.rpm = F_readRpm();
@@ -155,6 +216,7 @@ void F_ProfileSport(void)
 								distance_data.WheelSize = 300;
 								F_distance_process(&distance_data);
 							} else {
+								F_vms_control(0);
 								F_setProfileInit(setProfileEventVal);
 							}
 						}
@@ -166,9 +228,10 @@ void	F_ProfileSportInit(rt_uint8_t Evnet)
 {
 	ui_action.Status = profileSportVal;
 	ui_action.Event	= CalHrViewVal;
-	ui_action.TemporarySportStopEventFlg = 0;
+	ui_action.TemporarySportStopEvent = TemporarySportStopNormalEventVal;
 	ui_action.ProfileEventSave = Evnet;
 	memset(&calor_count,0,sizeof(calor_count));
+	distance_data.distance_count = 0;
 	F_setVmsDetectionVal(30);
 		switch(ui_action.ProfileEventSave) 
 		{
@@ -203,4 +266,3 @@ void	F_ProfileSportInit(rt_uint8_t Evnet)
 		F_MaxLevelCount(sport_data.resistance.number,R_Segments);
 		FlickerFlg = 0;
 }
-

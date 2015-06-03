@@ -87,6 +87,7 @@
 #define RT_KEY_NUM_105		105
 #define RT_KEY_NUM_106		106
 #define RT_KEY_NUM_107		107
+#define RT_KEY_NUM_108		108
 
 /* 定時器的控制塊 */
 //static rt_timer_t	key_led_scan_timer;
@@ -423,6 +424,9 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
               case	RT_KEY_NUM_2:
                 *KeyCode = RT_KEY_NUM_106;
                 break;
+              case	RT_KEY_NUM_14:
+								*KeyCode = RT_KEY_NUM_108;
+								break;
             }	
 						KeyCodeSave = *KeyCode;
 					}

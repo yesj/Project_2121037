@@ -34,7 +34,7 @@ extern void	F_eeprom_user_name(rt_uint8_t status,rt_uint8_t Num,rt_uint8_t *data
 
 extern void	F_eeprom_user_age(rt_uint8_t status,rt_uint8_t Num,rt_uint8_t *data);
 
-extern void	F_eeprom_user_wigeht(rt_uint8_t status,rt_uint8_t Num,rt_uint8_t *data);
+extern void	F_eeprom_user_wigeht(rt_uint8_t status,rt_uint8_t Num,rt_uint16_t *data);
 
 extern void	F_eeprom_user_seat_position(rt_uint8_t status,rt_uint8_t Num,rt_uint8_t *data);
 
@@ -44,7 +44,7 @@ extern void	F_eeprom_user_time(rt_uint8_t status,rt_uint8_t Num,rt_uint32_t *Tim
 
 extern void	F_eeprom_user_cal(rt_uint8_t status,rt_uint8_t Num,rt_uint32_t *cal);
 
-extern void	F_eeprom_user_km(rt_uint8_t status,rt_uint8_t Num,rt_uint16_t *km);
+extern void	F_eeprom_user_mile(rt_uint8_t status,rt_uint8_t Num,rt_uint16_t *km);
 
 extern void	F_eeprom_uint(rt_uint8_t status,rt_bool_t *data);
 
