@@ -45,7 +45,7 @@ void F_EngineeringMode(void)
 			{
 				if((e & time_20ms_val) == time_20ms_val)
 				{
-					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_ReadKeyCode(&keyCode,&LongKeyStartFlg,&ui_action.SleepTimer);
 					switch(keyCode)
 					{
 						case	stop_rest_KeyVal:

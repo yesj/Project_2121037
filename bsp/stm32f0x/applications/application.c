@@ -33,7 +33,7 @@
 #include "heart.h"
 #include "24lcxx_user.h"
 #include "pwm_vms.h"
-
+#include "sleeping.h"
 
 static struct rt_thread control_thread;
 static rt_uint8_t control_stack[512];
@@ -283,6 +283,7 @@ static void rt_control_thread_entry(void* parameter)
 				}
 				incline_control_init(incline_eeprom_data);
 				rt_hw_pwm_vms_init();
+				rt_sleeping_init();
 				rt_hw_led_on();	
 				rt_hw_heart_rate_init();
 				F_InitSportParameters();
@@ -429,8 +430,13 @@ static void rt_control_thread_entry(void* parameter)
 			case	eng1Val:
 			F_EngMode1();
 				break;
+			//==================
 			case	eepromErrVal:
 			F_eepromErrMode();
+				break;
+			//==================
+			case	sleepVal:
+			F_SysSleep();
 				break;
 		}
 		//memset(uart_rx_data_buf,0xFF,sizeof(uart_rx_data_buf));

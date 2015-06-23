@@ -8,6 +8,7 @@ static rt_uint8_t		time40ms;
 static rt_uint8_t		time100ms;
 static rt_uint16_t	time500ms;
 static rt_uint16_t	time1s;
+static rt_uint16_t	SleepTime1s;
 
 static void sport_time_timeout_callbak(void* parameter)
 {
@@ -53,12 +54,21 @@ static void sport_time_timeout_callbak(void* parameter)
 				time1s = 0;
 				Enterflg	=	1;
 				temp |= time_1s_val;
-			}
-				
+			}		
+
+		SleepTime1s++;
+		if(SleepTime1s >=100) 
+		{
+			SleepTime1s = 0;
+			Enterflg	=	1;
+			temp |= sleep_time_1s_val;
+		}
+
 	if(Enterflg)
 	{		
 		rt_event_send(&sport_timer_event, temp);
 	}
+	
 	//F_timer_process_up(&sport_time_data);
 	//rt_kprintf("%d : %d\n", sport_time_data.timeH,sport_time_data.timeL);
 }
@@ -76,6 +86,7 @@ void F_startSportTimerInit(void)
 {
 	
 		rt_event_init(&sport_timer_event, "timer_event", RT_IPC_FLAG_FIFO);
+		//rt_event_init(&sleep_timer_event, "timer_event", RT_IPC_FLAG_FIFO);
 	
 		sport_timer = rt_timer_create("sport_timer",
 																	sport_time_timeout_callbak,

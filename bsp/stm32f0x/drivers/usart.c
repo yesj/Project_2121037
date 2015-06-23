@@ -155,7 +155,7 @@ void USART1_IRQHandler(void)
     {
         rt_hw_serial_isr(&serial1);
         /* clear interrupt */
-        USART_ClearITPendingBit(uart->uart_device, USART_IT_RXNE);
+        //USART_ClearITPendingBit(uart->uart_device, USART_IT_RXNE);	// github上修正
     }
     if (USART_GetITStatus(uart->uart_device, USART_IT_TC) != RESET)
     {
@@ -190,7 +190,7 @@ void USART2_IRQHandler(void)
     {
         rt_hw_serial_isr(&serial2);
         /* clear interrupt */
-        USART_ClearITPendingBit(uart->uart_device, USART_IT_RXNE);
+        //USART_ClearITPendingBit(uart->uart_device, USART_IT_RXNE);	// github上修正
     }
     if (USART_GetITStatus(uart->uart_device, USART_IT_TC) != RESET)
     {

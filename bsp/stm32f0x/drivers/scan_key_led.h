@@ -40,7 +40,7 @@
 
 //typedef void (*app_button_handler_t)(rt_uint8_t button_action);
 
-extern void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart);
+extern void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart,rt_uint16_t *SleepTimer);
 
 //extern void rt_button_evt_init(app_button_handler_t button_handler);
 

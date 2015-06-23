@@ -119,7 +119,7 @@ void F_SportNoramal(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					keyCode = 0;
-					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_ReadKeyCode(&keyCode,&LongKeyStartFlg,&ui_action.SleepTimer);
 					F_LongRestKey(keyCode);
 					F_SeatPositionControlAllKey(&keyCode,LongKeyStartFlg);
 					if(ui_action.TemporarySportStopEvent == TemporarySportStopNormalEventVal) {
@@ -166,6 +166,7 @@ void F_SportNoramal(void)
 				{
 					F_SwitchingSeatPositionDisplayTimer();
 						if(ui_action.TemporarySportStopEvent == TemporarySportStopNormalEventVal) {
+							ui_action.SleepTimer = 0;
 							F_timer_process_up(&TimeData);
 							F_NormalSegmenTimeCount();
 							calor_count.level = sport_data.resistance.number;
