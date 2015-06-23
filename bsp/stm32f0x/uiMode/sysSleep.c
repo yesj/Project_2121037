@@ -1,12 +1,12 @@
 #include "chandler.h"
 #include "24lcxx_user.h"
+#include "led.h"
 
-void F_SysUiStart(void)
+void F_SysSleep(void)
 {
 		rt_uint8_t	keyCode = 0;
 		rt_bool_t	LongKeyStartFlg = 0;
 		rt_uint32_t e;
-		static rt_uint8_t	TimeTemp = 0;
 	
 			if (rt_event_recv(&sport_timer_event, 0xFFFF,
 					RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR,
@@ -18,32 +18,22 @@ void F_SysUiStart(void)
 					F_ReadKeyCode(&keyCode,&LongKeyStartFlg,&ui_action.SleepTimer);	
 					if(keyCode != 0 ) 
 					{
-						rt_kprintf(" sysUiStartVal:%d \r\n",keyCode);
-					}
-					switch(keyCode) {
-						case engineering_KeyVal:
-							F_EngineeringModeInit(UnitEventVal);
-							break;
-						case view_programs_KeyVal:
-						F_eeprom_whether_rest();	
-						IWDG_Config(0);	
-						while(1)
-							break;
+							IWDG_Config(0);	
+							while(1);
 					}
 				}
 				if((e & time_1s_val) == time_1s_val)
 				{
-					F_SetDisplayRam(1);
+					F_SetDisplayRam(0);
 					F_Display();
-					TimeTemp++;
-					if(TimeTemp > 2)
-					{
-						TimeTemp = 0;
-						F_setNoramalInit();
-					}
-					//rt_event_detach(&sport_timer_event);
-					//F_cleartTimer();
 				}
 			}
 }
 
+void	F_SysSleepInit(void)
+{
+	ui_action.Status = sleepVal;
+	rt_hw_led_off();
+	F_SetDisplayRam(0);
+	F_Display();
+}

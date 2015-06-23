@@ -49,7 +49,7 @@ void F_setProfilesHeartRate(void)
 			{
 				if((e & time_20ms_val) == time_20ms_val)
 				{
-					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_ReadKeyCode(&keyCode,&LongKeyStartFlg,&ui_action.SleepTimer);
 					F_LongRestKey(keyCode);
 					F_SeatPositionControlAllKey(&keyCode,LongKeyStartFlg);
 					F_SetUserKey(keyCode);

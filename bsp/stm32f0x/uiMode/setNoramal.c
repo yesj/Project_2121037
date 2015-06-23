@@ -15,7 +15,7 @@ void F_setNoramal(void)
 				if((e & time_20ms_val) == time_20ms_val)
 				{
 					//rt_kprintf("timer 40ms");
-					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_ReadKeyCode(&keyCode,&LongKeyStartFlg,&ui_action.SleepTimer);
 					if(keyCode != 0 ) 
 					{
 						rt_kprintf("setNoramalVal:%d\r\n>",keyCode);

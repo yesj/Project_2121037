@@ -215,7 +215,7 @@ static void F_EEDelay(rt_uint32_t us)
 }
 
 //===================================================
-void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
+void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart,rt_uint16_t *SleepTimer)
 {
 		rt_uint8_t  i;
 	
@@ -339,6 +339,7 @@ void	F_ReadKeyCode(rt_uint8_t *KeyCode,rt_bool_t *LongKeyStart)
           if(KeyCnt==1)	//Wait Debums
           {
             R_LongFastKeyCnt=0;
+						*SleepTimer = 0;
 						KeyCodeSave = KeyRam;
             switch(KeyRam)		//short key
             {

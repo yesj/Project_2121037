@@ -173,7 +173,7 @@ void F_setUsersSport(void)
 			{
 				if((e & time_20ms_val) == time_20ms_val)
 				{
-					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_ReadKeyCode(&keyCode,&LongKeyStartFlg,&ui_action.SleepTimer);
 					F_LongRestKey(keyCode);
 					F_SeatPositionControlAllKey(&keyCode,LongKeyStartFlg);
 						switch(ui_action.TemporarySportStopEvent) {
@@ -222,6 +222,7 @@ void F_setUsersSport(void)
 				{
 					F_SwitchingSeatPositionDisplayTimer();
 						if(ui_action.TemporarySportStopEvent == TemporarySportStopNormalEventVal) {
+							ui_action.SleepTimer = 0;
 							F_timer_process_down(&TimeData);
 							if(TimeData.timeH != 0 || TimeData.timeL != 0) {
 								F_ProfileTimeSegments(&R_Segments,TimeData,R_SegmentsTime,59);

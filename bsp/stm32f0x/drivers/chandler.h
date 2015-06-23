@@ -10,6 +10,7 @@
 #include "ht1650.h"
 #include "number_process.h"
 #include "pwm_vms.h"
+#include "sleeping.h"
 #include "Incline.h"
 #include "heart.h"
 //=================================
@@ -66,7 +67,8 @@ enum _uiStatus {
 		setProfilesFocusDataVal,
 		FocusSportVal,
     eepromErrVal,
-    sportErrVal
+    sportErrVal,
+		sleepVal
 };
 
 enum _sportNormalEvent {
@@ -241,6 +243,7 @@ struct	rt_ui_action
 	rt_uint8_t	TemporaryEventTimer;
 	rt_uint8_t	TemporarySeatPositionEvent;
 	rt_uint8_t	TemporarySportStopEvent;
+	rt_uint16_t	SleepTimer;
 };
 typedef struct	rt_ui_action	rt_ui_action_t;
 
@@ -491,9 +494,12 @@ extern rt_uint32_t F_ChangeMileToKm(rt_uint32_t Data);
 #define time_100ms_val		0x0008
 #define time_500ms_val		0x0010
 #define time_1s_val				0x0020
-#define CpuTime_1s_val		0x0040
+#define sleep_time_1s_val	0x10000		//不同線程 ，事件旗標從16位元後開始
 
 extern struct rt_event			sport_timer_event;
+
+
+//extern struct rt_event			sleep_timer_event;
 
 extern void	F_cleartTimer(void);
 
@@ -685,6 +691,10 @@ extern void F_setProfileManualInit(void);
 extern void F_manualSport(void);
 
 extern void F_manualSportInit(void);
+
+extern void F_SysSleep(void);
+
+extern void F_SysSleepInit(void);
 //===========================================================================
 
 extern void  F_ShowMatrixLcd(rt_uint8_t	lcdRamAdr,rt_uint32_t data,rt_uint8_t dataLongSize,rt_uint32_t *displayAdr);

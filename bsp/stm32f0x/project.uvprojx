@@ -428,6 +428,11 @@
               <FileType>1</FileType>
               <FilePath>.\applications\sport_timer.c</FilePath>
             </File>
+            <File>
+              <FileName>sleeping.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\sleeping.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -852,6 +857,11 @@
               <FileName>eepromErrMode.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\uiMode\eepromErrMode.c</FilePath>
+            </File>
+            <File>
+              <FileName>sysSleep.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uiMode\sysSleep.c</FilePath>
             </File>
           </Files>
         </Group>

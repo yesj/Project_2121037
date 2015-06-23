@@ -333,7 +333,7 @@ void F_FocusSport(void)
 			{
 				if((e & time_20ms_val) == time_20ms_val)
 				{
-					F_ReadKeyCode(&keyCode,&LongKeyStartFlg);
+					F_ReadKeyCode(&keyCode,&LongKeyStartFlg,&ui_action.SleepTimer);
 					F_LongRestKey(keyCode);
 					F_SeatPositionControlAllKey(&keyCode,LongKeyStartFlg);
 						switch(ui_action.TemporarySportStopEvent) {
@@ -383,6 +383,7 @@ void F_FocusSport(void)
 					F_SwitchingSeatPositionDisplayTimer();
 					F_MaxLevelTimer();
 					if(ui_action.TemporarySportStopEvent == TemporarySportStopNormalEventVal) {
+						ui_action.SleepTimer = 0;
 						distance_data.rpm = F_readRpm();
 						if(distance_data.rpm != 0) {
 							F_timer_process_down(&TimeData);
